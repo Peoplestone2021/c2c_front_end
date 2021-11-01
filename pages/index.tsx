@@ -2,34 +2,12 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { Key, ReactChild, ReactFragment, ReactPortal } from 'react';
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
 
-interface HomeProp {
-  exchange : ExChange;
-}
+import lobbiy from '../pages/lobby/lobbiy';
+import calculator from '../pages/lobby/Calculator';
 
-// interface ExChange {
-//   result?: 1,
-//   cur_unit?: String,
-//   ttb?: String,
-//   tts?: String,
-//   deal_bas_r?: String,
-//   bkpr?: String,
-//   yy_efee_r?: String,
-//   ten_dd_efee_r?: String,
-//   kftc_bkpr?: String,
-//   kftc_deal_bas_r?: String,
-//   cur_nm?: String,
-// }
-
-interface ExChange {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
-
-const Home = ({ exchange }: HomeProp) => {
+const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -39,21 +17,7 @@ const Home = ({ exchange }: HomeProp) => {
       </Head>
 
       <main className={styles.main}>
-        환율내용입니다.
-        <div>
-          <table>
-            <tr>
-              <td>userId</td>
-              <td>id</td>
-              <td>title</td>
-            </tr>
-            <tr>
-              <td>{exchange.userId}</td>
-              <td>{exchange.id}</td>
-              <td>{exchange.title}</td>
-            </tr>
-          </table>
-        </div>
+      
       </main>
 
       <footer className={styles.footer}>
