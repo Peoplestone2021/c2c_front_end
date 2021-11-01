@@ -1,0 +1,25 @@
+@import './app-variable.scss';
+
+.header {
+  height: $header-height;
+  background-color: rosybrown;
+}
+
+.main-title{
+  background-color: royalblue;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.menu {
+  width: $menu-width;
+  height: 100vh;
+  top: $header-height;
+  background-color: darkgray;
+  list-style: none;
+}
+
+.content{
+  padding: 1rem;
+  margin-left: $menu-width;
+}

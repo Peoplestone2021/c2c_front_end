@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { Key, ReactChild, ReactFragment, ReactPortal } from 'react';
 import styles from '../styles/Home.module.css';
 
-import lobbiy from '../pages/lobby/lobbiy';
-import calculator from '../pages/lobby/Calculator';
+
+
 
 const Home = () => {
   return (
@@ -17,7 +17,7 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
-      
+        <h1>Lobby</h1>
       </main>
 
       <footer className={styles.footer}>
@@ -26,12 +26,5 @@ const Home = () => {
   );
 };
 
-export async function getServerSideProps() {
-    // const res = await fetch("https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=coZvPjTmHHugazuTqHYxjKaYG3JKVMHs&searchdate=20180102&data=AP01");
-    const res = await fetch("https://jsonplaceholder.typicode.com/todos/1");
-    const exchange: ExChange = await res.json();
-
-    return { props: { exchange } };
-}
 
 export default Home
