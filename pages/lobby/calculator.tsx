@@ -1,6 +1,6 @@
 const calculator = () => {
   return(
-    <></>
+    <h1>Calculator</h1>
   )
 }
 

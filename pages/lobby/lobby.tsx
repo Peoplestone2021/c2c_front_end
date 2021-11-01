@@ -11,23 +11,33 @@ const lobby = () => {
       </div>
     </div>
       </header>
-      <nav className= "menu position-fixed">
-      <ul className="nav flex-column">
-        <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">Active</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Link</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Link</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link disabled">Disabled</a>
-        </li>
+      {/* <nav className= "navi position-fixed">
+      <ul className=" flex-column">
+        <li className ="nav-item">환전 계산</li>
+        <li className ="nav-item">환율 조회</li>
+        <li className ="nav-item">기간별 매매율</li>
       </ul>
-      </nav>
-      <div className= "content">contain</div>
+      </nav> */}
+      {/* main content */}
+      <div className= "content">
+        <div className="menus">
+          <a href="#!" className= "menu-link">
+            <div className="menu1">
+              <p>환전로비</p>
+            </div>
+          </a>
+          <a href="#!" className= "menu-link">
+            <div className="menu2">
+              마켓플레이스
+            </div>
+          </a>
+          <a href="#" className= "menu-link">
+            <div className="menu3">
+              <p>프라이빗거래매니저</p>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   )
 }
