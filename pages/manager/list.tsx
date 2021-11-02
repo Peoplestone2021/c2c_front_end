@@ -3,7 +3,7 @@ import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-const Request = () => {
+const List = () => {
 
   const Create = useRef<HTMLButtonElement>(null);
   const Cancel = useRef<HTMLButtonElement>(null);
@@ -25,4 +25,4 @@ const Request = () => {
     </div>
   );
 };
-export default Request;
+export default List;

@@ -4,7 +4,7 @@ import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 
-const Request = () => {
+const Comment = () => {
 
   const Create = useRef<HTMLButtonElement>(null);
   const Cancel = useRef<HTMLButtonElement>(null);
@@ -20,4 +20,4 @@ const Request = () => {
     </div>
   );
 };
-export default Request;
+export default Comment;
