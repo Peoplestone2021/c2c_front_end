@@ -20,8 +20,7 @@ const Home = () => {
         <h1>Lobby</h1>
       </main>
 
-      <footer className={styles.footer}>
-      </footer>
+      <footer className={styles.footer}></footer>
     </div>
   );
 };
