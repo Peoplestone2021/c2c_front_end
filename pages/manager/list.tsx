@@ -11,12 +11,12 @@ const Request = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <h2>요청페이지</h2>
+      <h2>거래 목록 페이지</h2>
       <Link href="/manager/create">
-        <button ref={Create}>거래 요청</button>
+        <button ref={Create}>신청한 매물</button>
       </Link>
       <Link href="/manager/cancel">
-        <button ref={Cancel}>취소 요청</button>
+        <button ref={Cancel}>거래한 매물</button>
       </Link>
 
 

@@ -3,6 +3,7 @@ import Link from "next/Link";
 import Sidebar from "./sidebar";
 import Appbar from "../bar/appbar";
 
+
 const Request = () => {
 
   const Create = useRef<HTMLButtonElement>(null);
@@ -11,14 +12,7 @@ const Request = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <h2>요청페이지</h2>
-      <Link href="/manager/create">
-        <button ref={Create}>거래 요청</button>
-      </Link>
-      <Link href="/manager/cancel">
-        <button ref={Cancel}>취소 요청</button>
-      </Link>
-
+      <h2>댓글 목록 페이지</h2>
 
 
 

@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import Link from "next/Link";
+import Sidebar from "./sidebar";
+import Appbar from "../bar/appbar";
 
 const CancelRequest = () => {
 
@@ -7,6 +9,8 @@ const CancelRequest = () => {
   const SendCancel = useRef<HTMLButtonElement>(null);
   return (
     <div>
+      <Appbar />
+      <Sidebar />
       <h2>취소 요청 페이지</h2>
 
       <button ref={ReceivedCancel}>받은 취소 요청</button>

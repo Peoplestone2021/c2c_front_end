@@ -1,16 +1,14 @@
-import { useRef } from "react";
-import Link from "next/Link";
+
 import Sidebar from "./sidebar";
 import Appbar from "../bar/appbar";
 
-const Manager = () => {
-
-
+const Schedule = () => {
   return (
     <div>
       <Appbar />
       <Sidebar />
+      <h2>스케쥴 관리 페이지</h2>
     </div>
   );
 };
-export default Manager;
+export default Schedule;
