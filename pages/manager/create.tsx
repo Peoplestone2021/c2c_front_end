@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Link from "next/Link";
-import Sidebar from "./sidebar";
+import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 const Request = () => {
@@ -11,12 +11,13 @@ const Request = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <h2>거래 요청 페이지</h2>
+      <div style={{ marginLeft: "20vw" }}>
+        <h2>거래 요청 페이지</h2>
 
-      <button ref={ReceivedCreate}>받은 거래 요청</button>
-      <button ref={SendCreate}>보낸 거래 요청</button>
+        <button ref={ReceivedCreate}>받은 거래 요청</button>
+        <button ref={SendCreate}>보낸 거래 요청</button>
 
-
+      </div>
     </div>
   );
 };

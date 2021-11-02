@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Link from "next/Link";
-import Sidebar from "./sidebar";
+import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 const Manager = () => {

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Link from "next/Link";
-import Sidebar from "./sidebar";
+import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 
@@ -12,10 +12,11 @@ const Request = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <h2>댓글 목록 페이지</h2>
+      <div style={{ marginLeft: "20vw" }}>
+        <h2>댓글 목록 페이지</h2>
 
 
-
+      </div>
     </div>
   );
 };
