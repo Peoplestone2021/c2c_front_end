@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^5.10.0",
+    "@fullcalendar/react": "^5.10.0",
     "@popperjs/core": "^2.10.2",
     "@reduxjs/toolkit": "^1.6.2",
     "add-event-to-calendar": "^1.0.7",
