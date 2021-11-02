@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Link from "next/Link";
+import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 

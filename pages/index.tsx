@@ -1,12 +1,8 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { Key, ReactChild, ReactFragment, ReactPortal } from 'react';
-import styles from '../styles/Home.module.css';
-import lobby from "../pages/lobby/lobby";
-
-
-
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import { Key, ReactChild, ReactFragment, ReactPortal } from "react";
+import styles from "../styles/Home.module.css";
 
 const Home = () => {
   return (
@@ -19,14 +15,11 @@ const Home = () => {
 
       <main className={styles.main}>
         <h1>Lobby</h1>
-
       </main>
 
-      <footer className={styles.footer}>
-      </footer>
+      <footer className={styles.footer}></footer>
     </div>
   );
 };
 
-
-export default Home
+export default Home;
