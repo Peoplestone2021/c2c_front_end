@@ -11,7 +11,6 @@
 
 .nav a {
   margin: 8px 0;
-  
   background: white;
   border-radius: 4px;
   font-size: 14px;
@@ -24,6 +23,6 @@
   transition: all 0.125s ease;
 }
 
-.nav > a:hover {
-  background-color: #eaeaea;
+.nav  a:hover {
+  background-color: #624fee;
 }
