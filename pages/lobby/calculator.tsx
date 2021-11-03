@@ -1,7 +1,6 @@
 import styles from './styles/caclulator.module.css'
 import Link from "next/link";
 
-
 const calculator = () => {
 
   return(
@@ -107,6 +106,7 @@ const calculator = () => {
             <textarea className={`form-control ${styles.memo}`} placeholder="Leave a comment here" id="floatingTextarea2"></textarea>
             <label htmlFor="floatingTextarea2">Comments</label>
           </div>
+        </div>
           <div className={`d-flex justify-content-center`}>
             <Link href="/market/market">
               <button 
@@ -117,8 +117,6 @@ const calculator = () => {
               </button>
             </Link>
           </div>
-          
-        </div>
       </div>
     </> 
   )
