@@ -14,7 +14,25 @@ const Comment = () => {
       <Sidebar />
       <div style={{ marginLeft: "20vw" }}>
         <h2>댓글 목록 페이지</h2>
-
+        <table>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+          </tr>
+          <tbody>
+            <tr>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>8</td>
+              <td>9</td>
+            </tr>
+          </tbody>
+        </table>
 
       </div>
     </div>
