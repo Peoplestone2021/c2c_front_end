@@ -23,6 +23,6 @@
   transition: all 0.125s ease;
 }
 
-.nav > a:hover {
-  background-color: #eaeaea;
+.nav  a:hover {
+  background-color: #624fee;
 }

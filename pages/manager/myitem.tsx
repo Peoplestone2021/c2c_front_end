@@ -4,7 +4,7 @@ import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 
-const Comment = () => {
+const MyItem = () => {
 
   const Create = useRef<HTMLButtonElement>(null);
   const Cancel = useRef<HTMLButtonElement>(null);
@@ -13,11 +13,11 @@ const Comment = () => {
       <Appbar />
       <Sidebar />
       <div style={{ marginLeft: "20vw" }}>
-        <h2>댓글 목록 페이지</h2>
+        <h2>나의 매물</h2>
         <table>
           <tr>
             <th>번호</th>
-            <th>2</th>
+            <th></th>
             <th>3</th>
           </tr>
           <tbody>
@@ -38,4 +38,4 @@ const Comment = () => {
     </div>
   );
 };
-export default Comment;
+export default MyItem;
