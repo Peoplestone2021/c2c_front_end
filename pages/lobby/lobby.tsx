@@ -18,12 +18,13 @@ const lobby = () => {
 
       <div className="content">
         <div className="menus">
-          <a href="#!" className="menu-link">
-
-            <div className="menu1">
-              <p>환전로비</p>
-            </div>
-          </a>
+          <Link href="/lobby/calculator">
+            <a className="menu-link">
+              <div className="menu1">
+                <p>환전로비</p>
+              </div>
+            </a>
+          </Link>
 
           <a href="#!" className="menu-link">
 

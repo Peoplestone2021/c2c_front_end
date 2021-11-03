@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-const getTimeStringD = (unixtime: number) => {
-  return;
-};
-=======
 // import itemState from "../../provider/modules/market";
 
 // const getTimeStringD = (unixtime: number) => {
@@ -69,7 +64,6 @@ const MarketItem = [
 ];
 
 // const marketItems= data.map((item)=>)
->>>>>>> 64a0d6e404ffd3df8d3d476a4176e094c4b90f49
 
 const market = () => {
   return (
@@ -87,21 +81,6 @@ const market = () => {
             <th>거래마감</th>
           </tr>
         </thead>
-<<<<<<< HEAD
-        {market.data.map((item, index) => (
-          <tbody key={`market-item-${index}`} id="tr-list">
-            <tr>
-              {/* {" "} */}
-              {/* 버튼 필요 */}
-              <td>{item.crcHave}</td>
-              <td>{item.cntHave}</td>
-              <td>{item.cntWant}</td>
-              <td>{item.status}</td>
-              <td>{getTimeStringD(item.dDay)}</td> {/*마감시간 계산함수 필요*/}
-            </tr>
-          </tbody>
-        ))}
-=======
         <tbody>
           <tr>
             <td>{}</td>
@@ -111,7 +90,6 @@ const market = () => {
             <td></td>
           </tr>
         </tbody>
->>>>>>> 64a0d6e404ffd3df8d3d476a4176e094c4b90f49
       </table>
       {/* 더보기 버튼, 페이징 처리 필요 */}
     </section>
@@ -119,8 +97,6 @@ const market = () => {
   // 머지 테스트
 };
 
-<<<<<<< HEAD
-=======
 //{market.data.map((item, index) => (
 //  <tbody key={`market-item-${index}`} id="tr-list">
 //  <tr>
@@ -133,5 +109,4 @@ const market = () => {
 //   </tr>
 // </tbody>
 // ))} // 데이터 테이블
->>>>>>> 64a0d6e404ffd3df8d3d476a4176e094c4b90f49
 export default market;
