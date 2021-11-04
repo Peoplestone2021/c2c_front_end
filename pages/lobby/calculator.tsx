@@ -1,6 +1,8 @@
 import styles from './styles/caclulator.module.css'
 import Link from "next/link";
 import { useRef, useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const Calculator = () => {
 
@@ -25,7 +27,10 @@ const Calculator = () => {
   const content =useRef<HTMLTextAreaElement>(null);
 
   // 매물등록 버튼 누를시 폼 표시
-  const [isAdd, setIsAdd] = useState<boolean>(false);
+  const [isAdd, setIsAdd] = useState<boolean>(true);
+
+  // 달력컴포넌트 날짜 
+  const [value, onChange] = useState(new Date());
 
 
 
@@ -180,6 +185,11 @@ const Calculator = () => {
                   </select>
                   일
                 </div>
+                <Calendar
+                  onChange={onChange}
+                  value={value}
+                // onClickDay={ }
+                />
                 내용
                 <div className={`form-floating `}>
                   <textarea className={`form-control ${styles.memo}`} 

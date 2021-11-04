@@ -49,7 +49,7 @@ function crcHaveImg() {
   );
 }
 
-const market = () => {
+const Market = () => {
   const router = useRouter();
 
   // const [itemList, setItemList] = useState<MarketItems[]>
@@ -225,4 +225,4 @@ const market = () => {
 //   </tr>
 // </tbody>
 // ))} // 데이터 테이블
-export default market;
+export default Market;
