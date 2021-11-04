@@ -9,10 +9,7 @@ body {
 a {
   color: inherit;
   text-decoration: none !important;
-<<<<<<< HEAD
   text-decoration-line: none;
-=======
->>>>>>> manager
 }
 
 * {

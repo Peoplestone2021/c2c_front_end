@@ -3,8 +3,7 @@ import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-
-const MyItem = () => {
+const List = () => {
 
   const Create = useRef<HTMLButtonElement>(null);
   const Cancel = useRef<HTMLButtonElement>(null);
@@ -13,7 +12,9 @@ const MyItem = () => {
       <Appbar />
       <Sidebar />
       <div style={{ marginLeft: "20vw" }} className="card text-center">
-        <h2>나의 매물</h2>
+        <h2>거래 목록</h2>
+
+
         <table className="table caption-top">
           <caption>
             <Link href="/manager/itemlist">
@@ -41,7 +42,7 @@ const MyItem = () => {
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <td>John</td>
+              <td>Mark</td>
               <td>100USD to 120,000KRW</td>
               <td>Jason</td>
               <td>거래중</td>
@@ -57,7 +58,7 @@ const MyItem = () => {
             </tr>
             <tr>
               <th scope="row">3</th>
-              <td>John</td>
+              <td>Tom</td>
               <td>110,000KRW to 10,000JPY</td>
               <td>Jully</td>
               <td>거래완료</td>
@@ -88,4 +89,4 @@ const MyItem = () => {
     </div>
   );
 };
-export default MyItem;
+export default List;

@@ -18,7 +18,6 @@ const lobby = () => {
 
       <div className="content">
         <div className="menus">
-<<<<<<< HEAD
           <Link href="/lobby/calculator">
             <a className="menu-link">
               <div className="menu1">
@@ -26,14 +25,6 @@ const lobby = () => {
               </div>
             </a>
           </Link>
-=======
-          <a href="#!" className="menu-link">
-
-            <div className="menu1">
-              <p>환전로비</p>
-            </div>
-          </a>
->>>>>>> manager
 
           <a href="#!" className="menu-link">
 
