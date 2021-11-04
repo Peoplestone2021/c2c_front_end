@@ -1,5 +1,5 @@
-const reply = () => {
+const Reply = () => {
   return;
 };
 
-export default reply;
+export default Reply;

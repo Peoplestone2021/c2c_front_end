@@ -1,4 +1,4 @@
-const detail = () => {
+const MarketDetail = () => {
   return (
     <section>
       <div
@@ -12,4 +12,4 @@ const detail = () => {
   );
 };
 
-export default detail;
+export default MarketDetail;
