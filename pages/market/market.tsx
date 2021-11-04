@@ -2,81 +2,21 @@
 import axios from "axios";
 import { NavItem, ToastBody } from "react-bootstrap";
 import styles from "../../styles/market.module.css";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { GetServerSideProps } from "next";
+import Image from "next/image";
+import { userInfo } from "os";
+// import {profilePic} from '../data/flag_usd.png'
+// import {}
+
+// import { Router } from "next/dist/client/router";
 // import { flagusd } from "../market/data";
 
 // const getTimeStringD = (unixtime: number) => {
 //   return;
 // };
-
-interface marketItems {
-  id: number;
-  hostName: String;
-  crcHave: String;
-  crcWant: String;
-  cntHave: number;
-  cntWant: number;
-  dDate: String;
-  content?: String;
-  status: boolean;
-}
-
-interface marketItemListResponse {
-  id: number;
-  crcHave: String;
-  // crcWant: String; // 한국원 케이스 알고리즘 필요
-  cntHave: number;
-  cntWant: number;
-  dDate: String;
-  // content?: String;
-  status: boolean;
-}
-
-const marketItems = [
-  {
-    id: 11111111,
-    hostName: "일번",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 100,
-    cntWant: 117400,
-    dDate: "1635747679",
-    content: "울릉도 동남쪽",
-    status: true,
-  },
-  {
-    id: 22222222,
-    hostName: "이번",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 110,
-    cntWant: 127400,
-    dDate: "1635745679",
-    content: "뱃길따라 이백리",
-    status: true,
-  },
-  {
-    id: 33333333,
-    hostName: "삼번",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 120,
-    cntWant: 128400,
-    dDate: "1635749679",
-    content: "외로운 섬하나",
-    status: true,
-  },
-  {
-    id: 44444444,
-    hostName: "사번",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 120,
-    cntWant: 128400,
-    dDate: "1635748679",
-    content: "새들의 고향",
-    status: true,
-  },
-];
 
 // const MarketItemData = (marketItems) => {};
 
@@ -86,8 +26,34 @@ const marketItems = [
 //   id.
 // })
 // )
+// export async function getServerSideProps(context){
+//   const res=await fetch(``)
+//   const data = await res.json()
+
+//   return{
+//     props
+//   }
+// }
+
+// type Data={}
+
+// export const getServerSideProps: GetServerSideProps = async(context)=>{
+
+// }
+
+function crcHaveImg() {
+  return (
+    <>
+      <Image src="/data/flag_usd.png" width={10} height={10}></Image>
+    </>
+  );
+}
 
 const market = () => {
+  const router = useRouter();
+
+  // const [itemList, setItemList] = useState<MarketItems[]>
+
   return (
     <section>
       <div id="site-container" style={{ width: "50vw" }} className="mx-auto">
@@ -105,7 +71,7 @@ const market = () => {
         </div>{" "}
         {/*검색 도구*/}
         <span className="bi bi-list badge bg-light fw-bold"> LIST</span>
-        <table className="text-center striped bordered hover w-100">
+        <table className="striped bordered table-hover w-100">
           <thead>
             <tr className="text-secondary">
               <th scope="col">국가</th>
@@ -119,9 +85,18 @@ const market = () => {
           <tbody className="border-bottom border-top">
             {" "}
             {/*map으로 출력하도록*/}
-            <tr className="h-40">
-              <td>USD</td>
-              {/*state사용*/}
+            <tr
+              className="h-40"
+              // style={{ cursor: "pointer" }}
+              onClick={() => {
+                router.push("/marketDetail");
+              }}
+            >
+              <td
+              //state사용
+              >
+                USD
+              </td>
               <td>1,000</td>
               <td>1,174,000w</td>
               <td className="bi bi-play-fill"></td>
@@ -157,24 +132,82 @@ const market = () => {
             </tr>
           </tbody>
         </table>
-        <table className="text-center striped bordered hover w-100">
-          <thead>
-            <tr className="text-secondary">
-              <th scope="col">국가</th>
-              <th>금액</th>
-              <th>가격</th>
-              {/*정렬 기능 버튼처리 필요-후순위*/}
-              <th>상태</th>
-              <th>거래마감</th>
-            </tr>
-          </thead>
-          <tbody className="border-bottom border-top"></tbody>
-        </table>
+        <div
+          className="card mx-auto"
+          onClick={() => {
+            router.push("/market/marketDetail");
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">
+              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
+              USD
+            </h5>
+            <p className="card-text">1,000$ to 1,174,000w</p>
+            <div className="bi bi-play-fill"></div>
+            <div className="text-end">마감: 오늘</div>
+          </div>
+        </div>
+        <div
+          className="card mx-auto"
+          onClick={() => {
+            router.push("/market/marketDetail");
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">
+              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
+              USD
+            </h5>
+            <p className="card-text">1,100$ to 1,291,000w</p>
+            <div className="bi bi-play-fill" style={{ width: 50 }}></div>
+            <div className="text-end">마감 없음</div>
+          </div>
+        </div>
+        <div
+          className="card mx-auto"
+          onClick={() => {
+            router.push("/market/marketDetail");
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">USD</h5>
+            <p className="card-text">890$ to 1,044,000w</p>
+            <td className="bi bi-stop-fill"></td>
+            <div className="text-end">-14일</div>
+          </div>
+        </div>
+        <div
+          className="card mx-auto"
+          onClick={() => {
+            router.push("/market/marketDetail");
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">USD</h5>
+            <p className="card-text">880$ to 1,033,000w</p>
+            <td className="bi bi-play-fill"></td>
+            <div className="text-end">-7일</div>
+          </div>
+        </div>
+        <div
+          className="card mx-auto"
+          onClick={() => {
+            router.push("/market/marketDetail");
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">USD</h5>
+            <p className="card-text">1,150$ to 1,291,000w</p>
+            <td className="bi bi-play-fill"></td>
+            <div className="text-end">마감없음</div>
+          </div>
+        </div>
         <div className="text-center btn text-secondary fs-10 fw-bold mx-auto">
           더 보기
         </div>
-        {/* 더보기 버튼, 페이징 처리 필요 */}
       </div>
+      {/* 더보기 버튼, 페이징 처리 필요 */}
     </section>
   );
   // 머지 테스트
