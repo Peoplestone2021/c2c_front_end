@@ -1,8 +1,7 @@
 .calculator_main {
   width: 800px;
-  height: 850px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 20px;
   background-color: rgba(168, 228, 236, 0.938);
   border: rgba(160, 198, 241, 0.938) 6px solid;
   border-radius: 10%;
@@ -42,5 +41,7 @@
 
 .calculator_main .ebut {
   margin-top: 10px;
+  margin-bottom: 30px;
   width: 600px;
+  
 }
