@@ -1,18 +1,63 @@
 import styles from './styles/caclulator.module.css'
 import Link from "next/link";
-import { useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+
+import api from "../api/calculator"
+
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
+//계산에 필요한 state
+interface CalculatorItemState{
+  curUnit: string;
+  dealBasR: string
+}
+// 매물에 대한 state
+interface AddItemState{
+  // 매물 ID
+  itemId: number;
+  // 유저 아이디
+  hostName : String;
+  // 가지고있는 국가
+  cntHave : String;
+  // 가지고있는 돈
+  crcHave : number;
+  // 원하는환전 국가
+  cntWant : String;
+  // 원하는환전 액
+  crcWant : number;
+  // 거래일자
+  dDay : String;
+  // 본문
+  content : String;
+  // 거래상태
+  status : boolean;
+  // 추가모드인지
+  isAdd? : boolean;
+}
+
 const Calculator = () => {
+  //매물목록
+  const [itemList, setItemList] = useState<CalculatorItemState[]>();
 
   // 보유하고 있는 화페 국가
-  const cntHave = useRef<HTMLSelectElement>(null);
+  const cntHave = useRef() as MutableRefObject <HTMLSelectElement>;
   // // 보유하고있는 화폐 금액
-  const crcHave = useRef<HTMLInputElement>(null);
+  const crcHave = useRef() as MutableRefObject <HTMLInputElement>;
   // // 환전을 원하는 국가
-  const cntWant = useRef<HTMLSelectElement>(null);
+  const cntWant = useRef() as MutableRefObject <HTMLSelectElement>;
   // // 계산된 환전 금액
+<<<<<<< HEAD
+  const crcWant = useRef() as MutableRefObject <HTMLInputElement>;
+  // // 유저아이디
+  const hostName = useRef() as MutableRefObject <HTMLInputElement>;
+  // //년도 월 일
+  const yy = useRef() as MutableRefObject <HTMLSelectElement>;
+  const mm = useRef() as MutableRefObject <HTMLSelectElement>;
+  const dd = useRef() as MutableRefObject <HTMLSelectElement>;
+  // // 내용
+  const content =useRef() as MutableRefObject <HTMLTextAreaElement>;
+=======
   const crcWant = useRef<HTMLInputElement>(null);
 
 <<<<<<< HEAD
@@ -35,14 +80,33 @@ const Calculator = () => {
   // // 내용
   const content =useRef<HTMLTextAreaElement>(null);
 >>>>>>> f85b5eb79ad87bf51c8361f6b551036157df9d32
+>>>>>>> fb5f27f21bb48e9d4301c1fc138375f88a542f2b
 
   // 매물등록 버튼 누를시 폼 표시
   const [isAdd, setIsAdd] = useState<boolean>(true);
+  // 국가코드, 매매기준율 받아오기
+  
+  const fetchData = async () => {
+      // 백엔드에서 데이터를 받아옴 
+      const res = await api.fetch();
+    
+      // axios에서 응답받은 데이터는 data 속성에 들어가있음
+      // 서버로부터 받은 데이터를 state 객체로 받아옴
+      const rates = res.data.map((item)=> ({
+        curUnit: item.curUnit,
+        dealBasR: item.dealBasR,
+      })) as CalculatorItemState[];
+    
+      console.log("---- 2. await axios.get completed ----");
+      console.log(rates);
+  }
 
-  // 달력컴포넌트 날짜 
-  const [value, onChange] = useState(new Date());
-
-
+  useEffect(() => {
+    console.log("---- 1. mounted ----");
+    // 백엔드에서 데이터를 받아올것
+    // ES8 Style로 async-await 기법을 이용해서 데이터를 조회해옴
+    fetchData()
+  })
 
   // HTML
   return (
@@ -106,6 +170,9 @@ const Calculator = () => {
         <hr className={styles.hr} />
         {/*  거래등록 */}
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> fb5f27f21bb48e9d4301c1fc138375f88a542f2b
         <div className={styles.addItem}>
           아이디
           <div className="input-group flex-nowrap">
@@ -195,6 +262,8 @@ const Calculator = () => {
             </button>
           </Link>
         </div>
+<<<<<<< HEAD
+=======
 =======
         {isAdd && (
           <>
@@ -316,6 +385,7 @@ const Calculator = () => {
         )}
 
 >>>>>>> f85b5eb79ad87bf51c8361f6b551036157df9d32
+>>>>>>> fb5f27f21bb48e9d4301c1fc138375f88a542f2b
       </div>
     </>
   )
