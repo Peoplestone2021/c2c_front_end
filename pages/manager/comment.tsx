@@ -12,12 +12,10 @@ interface CommentItemState {
   id: number;
   memo: string | undefined;
   name: string;
-  createdTime?: number;
+  createdTime: number;
 }
 
 const getTimeString = (unixtime: number) => {
-  // Locale: timezone, currency 등
-  // js에서는 브라우저의 정보를 이용함
   const dateTime = new Date(unixtime);
   return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
 };
@@ -100,7 +98,7 @@ const Comment = () => {
       <Sidebar />
       <div style={{ marginLeft: "20vw" }} className="card text-center">
         <h2>댓글 목록</h2>
-        {commentList}
+
         <table className="table caption-top">
           <caption>
           </caption>
@@ -126,28 +124,11 @@ const Comment = () => {
                   {item.name}
                 </td>
                 <td className="me-1" >
-                  {item.createdTime}
+                  {getTimeString(item.createdTime)}
                 </td>
               </tr>
             ))}
-            <tr>
-              <th scope="row">1</th>
-              <td>댓글입니다.</td>
-              <td>John</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>댓글입니다.</td>
-              <td>John</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>댓글입니다.</td>
-              <td>John</td>
-              <td>2021.11.01</td>
-            </tr>
+
           </tbody>
         </table>
 
