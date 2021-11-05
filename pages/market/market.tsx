@@ -99,31 +99,6 @@ const Market = () => {
 
   return (
     <section>
-<<<<<<< HEAD
-      <h2>마켓플레이스</h2>
-      <div></div>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">국가</th>
-            <th>금액</th>
-            <th>가격</th>
-            {/*정렬 기능 버튼처리 필요*/}
-            <th>상태</th>
-            <th>거래마감</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{ }</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-=======
       <div id="site-container" style={{ width: "50vw" }} className="mx-auto">
         <h1 className="text-center my-5 fw-bold border-bottom pb-4">
           마켓플레이스
@@ -275,7 +250,6 @@ const Market = () => {
           더 보기
         </div>
       </div>
->>>>>>> f85b5eb79ad87bf51c8361f6b551036157df9d32
       {/* 더보기 버튼, 페이징 처리 필요 */}
     </section>
   );
