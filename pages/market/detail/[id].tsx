@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 // import { AppDispatch, RootState } from "../../../provider";
 
-=======
->>>>>>> f85b5eb79ad87bf51c8361f6b551036157df9d32
 const MarketDetail = () => {
   return (
     <section>
