@@ -17,7 +17,7 @@ const calculatorApi = {
   // axios.get<응답데이터의타입>(요청URL);
   // GET 요청URL HTTP/1.1
   fetch: () =>
-    axios.get<ExChangeRateResponse[]>(`http://54.180.135.245:6060/lobby/rate`),
+    axios.get<ExChangeRateResponse[]>(`http://54.180.135.245:8080/lobby/rate`),
 
   // axios.post<응답타입>(요청URL, 요청객체(JSON바디));
   // POST 요청URL HTTP/1.1  {...}

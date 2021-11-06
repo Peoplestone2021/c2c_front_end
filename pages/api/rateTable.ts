@@ -11,9 +11,9 @@ interface rateRespons{
 // process.env.변수명
 const rateApi = {
   // axios.get<응답데이터의타입>(요청URL);
-  // GET 요청URL HTTP/1.1
-  fetch: () =>                // http://54.180.135.245:6060/lobby/rate"
-    axios.get<rateRespons[]>(`${process.env.NEXT_PUBLIC_API_TABLE}/lobby/rate`),
+  // GET 요청URL HTTP/1.1   // http://localhost:8080/lobby/rate
+  fetch: () =>              // http://54.180.135.245:6060/lobby/rate"
+    axios.get<rateRespons[]>(`http://54.180.135.245:8080/lobby/rate`),
 };
 
 export default rateApi;

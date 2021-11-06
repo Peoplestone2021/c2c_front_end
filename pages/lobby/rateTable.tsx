@@ -85,4 +85,4 @@ const RateTable = () => {
 
 // const res = await fetch("http://54.180.135.245:6060/lobby/rate");
 
-export default RateTable
+export default RateTable;
