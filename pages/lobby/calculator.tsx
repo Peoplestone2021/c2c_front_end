@@ -9,8 +9,8 @@ import 'react-calendar/dist/Calendar.css';
 
 //계산에 필요한 state
 interface CalculatorItemState{
-  curUnit: string;
-  dealBasR: string
+  cntUnit: string;
+  dealBasR: number;
 }
 // 매물에 대한 state
 interface AddItemState{
@@ -37,52 +37,83 @@ interface AddItemState{
 }
 
 const Calculator = () => {
-  //매물목록
-  const [itemList, setItemList] = useState<CalculatorItemState[]>();
+  // 매물목록
+  const [itemList, setItemList] = useState<AddItemState[]>();
+
+  // 불러온 매매율
+  const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
+
+  // 환전된 결과 값
+  const [exValue, setExValue] = useState();
 
   // 보유하고 있는 화페 국가
   const cntHave = useRef() as MutableRefObject <HTMLSelectElement>;
-  // // 보유하고있는 화폐 금액
+  // 보유하고있는 화폐 금액
   const crcHave = useRef() as MutableRefObject <HTMLInputElement>;
-  // // 환전을 원하는 국가
+  // 환전을 원하는 국가
   const cntWant = useRef() as MutableRefObject <HTMLSelectElement>;
-  // // 계산된 환전 금액
+  // 계산된 환전 금액
   const crcWant = useRef() as MutableRefObject <HTMLInputElement>;
-  // // 유저아이디
+  // 유저아이디
   const hostName = useRef() as MutableRefObject <HTMLInputElement>;
-  // //년도 월 일
+  // 년도 월 일
   const yy = useRef() as MutableRefObject <HTMLSelectElement>;
   const mm = useRef() as MutableRefObject <HTMLSelectElement>;
   const dd = useRef() as MutableRefObject <HTMLSelectElement>;
-  // // 내용
+  // 내용
   const content =useRef() as MutableRefObject <HTMLTextAreaElement>;
   
+  // 원하는 국가
+  const wantCountry = cntWant.current?.value; 
 
-  // 매물등록 버튼 누를시 폼 표시
-  const [isAdd, setIsAdd] = useState<boolean>(true);
-  // 국가코드, 매매기준율 받아오기
-  
-  const fetchData = async () => {
-      // 백엔드에서 데이터를 받아옴 
-      const res = await api.fetch();
+  // 계산하는 함수
+  const ExChange = () => {
+    // 원하는 금액의 값
+    const haveMoney = crcHave.current?.value;
     
-      // axios에서 응답받은 데이터는 data 속성에 들어가있음
-      // 서버로부터 받은 데이터를 state 객체로 받아옴
-      const rates = res.data.map((item)=> ({
-        curUnit: item.curUnit,
-        dealBasR: item.dealBasR,
-      })) as CalculatorItemState[];
+    // 대상 국가의 매매기준율값을 exrate에 넣는다.
+    // 대상 국가의 화폐 1단위가 한국돈으로 바뀐 기준
+    // ex) usd 1$ => exrate = 1066.1
+    // 일본돈 같은경우 100엔 기준 즉 100 기준임으로 100으로 나눠서 계산해줘야 함
+    rateValue?.map((item) => {
+      const exrate = item.dealBasR;
+      console.log(exrate);
+      console.log(parseInt(haveMoney) * exrate);
+
+      return exrate;
+    })
+    // const result = parseInt(haveMoney) * parseInt(exrate);
+
+    // console.log(result);
     
-      console.log("---- 2. await axios.get completed ----");
-      console.log(rates);
   }
+  // 국가코드, 매매기준율 받아오기
+  const fetchData = async () => {
+    // 백엔드에서 해당 국가의 코드와 매매기준율 데이터를 받아옴 
+    const res = await api.fetch(wantCountry);
+  
+    // axios에서 응답받은 데이터는 data 속성에 들어가있음
+    // 서버로부터 받은 데이터를 state 객체로 받아옴
+    const rate = res.data.map((item)=> ({
+      cntUnit: item.curUnit,
+      dealBasR: item.dealBasR,
+    })) as CalculatorItemState[];
+    // const rate = res.data.map((item)=> ({
+    //   cntUnit: item.curUnit,
+    //   dealBasR: item.dealBasR,
+    // })) as CalculatorItemState[];
+    
+    // 받아온 값 rateValue에 넣기
+    setRateValue(rate);
+  
+    console.log("---- await axios.get completed ----");
+    // 확인용 콘솔 출력
+    console.log(rateValue);
 
-  useEffect(() => {
-    console.log("---- 1. mounted ----");
-    // 백엔드에서 데이터를 받아올것
-    // ES8 Style로 async-await 기법을 이용해서 데이터를 조회해옴
-    fetchData()
-  })
+    ExChange();
+  }
+  
+
 
   // HTML
   return (
@@ -94,48 +125,70 @@ const Calculator = () => {
             <div className="mb-3">
               <label className="form-label">보유한 화페의 국가</label><br />
               <select
+                defaultValue="USD"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntHave}
+                ref={cntWant}
               >
-                <option selected >KRW</option>
-                {/* <option value="USD">USD</option>
-                <option value="JPY">JPY</option>
-                <option value="CNY">CNY</option> */}
+                <option 
+                value="USD"
+                >
+                  USD
+                </option>
+                <option 
+                  value="JPY(100)"
+                >
+                  JPY
+                </option>
+                <option 
+                  value="CNH"
+                >
+                  CNH
+                </option>
               </select>
               <input
-                type="text"
-                className="form-control"
+                type="number"
+                className= {`form-control ${styles.inputCrc}`}
                 ref={crcHave}
+                onChange={fetchData}
               />
               <div className="form-text">원하는 환전액을 입력하세요.</div>
             </div>
             <div className="mb-3">
               <label className="form-label">환전을 원하는 국가</label><br />
               <select
+                defaultValue="KRW"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntWant}
+                ref={cntHave}
               >
-                <option selected>국가선택</option>
-                <option value="USD">USD</option>
+                <option value="KRW">KRW</option>
+                {/* <option value="USD">USD</option>
                 <option value="JPY">JPY</option>
-                <option value="CNY">CNY</option>
+                <option value="CNY">CNH</option> */}
               </select>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 ref={crcWant}
+                readOnly
+                disabled 
               />
-            </div>
-            <div className="d-flex buttons justify-content-center">
-              <button type="submit" className={`btn btn-primary ${styles.ebut}`}>계산하기</button>
             </div>
             <div className="d-flex buttons justify-content-center">
               <button 
                 type="submit" 
                 className={`btn btn-primary ${styles.ebut}`}
                 onClick = {() => {
-                  setIsAdd(true);
+                  // 계산하는 함수
+                  ExChange()
                 }}
+              >
+                계산하기
+              </button>
+            </div>
+            <div className="d-flex buttons justify-content-center">
+              <button 
+                type="submit" 
+                className={`btn btn-primary ${styles.ebut}`}
               >
                 이 가격으로 매물 등록
               </button>
