@@ -1,34 +1,31 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-import produce from "immer";
-import api from "./commentApi";
+import api from "./itemlistApi";
 
-
-
-interface CommentItemState {
+interface ItemListItemState {
   id: number;
-  memo: string | undefined;
-  name: string;
+  hostName: string;
+  crcHave: number;
+  cntHave: string;
+  memo: string;
+  crcWant: number;
+  cntWant: string;
+  bidderName: string;
+  status?: boolean;
   createdTime: number;
 }
-
 const getTimeString = (unixtime: number) => {
   const dateTime = new Date(unixtime);
   return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
 };
 
-const Comment = () => {
+const ItemList = () => {
 
-  // comment 여러건에 대한 state
-  const [commentList, setCommentList] = useState<CommentItemState[]>([
-    // { id: 2, memo: "메모입니다", name: "Jhon", },
-    // { id: 1, memo: "메모입니다", name: "Smith" },
-  ]);
+  const [itemlistList, setItemListList] = useState<ItemListItemState[]>([]);
 
-  // 데이터 로딩처리 여부 표시
   const [isLoading, setLoading] = useState<boolean>(true);
 
   // 에러 여부 state
@@ -40,95 +37,76 @@ const Comment = () => {
   const fetchData = async () => {
     // 백엔드에서 데이터 받아옴
     const res = await api.fetch();
-
-    // axios에서 응답받은 데이터는 data속성에 들어가 있음
-    // 서버로부터 받은 데이터를 state 객체로 변환함
-    const comments = res.data.map((item) => ({
+    const itemlists = res.data.map((item) => ({
       id: item.id,
+      hostName: item.hostName,
+      crcHave: item.crcHave,
+      cntHave: item.cntHave,
       memo: item.memo,
-      name: item.name,
+      crcWant: item.crcWant,
+      cntWant: item.cntWant,
+      bidderName: item.bidderName,
+      // status?:
       createdTime: item.createdTime,
-    })) as CommentItemState[];
+    })) as ItemListItemState[];
     setLoading(false); // 로딩중 여부 state 업데이트
-    setCommentList(comments); // comment state 업데이트
-    // console.log(comments);
-    // console.log("--2. await axios.get completed--");
-
+    setItemListList(itemlists); // comment state 업데이트
   };
   useEffect(() => {
-    console.log("--1. mounted--");
-    //   // 백엔드에서 데이터를 받아올 것임
-    //   // ES8 style로 async-await 기법을 이용해서 데이터를 조회해옴
     fetchData();
   }, []);
-
-  // const add = async () => {
-  //   try {
-  //     const result = await api.add({
-
-  //     });
-  //     console.log(result);
-
-  //     const comment: CommentItemState = {
-  //       id: result.data.id,
-  //       memo: result.data.memo,
-  //       name: result.data.name,
-  //       createdTime: result.data.createdTime,
-  //     };
-
-
-  //     setIsError(false);
-  //   } catch (e: any) {
-  //     console.log(e.response);
-  //     // 에러메시지를 표시
-  //     const message = (e as Error).message;
-  //     setIsError(true);
-  //     setErrMessage(message);
-  //   }
-  // }
-
-
-
-
-
 
   return (
     <div>
       <Appbar />
       <Sidebar />
       <div style={{ marginLeft: "20vw" }} className="card text-center">
-        <h2>댓글 목록</h2>
+        <h2>거래 목록</h2>
 
         <table className="table caption-top">
           <caption>
+            <Link href="/manager/itemlist">
+              <button>전체매물</button>
+            </Link>
+            <Link href="/manager/myitem">
+              <button>나의매물</button>
+            </Link>
+            <Link href="/manager/mylist">
+              <button>신청중매물</button>
+            </Link>
+
           </caption>
+
           <thead>
             <tr>
               <th scope="col">번호</th>
-              <th scope="col">댓글</th>
-              <th scope="col">작성자</th>
+              <th scope="col">호스트</th>
+              <th scope="col">교환매물</th>
+              <th scope="col">비더</th>
+              <th scope="col">상태</th>
               <th scope="col">작성시간</th>
             </tr>
           </thead>
           <tbody>
-            {commentList.map((item, index) => (
+            {itemlistList.map((item, index) => (
               <tr className="tbody-tr" key={item.id}>
                 <td className="me-1" >
                   {item.id}
-
                 </td>
                 <td className="me-1" >
-                  {item.memo}
+                  {item.hostName}
                 </td>
                 <td className="me-1" >
-                  {item.name}
+                  {item.crcHave} {item.cntHave} {item.memo} {item.crcWant} {item.cntWant}
+                </td>
+                <td className="me-1" >
+                  {item.bidderName}
                 </td>
                 <td className="me-1" >
                   {getTimeString(item.createdTime)}
                 </td>
               </tr>
             ))}
-
           </tbody>
         </table>
 
@@ -150,9 +128,8 @@ const Comment = () => {
           </ul>
         </nav>
 
-
       </div>
     </div>
   );
 };
-export default Comment;
+export default ItemList;

@@ -3,6 +3,11 @@ import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
+
+
+
+
+
 const MyList = () => {
 
 
@@ -10,47 +15,80 @@ const MyList = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <div style={{ marginLeft: "20vw" }}>
 
 
-        <div className="card text-center">
-          <h2>나의 목록 페이지</h2>
-          <div className="card-header">
+      <div style={{ marginLeft: "20vw" }} className="card text-center">
+        <h2>신청중 목록</h2>
+        <table className="table caption-top">
+          <caption>
+            <Link href="/manager/itemlist">
+              <button>전체매물</button>
+            </Link>
+            <Link href="/manager/myitem">
+              <button>나의매물</button>
+            </Link>
+            <Link href="/manager/mylist">
+              <button>신청중매물</button>
+            </Link>
 
-            <ul className="nav nav-pills card-header-pills ">
-              <li className="nav-item">
-                <Link href="/manager/myitem">
-                  <a className="nav-link active">나의 매물</a>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link href="/manager/comment">
-                  <a className="nav-link">나의 댓글</a>
-                </Link>
+          </caption>
 
-              </li>
-            </ul>
-          </div>
-          <div className="card-body">
-            <h5 className="card-title">Special title treatment</h5>
-            <table>
-              <thead>
-                <tr>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>3</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">호스트</th>
+              <th scope="col">교환매물</th>
+              <th scope="col">비더</th>
+              <th scope="col">상태</th>
+              <th scope="col">작성시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>John</td>
+              <td>100USD to 120,000KRW</td>
+              <td></td>
+              <td>거래가능</td>
+              <td>2021.11.02</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>John</td>
+              <td>100CNY to 18,000KRW</td>
+              <td></td>
+              <td>거래가능</td>
+              <td>2021.11.02</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>John</td>
+              <td>110,000KRW to 10,000JPY</td>
+              <td></td>
+              <td>거래가능</td>
+              <td>2021.11.01</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li className="page-item"><a className="page-link" href="#">1</a></li>
+            <li className="page-item"><a className="page-link" href="#">2</a></li>
+            <li className="page-item"><a className="page-link" href="#">3</a></li>
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
 
       </div>
     </div>

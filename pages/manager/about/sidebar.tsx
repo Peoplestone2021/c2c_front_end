@@ -8,14 +8,14 @@ export default function Sidebar() {
         <ul className="nav-justified">
 
           <li className="nav-item">
-            <Link href="/manager/list">
+            <Link href="/manager/itemlist">
               <a className={"nav-link"}>거래목록</a>
             </Link>
 
           </li>
           <li className="nav-item">
-            <Link href="/manager/mylist">
-              <a className={"nav-link"}>나의목록</a>
+            <Link href="/manager/comment">
+              <a className={"nav-link"}>댓글목록</a>
             </Link>
 
           </li>

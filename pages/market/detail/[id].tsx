@@ -1,3 +1,5 @@
+// import { AppDispatch, RootState } from "../../../provider";
+
 const MarketDetail = () => {
   const itemDetail = [
     {
