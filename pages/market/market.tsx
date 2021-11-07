@@ -42,47 +42,60 @@ import { GetServerSideProps } from "next";
 // }
 
 const Market = () => {
+  const router = useRouter();
+
   const marketItems = [
     {
-      id: 0,
-      hostName: "일번",
+      id: 11111111,
+      hostName: "Zero",
       crcHave: "USD",
       crcWant: "KRW",
-      cntHave: 100,
-      cntWant: 117400,
+      cntHave: 1000,
+      cntWant: 1174000,
       dDate: "1635747679",
       content: "울릉도 동남쪽",
       status: true,
     },
     {
       id: 22222222,
-      hostName: "이번",
+      hostName: "One",
       crcHave: "USD",
       crcWant: "KRW",
-      cntHave: 110,
-      cntWant: 127400,
+      cntHave: 1100,
+      cntWant: 1291000,
       dDate: "1635745679",
       content: "뱃길따라 이백리",
       status: true,
     },
     {
       id: 33333333,
-      hostName: "삼번",
+      hostName: "Two",
       crcHave: "USD",
       crcWant: "KRW",
-      cntHave: 120,
-      cntWant: 128400,
+      cntHave: 890,
+      cntWant: 1044000,
       dDate: "1635749679",
       content: "외로운 섬하나",
       status: true,
     },
     {
       id: 44444444,
-      hostName: "사번",
+      hostName: "Three",
       crcHave: "USD",
       crcWant: "KRW",
-      cntHave: 120,
-      cntWant: 128400,
+      cntHave: 880,
+      cntWant: 1033000,
+      dDate: "1635748679",
+      content: "새들의 고향",
+      status: true,
+    },
+    {
+      id: 55555555,
+      hostName: "Three",
+      crcHave: "USD",
+      crcWant: "KRW",
+      cntHave: 1150,
+      cntWant: 1350000,
       dDate: "1635748679",
       content: "새들의 고향",
       status: true,
@@ -92,8 +105,6 @@ const Market = () => {
   // const listMarketItems = marketItems.map((marketItems) => (
   //   <li>{listMarketItems}</li>
   // ));
-
-  const router = useRouter();
 
   // const [itemList, setItemList] = useState<MarketItems[]>
 
@@ -128,68 +139,49 @@ const Market = () => {
           <tbody className="border-bottom border-top">
             {" "}
             {/*map으로 출력하도록*/}
-            <tr
-              className="h-40"
-              // style={{ cursor: "pointer" }}
-              onClick={() => {
-                router.push("/marketDetail");
-              }}
-            >
-              <td
-              //state사용
-              >
-                USD
-              </td>
-              <td>1,000</td>
-              <td>1,174,000w</td>
-              <td className="bi bi-play-fill"></td>
-              <td className="text-warning">오늘</td>
-            </tr>
-            <tr>
-              <td>USD</td>
-              <td>1,100</td>
-              <td>1,291,000w</td>
-              <td className="bi bi-play-fill"></td>
-              <td>마감없음</td>
-            </tr>
-            <tr>
-              <td>USD</td>
-              <td>890</td>
-              <td>1,044,000w</td>
-              <td className="bi bi-stop-fill"></td>
-              <td>-14일</td>
-            </tr>
-            <tr>
-              <td>USD</td>
-              <td>880</td>
-              <td>1,033,000w</td>
-              <td className="bi bi-play-fill"></td>
-              <td>-7일</td>
-            </tr>
-            <tr>
-              <td>USD</td>
-              <td>1,150</td>
-              <td>1,291,000w</td>
-              <td className="bi bi-play-fill"></td>
-              <td>마감없음</td>
-            </tr>
+            {marketItems.map((d) => (
+              <tr>
+                <td>{d.crcHave}</td>
+                <td>{d.cntHave}</td>
+                <td>{d.cntWant}</td>
+                <td>{d.status}</td>
+                <td>{d.dDate}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-        <div
-          className="card mx-auto"
-          onClick={() => {
-            router.push("/market/marketDetail");
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">
-              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
-              USD
-            </h5>
-            <p className="card-text">1,000$ to 1,174,000w</p>
-            <div className="bi bi-play-fill"></div>
-            <div className="text-end">마감: 오늘</div>
-          </div>
+        <div>
+          {marketItems.map((d) => (
+            <div
+              className="card mx-auto"
+              onClick={() => {
+                router.push("/market/marketDetail");
+              }}
+            >
+              <div className="card-body">
+                <h5 className="card-title">
+                  <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
+                  USD
+                </h5>
+                <p className="card-text">
+                  <div>
+                    {d.cntHave}$ to {d.cntWant}w
+                  </div>
+                  <div className="bi bi-play-fill"></div>
+                  <div className="text-end">마감: {d.dDate}</div>
+                </p>
+              </div>
+            </div>
+          ))}
+          {/* <div>
+              <h5 className="card-title">
+                <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
+                USD
+              </h5>
+              <p className="card-text">1,000$ to 1,174,000w</p>
+              <div className="bi bi-play-fill"></div>
+              <div className="text-end">마감: 오늘</div>
+            </div> */}
         </div>
         <div
           className="card mx-auto"
@@ -205,45 +197,6 @@ const Market = () => {
             <p className="card-text">1,100$ to 1,291,000w</p>
             <div className="bi bi-play-fill" style={{ width: 50 }}></div>
             <div className="text-end">마감 없음</div>
-          </div>
-        </div>
-        <div
-          className="card mx-auto"
-          onClick={() => {
-            router.push("/market/marketDetail");
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">USD</h5>
-            <p className="card-text">890$ to 1,044,000w</p>
-            <td className="bi bi-stop-fill"></td>
-            <div className="text-end">-14일</div>
-          </div>
-        </div>
-        <div
-          className="card mx-auto"
-          onClick={() => {
-            router.push("/market/marketDetail");
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">USD</h5>
-            <p className="card-text">880$ to 1,033,000w</p>
-            <td className="bi bi-play-fill"></td>
-            <div className="text-end">-7일</div>
-          </div>
-        </div>
-        <div
-          className="card mx-auto"
-          onClick={() => {
-            router.push("/market/marketDetail");
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">USD</h5>
-            <p className="card-text">1,150$ to 1,291,000w</p>
-            <td className="bi bi-play-fill"></td>
-            <div className="text-end">마감없음</div>
           </div>
         </div>
         <div className="text-center btn text-secondary fs-10 fw-bold mx-auto">
