@@ -1,19 +1,67 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-const List = () => {
+import api from "./itemlistApi";
 
-  const Create = useRef<HTMLButtonElement>(null);
-  const Cancel = useRef<HTMLButtonElement>(null);
+interface ItemListItemState {
+  id: number;
+  hostName: string;
+  crcHave: number;
+  cntHave: string;
+  memo: string;
+  crcWant: number;
+  cntWant: string;
+  bidderName: string;
+  status?: boolean;
+  createdTime: number;
+}
+const getTimeString = (unixtime: number) => {
+  const dateTime = new Date(unixtime);
+  return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+};
+
+const ItemList = () => {
+
+  const [itemlistList, setItemListList] = useState<ItemListItemState[]>([]);
+
+  const [isLoading, setLoading] = useState<boolean>(true);
+
+  // 에러 여부 state
+  const [isError, setIsError] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
+
+  const ulRef = useRef<HTMLUListElement>(null);
+
+  const fetchData = async () => {
+    // 백엔드에서 데이터 받아옴
+    const res = await api.fetch();
+    const itemlists = res.data.map((item) => ({
+      id: item.id,
+      hostName: item.hostName,
+      crcHave: item.crcHave,
+      cntHave: item.cntHave,
+      memo: item.memo,
+      crcWant: item.crcWant,
+      cntWant: item.cntWant,
+      bidderName: item.bidderName,
+      // status?:
+      createdTime: item.createdTime,
+    })) as ItemListItemState[];
+    setLoading(false); // 로딩중 여부 state 업데이트
+    setItemListList(itemlists); // comment state 업데이트
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Appbar />
       <Sidebar />
       <div style={{ marginLeft: "20vw" }} className="card text-center">
         <h2>거래 목록</h2>
-
 
         <table className="table caption-top">
           <caption>
@@ -40,30 +88,25 @@ const List = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>100USD to 120,000KRW</td>
-              <td>Jason</td>
-              <td>거래중</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>John</td>
-              <td>100CNY to 18,000KRW</td>
-              <td>Smith</td>
-              <td>거래완료</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Tom</td>
-              <td>110,000KRW to 10,000JPY</td>
-              <td>Jully</td>
-              <td>거래완료</td>
-              <td>2021.11.01</td>
-            </tr>
+            {itemlistList.map((item, index) => (
+              <tr className="tbody-tr" key={item.id}>
+                <td className="me-1" >
+                  {item.id}
+                </td>
+                <td className="me-1" >
+                  {item.hostName}
+                </td>
+                <td className="me-1" >
+                  {item.crcHave} {item.cntHave} {item.memo} {item.crcWant} {item.cntWant}
+                </td>
+                <td className="me-1" >
+                  {item.bidderName}
+                </td>
+                <td className="me-1" >
+                  {getTimeString(item.createdTime)}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -89,4 +132,4 @@ const List = () => {
     </div>
   );
 };
-export default List;
+export default ItemList;

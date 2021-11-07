@@ -3,6 +3,11 @@ import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
+
+
+
+
+
 const MyList = () => {
 
 
@@ -10,6 +15,8 @@ const MyList = () => {
     <div>
       <Appbar />
       <Sidebar />
+
+
       <div style={{ marginLeft: "20vw" }} className="card text-center">
         <h2>신청중 목록</h2>
         <table className="table caption-top">
