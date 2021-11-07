@@ -23,6 +23,11 @@
   width: 150px;
 }
 
+.inputCrc {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .calculator_main .addItem{
   width: 600px;
   margin: 0 auto;
