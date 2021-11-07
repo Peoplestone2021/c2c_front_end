@@ -44,7 +44,7 @@ const Calculator = () => {
   const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
 
   // 환전된 결과 값
-  const [exValue, setExValue] = useState();
+  const [exValue, setExValue] = useState(Number);
 
   // 보유하고 있는 화페 국가
   const cntHave = useRef() as MutableRefObject <HTMLSelectElement>;
@@ -80,7 +80,7 @@ const Calculator = () => {
       console.log(exrate);
       console.log(parseInt(haveMoney) * exrate);
 
-      return exrate;
+      return setExValue(parseInt(haveMoney) * exrate);
     })
     // const result = parseInt(haveMoney) * parseInt(exrate);
 
@@ -171,27 +171,8 @@ const Calculator = () => {
                 ref={crcWant}
                 readOnly
                 disabled 
+                value={exValue}
               />
-            </div>
-            <div className="d-flex buttons justify-content-center">
-              <button 
-                type="submit" 
-                className={`btn btn-primary ${styles.ebut}`}
-                onClick = {() => {
-                  // 계산하는 함수
-                  ExChange()
-                }}
-              >
-                계산하기
-              </button>
-            </div>
-            <div className="d-flex buttons justify-content-center">
-              <button 
-                type="submit" 
-                className={`btn btn-primary ${styles.ebut}`}
-              >
-                이 가격으로 매물 등록
-              </button>
             </div>
           </form>
         </div>
