@@ -1,7 +1,7 @@
 .calculator_main {
-  width: 800px;
+  width: 600px;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 50px;
   background-color: rgba(168, 228, 236, 0.938);
   border: rgba(160, 198, 241, 0.938) 6px solid;
   border-radius: 10%;
@@ -9,9 +9,9 @@
 }
 
 .calculator_main .calculator{
-  width: 600px;
+  width: 500px;
   margin: 0 auto;
-  padding-top: 30px;
+  padding-top: 50px;
   padding-bottom: 30px;
 }
 
@@ -29,15 +29,19 @@
 }
 
 .calculator_main .addItem{
-  width: 600px;
+  width: 500px;
   margin: 0 auto;
 }
 
 .calculator_main .addItem .datebox{
   font-size: 20px;
+  width: 500px;
+  margin: 0 auto;
 }
 .calculator_main .addItem .datebox .date{
   width: 150px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .calculator_main .addItem .memo {
@@ -47,6 +51,6 @@
 .calculator_main .ebut {
   margin-top: 10px;
   margin-bottom: 30px;
-  width: 600px;
+  width: 500px;
   
 }

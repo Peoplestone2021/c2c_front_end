@@ -1,11 +1,8 @@
 import styles from './styles/caclulator.module.css'
 import Link from "next/link";
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-
+// 계산기 백엔드 연동 api
 import api from "../api/calculator"
-
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
 
 //계산에 필요한 state
 interface CalculatorItemState{
@@ -39,6 +36,15 @@ interface AddItemState{
 const Calculator = () => {
   // 매물목록
   const [itemList, setItemList] = useState<AddItemState[]>();
+
+  // 2월
+  const [month28, setMonth28] = useState(Boolean(false));
+  // 윤달
+  const [month29, setMonth29] = useState(Boolean(false));
+  // 30일
+  const [month30, setMonth30] = useState(Boolean(false));
+  // 31일
+  const [month31, setMonth31] = useState(Boolean(false));
 
   // 불러온 매매율
   const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
@@ -79,13 +85,14 @@ const Calculator = () => {
       const exrate = item.dealBasR;
       console.log(exrate);
       console.log(parseInt(haveMoney) * exrate);
-
-      return setExValue(parseInt(haveMoney) * exrate);
+      // 100원기준인 국가코드 일 때
+      if (wantCountry === "JPY(100)") {
+        // 100을 나누어 1원 기준으로 만든다. (나머지값은 버린다.)
+        return setExValue(Math.round(parseInt(haveMoney) * exrate/100));
+      }
+      // 1원 기준일 시 (나머지 값은 버린다)
+      return setExValue(Math.round(parseInt(haveMoney) * exrate));
     })
-    // const result = parseInt(haveMoney) * parseInt(exrate);
-
-    // console.log(result);
-    
   }
   // 국가코드, 매매기준율 받아오기
   const fetchData = async () => {
@@ -98,10 +105,6 @@ const Calculator = () => {
       cntUnit: item.curUnit,
       dealBasR: item.dealBasR,
     })) as CalculatorItemState[];
-    // const rate = res.data.map((item)=> ({
-    //   cntUnit: item.curUnit,
-    //   dealBasR: item.dealBasR,
-    // })) as CalculatorItemState[];
     
     // 받아온 값 rateValue에 넣기
     setRateValue(rate);
@@ -109,10 +112,32 @@ const Calculator = () => {
     console.log("---- await axios.get completed ----");
     // 확인용 콘솔 출력
     console.log(rateValue);
-
+    // 계산하는 함수 실행
     ExChange();
   }
+
+  // ---------- 거래일자 구하기 ----------
+  // 년 배열
+  let years = [];
+  // 2021s년부터 2023년까지
+  for (let i = 2021; i<= 2023; i++){
+    years.push(i);
+  }
   
+  // 월 배열
+  let months = [];
+  // 12월 까지 
+  for (let i = 1; i <= 12; i++) {
+    months.push(i);
+  }
+  // 일 배열
+  let day31 = [];
+
+  for (let i = 1; i <= 31; i++) {
+    day31.push(i);
+  }
+
+
 
 
   // HTML
@@ -150,6 +175,7 @@ const Calculator = () => {
                 className= {`form-control ${styles.inputCrc}`}
                 ref={crcHave}
                 onChange={fetchData}
+                placeholder="0"
               />
               <div className="form-text">원하는 환전액을 입력하세요.</div>
             </div>
@@ -195,60 +221,21 @@ const Calculator = () => {
           거래일자
           <div className={`date d-flex justify-content-between ${styles.datebox}`}>
             <select name="yy" ref={yy} id="" className={`form-select ${styles.date}`}>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
-              <option value="2020">2020</option>
-              <option value="2019">2019</option>
-              <option value="2018">2018</option>
+              {years.map((year, index) =>(
+                <option key = {index} value={year}>{year}</option>
+              ))}
             </select>
             년
             <select name="mm" ref={mm} id="" className={`form-select ${styles.date}`}>
-              <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option value="07">07</option>
-              <option value="08">08</option>
-              <option value="09">09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
+              {months.map((item, index) =>(
+                <option key = {index} value={item}>{item}</option>
+              ))}
             </select>
             월
             <select name="dd" ref={dd} id="" className={`form-select ${styles.date}`}>
-              <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option value="07">07</option>
-              <option value="08">08</option>
-              <option value="09">09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-              <option value="18">18</option>
-              <option value="19">19</option>
-              <option value="20">20</option>
-              <option value="21">21</option>
-              <option value="22">22</option>
-              <option value="23">23</option>
-              <option value="24">24</option>
-              <option value="25">25</option>
-              <option value="26">26</option>
-              <option value="27">27</option>
-              <option value="28">28</option>
-              <option value="29">29</option>
-              <option value="30">30</option>
-              <option value="31">31</option>
+              {day31.map((item, index) =>(
+                <option key = {index} value={item}>{item}</option>
+              ))}
             </select>
             일
           </div>
