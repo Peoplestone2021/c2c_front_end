@@ -6,6 +6,27 @@ interface ExChangeRateResponse {
   dealBasR: number;
 }
 
+interface AddItemRequest{
+   // 매물 ID
+   itemId: number;
+   // 유저 아이디
+   hostName : String;
+   // 가지고있는 국가
+   cntHave : String;
+   // 가지고있는 돈
+   crcHave : number;
+   // 원하는환전 국가
+   cntWant : String;
+   // 원하는환전 액
+   crcWant : number;
+   // 거래일자
+   dDay : String;
+   // 본문
+   content : String;
+   // 거래상태
+   status : boolean;
+}
+
 // 서버하고 데이터 연동하는 api처리 목록을 별도의 객체로 작성
 // process.env.변수명
 const calculatorApi = {
@@ -16,11 +37,10 @@ const calculatorApi = {
 
   // axios.post<응답타입>(요청URL, 요청객체(JSON바디));
   // POST 요청URL HTTP/1.1  {...}
-  // add: (todoItem: TodoItemRequest) =>
-  //   axios.post<TodoItemResponse>(
-  //     `${process.env.NEXT_PUBLIC_API_BASE}/lobby/rate`,
-  //     todoItem
-  //   ),
+  add: () =>
+    axios.post<AddItemRequest>(
+      `http://localhost:9091/send-message`
+    ),
 };
 
 export default calculatorApi;

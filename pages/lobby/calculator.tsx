@@ -3,6 +3,8 @@ import Link from "next/link";
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 // 계산기 백엔드 연동 api
 import api from "../api/calculator"
+import { Alert } from 'react-bootstrap';
+import produce from 'immer';
 
 //계산에 필요한 state
 interface CalculatorItemState{
@@ -34,17 +36,8 @@ interface AddItemState{
 }
 
 const Calculator = () => {
-  // 매물목록
-  const [itemList, setItemList] = useState<AddItemState[]>();
-
-  // 2월
-  const [month28, setMonth28] = useState(Boolean(false));
-  // 윤달
-  const [month29, setMonth29] = useState(Boolean(false));
-  // 30일
-  const [month30, setMonth30] = useState(Boolean(false));
-  // 31일
-  const [month31, setMonth31] = useState(Boolean(false));
+  // 매물
+  const [item, setItem] = useState<AddItemState[]>();
 
   // 불러온 매매율
   const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
@@ -116,7 +109,7 @@ const Calculator = () => {
     ExChange();
   }
 
-  // ---------- 거래일자 구하기 ----------
+  // ---------- 거래일자 구현 ----------
   // 년 배열
   let years = [];
   // 2021s년부터 2023년까지
@@ -132,9 +125,49 @@ const Calculator = () => {
   }
   // 일 배열
   let day31 = [];
-
+  // 31일 까지 
   for (let i = 1; i <= 31; i++) {
     day31.push(i);
+  }
+
+  const seleYear = yy.current?.value;
+  const seleMonth = mm.current?.value;
+  const seleDay = dd.current?.value;
+  
+  let dDays = seleYear + seleMonth + seleDay;
+
+  // 매물 추가시 함수
+  const handleAddClick = async () => {
+    
+    const addItem : AddItemState = {
+      // 매물 ID
+      // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
+      itemId: 1,
+      // 유저 아이디
+      hostName : hostName.current?.value,
+      // 가지고있는 국가
+      cntHave : cntHave.current?.value,
+      // 가지고있는 돈
+      crcHave : parseInt(crcHave.current?.value),
+      // 원하는환전 국가
+      cntWant : cntWant.current?.value,
+      // 원하는환전 액
+      crcWant : parseInt(crcWant.current?.value),
+      // 거래일자
+      dDay : dDays,
+      // 본문
+      content : content.current?.value,
+      // 거래상태
+      status : true,
+    }
+
+    setItem(
+      produce((state) => {
+        state?.unshift(addItem);
+      })
+    );
+
+    const res = await api.add();
   }
 
 
@@ -241,19 +274,27 @@ const Calculator = () => {
           </div>
           내용
           <div className={`form-floating `}>
-            <textarea className={`form-control ${styles.memo}`} ref={content} placeholder="Leave a comment here" id="floatingTextarea2"></textarea>
-            <label htmlFor="floatingTextarea2">Comments</label>
+            <textarea 
+              className={`form-control ${styles.memo}`} 
+              ref={content} 
+              placeholder="Leave a comment here" 
+              id="floatingTextarea2" />
+            <label htmlFor="floatingTextarea2">Contant</label>
           </div>
         </div>
         <div className={`d-flex justify-content-center`}>
-          <Link href="/market/market">
+          {/* <Link href="/market/market"> */}
             <button
               type="submit"
               className={`btn btn-dark ${styles.ebut}`}
+              onClick = {() => {
+                // handleAddClick();
+                console.log(dDays)
+              }}
             >
               매물등록
             </button>
-          </Link>
+          {/* </Link> */}
         </div>
       </div>
     </>
