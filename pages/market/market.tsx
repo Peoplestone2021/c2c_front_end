@@ -1,22 +1,9 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+import ApexCharts from "apexcharts";
 import SSRProvider from "react-bootstrap/SSRProvider";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
-// import itemState from "../../provider/modules/market";
-// import axios from "axios";
-// import { NavItem, ToastBody } from "react-bootstrap";
-// import styles from "../../styles/market.module.css";
-// import Link from "next/link";
-// import {profilePic} from '../data/flag_usd.png'
-// import {}
-
-// import { Router } from "next/dist/client/router";
-// import { flagusd } from "../market/data";
-
-// const getTimeStringD = (unixtime: number) => {
-//   return;
-// };
 
 // const MarketItemData = (marketItems) => {};
 
@@ -41,6 +28,22 @@ import { GetServerSideProps } from "next";
 
 // }
 
+const getTimeString = (unixtime: number) => {
+  const dateTime = new Date(unixtime);
+  const day = 24 * 60 * 60 * 1000;
+  return unixtime - new Date().getTime() >= day
+    ? dateTime.toLocaleDateString()
+    : dateTime.toLocaleTimeString();
+  // return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+};
+
+const itemStatus = (d: boolean) => {
+  if (d === true) {
+    return <span className="bi bi-play-fill"></span>;
+  }
+  return <span className="bi bi-stop-fill"></span>;
+};
+
 const Market = () => {
   const router = useRouter();
 
@@ -52,7 +55,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1000,
       cntWant: 1174000,
-      dDate: "1635747679",
+      dDate: 1635747679,
       content: "울릉도 동남쪽",
       status: true,
     },
@@ -63,7 +66,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1100,
       cntWant: 1291000,
-      dDate: "1635745679",
+      dDate: 1635745679,
       content: "뱃길따라 이백리",
       status: true,
     },
@@ -74,9 +77,9 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 890,
       cntWant: 1044000,
-      dDate: "1635749679",
+      dDate: 1635749679,
       content: "외로운 섬하나",
-      status: true,
+      status: false,
     },
     {
       id: 44444444,
@@ -85,7 +88,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 880,
       cntWant: 1033000,
-      dDate: "1635748679",
+      dDate: 1635748679,
       content: "새들의 고향",
       status: true,
     },
@@ -96,7 +99,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1150,
       cntWant: 1350000,
-      dDate: "1635748679",
+      dDate: 1635748679,
       content: "새들의 고향",
       status: true,
     },
@@ -123,39 +126,41 @@ const Market = () => {
           <button className="btn btn-secondary">[검색</button>
           <button className="btn btn-secondary">도구]</button>
         </div>{" "}
+        <span></span>
         {/*검색 도구*/}
         <span className="bi bi-list badge bg-light fw-bold"> LIST</span>
-        <table className="striped bordered table-hover w-100">
+        <table className="table text-center striped bordered table-hover max-auto">
           <thead>
             <tr className="text-secondary">
               <th scope="col">국가</th>
-              <th>금액</th>
-              <th>가격</th>
+              <th scope="col">금액</th>
+              <th scope="col">가격</th>
               {/*정렬 기능 버튼처리 필요-후순위*/}
-              <th>상태</th>
-              <th>거래마감</th>
+              <th scope="col">상태</th>
+              <th scope="col">거래마감</th>
             </tr>
           </thead>
           <tbody className="border-bottom border-top">
             {" "}
             {/*map으로 출력하도록*/}
             {marketItems.map((d) => (
-              <tr>
+              <tr key="id">
                 <td>{d.crcHave}</td>
                 <td>{d.cntHave}</td>
                 <td>{d.cntWant}</td>
-                <td>{d.status}</td>
-                <td>{d.dDate}</td>
+                <td>{itemStatus(d.status)}</td>
+                <td>{getTimeString(d.dDate)}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div>
-          {marketItems.map((d) => (
+          {marketItems.map((d, index) => (
             <div
+              key={`market-item-${index}`}
               className="card mx-auto"
               onClick={() => {
-                router.push("/market/marketDetail");
+                router.push(`/market/detail/${d.id}`);
               }}
             >
               <div className="card-body">
@@ -167,8 +172,8 @@ const Market = () => {
                   <div>
                     {d.cntHave}$ to {d.cntWant}w
                   </div>
-                  <div className="bi bi-play-fill"></div>
-                  <div className="text-end">마감: {d.dDate}</div>
+                  {itemStatus(d.status)}
+                  <div className="text-end">마감: {getTimeString(d.dDate)}</div>
                 </p>
               </div>
             </div>
