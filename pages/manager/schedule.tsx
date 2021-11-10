@@ -3,31 +3,37 @@ import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+
+import FullCalendar, { DatesSetArg, EventInput } from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
 
 
 
 
 const Schedule = () => {
+  const [events, setEvents] = useState<EventInput[]>([
+    { title: "initial event1", start: new Date() },
+  ]);
 
-  const [value, onChange] = useState(new Date());
 
   return (
     <div>
       <Appbar />
       <Sidebar />
+      {/* <FullCalendar
+        plugins={[dayGridPlugin]}
+        events={events}
+        datesSet={(arg: DatesSetArg) => {
+          setEvents([...events, { title: "additional", start: arg.start }]);
+        }}
+      /> */}
 
-      <div style={{ marginLeft: "20vw" }}>
-        <h2>스케쥴 관리 페이지</h2>
-        <Calendar
-          onChange={onChange}
-          value={value}
-        // onClickDay={ }
-        />
-      </div>
     </div>
   );
 };
 
 export default Schedule;
+
+

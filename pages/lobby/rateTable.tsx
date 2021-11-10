@@ -55,7 +55,7 @@ const RateTable = () => {
         </thead>
         <tbody>
           {rateList.map((item, index) => (
-            <tr key = {item.curUnit}>
+            <tr key = {index}>
               <td>
                 {item.curUnit}
               </td>

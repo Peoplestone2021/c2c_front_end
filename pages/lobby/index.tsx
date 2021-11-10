@@ -18,7 +18,7 @@ const lobby = () => {
 
       <div className="content">
         <div className="menus">
-          <Link href="/lobby/calculator">
+          <Link href="/lobby/main">
             <a className="menu-link">
               <div className="menu1">
                 <p>환전로비</p>

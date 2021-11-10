@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
@@ -96,10 +96,10 @@ const Comment = () => {
     <div>
       <Appbar />
       <Sidebar />
-      <div style={{ marginLeft: "20vw" }} className="card text-center">
-        <h2>댓글 목록</h2>
+      <div style={{ marginLeft: "20vw" }} className="card">
+        <h2 className="card text-center">댓글 목록</h2>
 
-        <table className="table caption-top">
+        {/* <table className="table caption-top">
           <caption>
           </caption>
           <thead>
@@ -130,8 +130,24 @@ const Comment = () => {
             ))}
 
           </tbody>
-        </table>
+        </table> */}
+        <div className="card-body">
 
+          <h5 className="card-title">John</h5>
+          <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam distinctio non sunt quasi atque ipsam libero a porro nihil ratione, alias harum dolorum! Impedit iusto sed dignissimos harum mollitia necessitatibus!</p>
+        </div>
+
+        <div className="card-body d-flex justify-content-end">
+          <div className="me-3">
+            createdTime
+          </div>
+          <div className="me-3">
+            <button>수정</button>
+          </div>
+          <div>
+            <button>삭제</button>
+          </div>
+        </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination">
             <li className="page-item">
