@@ -31,8 +31,6 @@ interface AddItemState {
   content: String;
   // 거래상태
   status: boolean;
-  // 추가모드인지
-  isAdd?: boolean;
 }
 
 const Calculator = () => {
@@ -130,44 +128,43 @@ const Calculator = () => {
     day31.push(i);
   }
 
-  const seleYear = yy.current?.value;
-  const seleMonth = mm.current?.value;
-  const seleDay = dd.current?.value;
-
-  let dDays = seleYear + seleMonth + seleDay;
-
   // 매물 추가시 함수
   const handleAddClick = async () => {
 
-    const addItem: AddItemState = {
-      // 매물 ID
-      // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-      itemId: 1,
-      // 유저 아이디
-      hostName: hostName.current?.value,
-      // 가지고있는 국가
-      cntHave: cntHave.current?.value,
-      // 가지고있는 돈
-      crcHave: parseInt(crcHave.current?.value),
-      // 원하는환전 국가
-      cntWant: cntWant.current?.value,
-      // 원하는환전 액
-      crcWant: parseInt(crcWant.current?.value),
-      // 거래일자
-      dDay: dDays,
-      // 본문
-      content: content.current?.value,
-      // 거래상태
-      status: true,
+    // 아이디값을 위한 매물목록 불러오기
+    // res에 받아온 패티 데이터를 넣는다.
+    // const res = await api.fetchList ()
+
+    try{
+      const result = await api.add({
+        // 매물 ID
+        // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
+        itemId:  + 1,
+        // 유저 아이디
+        hostName: hostName.current?.value,
+        // 가지고있는 국가
+        cntHave: cntHave.current?.value,
+        // 가지고있는 돈
+        crcHave: parseInt(crcHave.current?.value),
+        // 원하는환전 국가
+        cntWant: cntWant.current?.value,
+        // 원하는환전 액
+        crcWant: parseInt(crcWant.current?.value),
+        // 거래일자
+        dDay: yy.current?.value+mm.current?.value+dd.current?.value,
+        // 본문
+        content: content.current?.value,
+        // 거래상태
+        status: true,
+      });
+
+      console.log("----- result -----");
+      console.log(result);
+      
+    }catch(e:any){
+      console.log("ADDERR");
+      console.log(e.response);
     }
-
-    setItem(
-      produce((state) => {
-        state?.unshift(addItem);
-      })
-    );
-
-    const res = await api.add();
   }
 
 
@@ -288,8 +285,7 @@ const Calculator = () => {
             type="submit"
             className={`btn btn-dark ${styles.ebut}`}
             onClick={() => {
-              // handleAddClick();
-              console.log(dDays)
+              handleAddClick();
             }}
           >
             매물등록
