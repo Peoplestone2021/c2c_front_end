@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { Collapse } from "react-bootstrap";
 import style from "../styles/market.module.scss";
+import { Container, Collapse, Form, Button } from "react-bootstrap";
 import ContentDetail from "../components/ContentDetail";
 import marketApi from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +30,7 @@ const marketItems = [
     cntHave: 1000,
     cntWant: 1174000,
     dDate: 1635747679,
-    content: "울릉도 동남쪽",
+    content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
     status: true,
   },
   {
@@ -41,7 +41,7 @@ const marketItems = [
     cntHave: 1100,
     cntWant: 1291000,
     dDate: 1635745679,
-    content: "뱃길따라 이백리",
+    content: "Exercitationem velit labore animi nihil corporis nostrum!",
     status: true,
   },
   {
@@ -52,7 +52,7 @@ const marketItems = [
     cntHave: 890,
     cntWant: 1044000,
     dDate: 1635749679,
-    content: "외로운 섬하나",
+    content: "Dolorum molestias distinctio velit maiores, ",
     status: false,
   },
   {
@@ -63,7 +63,8 @@ const marketItems = [
     cntHave: 880,
     cntWant: 1033000,
     dDate: 1635748679,
-    content: "새들의 고향",
+    content:
+      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
     status: true,
   },
   {
@@ -74,7 +75,7 @@ const marketItems = [
     cntHave: 1150,
     cntWant: 1350000,
     dDate: 1635748679,
-    content: "새들의 고향",
+    content: "Exercitationem velit labore animi nihil corporis nostrum!",
     status: true,
   },
 ];
@@ -82,8 +83,15 @@ const marketItems = [
 const commentsItem = [
   {
     id: 1111,
-    userName: "홍길동",
-    cmtContent: "댓글 내용 예시입니다.",
+    userName: "John Doe",
+    cmtContent: "Exercitationem velit labore animi nihil corporis nostrum!",
+    cmtCreatedTime: 1636325783,
+  },
+  {
+    id: 2222,
+    userName: "Smith",
+    cmtContent:
+      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
     cmtCreatedTime: 1636325783,
   },
 ];
@@ -110,7 +118,7 @@ const MarketDetail = () => {
     id?: marketItem;
   };
 
-  const [Open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <section>
@@ -122,18 +130,20 @@ const MarketDetail = () => {
         <h2 className="text-center">매물 상세</h2>
         <span className="card mx-auto">
           <span className="card-body">
-            <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
-            <h5 className="card-title">
-              {marketContent?.crcHave}
-              {marketContent?.cntHave} &#62; {marketContent?.crcWant}
-              {marketContent?.cntWant}
-            </h5>
-            내용
+            <Container>
+              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
+              <h5 className="card-title">
+                {marketContent?.crcHave}
+                {marketContent?.cntHave} &#62; {marketContent?.crcWant}
+                {marketContent?.cntWant}
+              </h5>
+              {marketContent?.content}
+            </Container>
             {/* <span className="card-text"></span> */}
             {/* css 그리드처리 해야함 */}
           </span>
         </span>
-        <div className="d-flex">
+        <div className="d-flex mt-2">
           <div style={{ width: "50%" }}>
             <button
               className="btn btn-secondary me-1 float-left"
@@ -147,29 +157,37 @@ const MarketDetail = () => {
           <div style={{ width: "50%" }} className="d-flex justify-content-end">
             <button
               className="btn btn-secondary me-1 float-left"
-              onClick={() => setOpen(!Open)}
-              aria-controls="collapseCommentList"
-              aria-expanded={Open}
+              onClick={() => setOpen(!open)}
+              aria-controls="comment-collapse-thread"
+              aria-expanded={open}
             >
               댓글 보기
             </button>
           </div>
         </div>
         {commentsItem.map((d) => (
-          <Collapse key="id" in={Open}>
-            <span
-              className="speech-bubble collapse mx-auto"
-              id="collapseCommentList"
-            >
-              <div className="card card-body">
-                <div className={style.speechBubble}>{d.cmtContent}</div>{" "}
-                <cite>{d.userName}</cite>
-                <span>
-                  created&nbsp;
+          <Collapse key={id} in={open} className="mt-2">
+            <div key="id" className="mx-auto" id="comment-collapse-thread">
+              {/* <div className="card card-body"> */}
+              <div className={`${style.imessage}`}>
+                <p className={`${style.fromThem}`}>{d.cmtContent}</p>
+                <div className="fs-6">
+                  <div className="text-bold">{d.userName}</div>
+                  {/* created&nbsp; */}
                   {getTimeString(d.cmtCreatedTime)}
-                </span>
+                </div>
+                {/* </div> */}
+                <Form>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="commentForm.ControlTextarea1"
+                  >
+                    <Form.Control as="textarea" rows={2} />
+                  </Form.Group>
+                </Form>
+                <Button>댓글</Button>
               </div>
-            </span>
+            </div>
           </Collapse>
         ))}
       </div>

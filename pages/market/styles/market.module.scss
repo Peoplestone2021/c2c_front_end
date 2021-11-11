@@ -1,119 +1,201 @@
-// This solution uses transforms and a caret mixin.
-// What will yours be? Fork this pen and share
-// your solution in this comments.
+//========================================= imessage ==================================
+.imessage {
+  background-color: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  font-family: "SanFrancisco";
+  font-size: 1.25rem;
+  margin: 0 auto 1rem;
+  max-width: 50vw;
+  padding: 0.5rem 1.5rem;
+}
 
-// This pen's solution is on line 91.
+.imessage p {
+  border-radius: 1.15rem;
+  line-height: 1.25;
+  max-width: 75%;
+  padding: 0.5rem 0.875rem;
+  position: relative;
+  word-wrap: break-word;
+}
 
-/// DEMO
-/// ==========================================================
-// $bg: darken(#8ca8d8, 10%);
-// body {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   background: $bg;
+.imessage p::before,
+.imessage p::after {
+  bottom: -0.1rem;
+  content: "";
+  height: 1rem;
+  position: absolute;
+}
+
+p.fromMe {
+  align-self: flex-end;
+  background-color: #248bf5;
+  color: #fff;
+}
+
+p.fromMe::before {
+  border-bottom-left-radius: 0.8rem 0.7rem;
+  border-right: 1rem solid #248bf5;
+  right: -0.35rem;
+  transform: translate(0, -0.1rem);
+}
+
+p.fromMe::after {
+  background-color: #fff;
+  border-bottom-left-radius: 0.5rem;
+  right: -40px;
+  transform: translate(-30px, -2px);
+  width: 10px;
+}
+
+// p[class^="from-"] {
+//   margin: 0.5rem 0;
+//   width: fit-content;
 // }
 
-/// REQUIRED
-/// ==========================================================
+p.fromMe ~ p.fromMe {
+  margin: 0.25rem 0 0;
+}
 
-$gutter: 20px;
-$caret-unit: 25px;
-$bubble-bg: #8ca8d8;
-$bubble-color: white;
-$cite-color: $bubble-color;
+p.fromMe ~ p.fromMe:not(:last-child) {
+  margin: 0.25rem 0 0;
+}
 
-/// Opposite Direction
-/// ==========================================================
-/// Returns the opposite direction of each direction in a list
-/// @author Hugo Giraudel
-/// @param {List} $directions - List of initial directions
-/// @return {List} - List of opposite directions
+p.fromMe ~ p.fromMe:last-child {
+  margin-bottom: 0.5rem;
+}
 
-@function opposite-direction($directions) {
-  $opposite-directions: ();
-  $direction-map: (
-    "top": "bottom",
-    "right": "left",
-    "bottom": "top",
-    "left": "right",
-    "center": "center",
-    "ltr": "rtl",
-    "rtl": "ltr",
-  );
+p.fromThem {
+  align-items: flex-start;
+  background-color: #e5e5ea;
+  color: #000;
+}
 
-  @each $direction in $directions {
-    $direction: to-lower-case($direction);
+p.fromThem:before {
+  border-bottom-right-radius: 0.8rem 0.7rem;
+  border-left: 1rem solid #e5e5ea;
+  left: -0.35rem;
+  transform: translate(0, -0.1rem);
+}
 
-    @if map-has-key($direction-map, $direction) {
-      $opposite-directions: append(
-        $opposite-directions,
-        unquote(map-get($direction-map, $direction))
-      );
-    } @else {
-      @warn "No opposite direction can be found for `#{$direction}`. Direction omitted.";
-    }
+p.fromThem::after {
+  background-color: #fff;
+  border-bottom-right-radius: 0.5rem;
+  left: 20px;
+  transform: translate(-30px, -2px);
+  width: 10px;
+}
+
+p[class^="from-"].emoji {
+  background: none;
+  font-size: 2.5rem;
+}
+
+p[class^="from-"].emoji::before {
+  content: none;
+}
+
+.no-tail::before {
+  display: none;
+}
+
+.margin-b_none {
+  margin-bottom: 0 !important;
+}
+
+.margin-b_one {
+  margin-bottom: 1rem !important;
+}
+
+.margin-t_one {
+  margin-top: 1rem !important;
+}
+
+/* general styling */
+@font-face {
+  font-family: "SanFrancisco";
+  src: url("https://cdn.rawgit.com/AllThingsSmitty/fonts/25983b71/SanFrancisco/sanfranciscodisplay-regular-webfont.woff2")
+      format("woff2"),
+    url("https://cdn.rawgit.com/AllThingsSmitty/fonts/25983b71/SanFrancisco/sanfranciscodisplay-regular-webfont.woff")
+      format("woff");
+}
+
+.commentBody {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-weight: normal;
+  margin: 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 1rem;
+}
+
+.commentH1 {
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+}
+
+.commentH2 {
+  border-bottom: 1px solid #e5e5ea;
+  color: #666;
+  font-weight: normal;
+  margin-top: 0;
+  padding-bottom: 1.5rem;
+}
+
+.comment {
+  color: #222;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  max-width: 100%;
+  padding: 0;
+}
+
+@media screen and (max-width: 800px) {
+  .commentBody {
+    margin: 0 0.5rem;
   }
 
-  @return $opposite-directions;
-}
+  .container {
+    padding: 0.5rem;
+  }
 
-/// Unit Removal
-@function strip-unit($num) {
-  @return $num / ($num * 0 + 1);
-}
+  .imessage {
+    font-size: 1.05rem;
+    margin: 0 auto 1rem;
+    max-width: 600px;
+    padding: 0.25rem 0.875rem;
+  }
 
-/// Triangle Mixin
-/// ==========================================================
-
-@mixin caret($point, $border-width, $color) {
-  $opposite: opposite-direction($point);
-  border: $border-width solid transparent;
-  border-#{$opposite}: $border-width solid $color;
-  border-#{$point}: 0;
-  height: 0;
-  width: 0;
-}
-
-/// Component
-/// ==========================================================
-
-.speechBubble {
-  filter: drop-shadow(-1px -1px 2px rgba(black, 0.1))
-    drop-shadow(1px 2px 2px rgba(black, 0.15));
-  margin: 1rem;
-  margin-bottom: ($gutter * 2);
-  padding: 1.5rem 2rem;
-  position: relative;
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 400;
-  background: $bubble-bg;
-  color: $bubble-color;
-
-  &::before {
-    @include caret(bottom, ($caret-unit / 2), $bubble-bg);
-    border-top-width: $caret-unit;
-    content: "";
-    display: block;
-    position: absolute;
-    left: 3rem;
-    bottom: -$caret-unit;
-    transform-origin: center;
-    transform: rotate(90deg) skew(-(strip-unit($caret-unit)) + deg)
-      translateY($caret-unit / 1.5);
+  .imessage p {
+    margin: 0.5rem 0;
   }
 }
 
-.speechBubble cite {
-  position: absolute;
-  bottom: -2rem;
-  left: 4.5rem;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  letter-spacing: 0.5px;
-  color: $cite-color;
+// ==== grid container
+.detailContainer {
+  display: grid;
+}
+
+.commentContainer {
+  display: grid;
+}
+
+// ==== chart
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+.body {
+  font-family: Roboto, sans-serif;
+}
+
+#chart {
+  max-width: 650px;
+  margin: 35px auto;
 }

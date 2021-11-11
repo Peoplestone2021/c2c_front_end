@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import Appbar from "../bar/appbar";
 
@@ -26,12 +25,13 @@ const lobby = () => {
             </a>
           </Link>
 
-          <a href="#!" className="menu-link">
-
-            <div className="menu2">
-              마켓플레이스
-            </div>
-          </a>
+          <Link href="/market/market">
+            <a className="menu-link">
+              <div className="menu2">
+                <p>마켓플레이스</p>
+              </div>
+            </a>
+          </Link>
 
           <Link href="/manager/manager">
             <a className="menu-link">
@@ -40,12 +40,10 @@ const lobby = () => {
               </div>
             </a>
           </Link>
-
-
-        </div >
-      </div >
-    </div >
-  )
-}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default lobby;

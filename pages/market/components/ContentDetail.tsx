@@ -1,8 +1,8 @@
 import * as React from "react";
-import { marketItems } from "../marketApi";
+import { marketItem } from "../marketApi";
 
 type ContentDetailProps = {
-  item: marketItems;
+  item: marketItem;
 };
 
 const ContentDetail = ({ item: item }: ContentDetailProps) => (

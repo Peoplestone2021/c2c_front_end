@@ -49,6 +49,7 @@ $border-radius-sm: 0;
 @import "~bootstrap/scss/navbar";
 /* ---------------------------------------------- */
 @import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/grid";
 
 // 5. Optionally include utilities API last to generate classes based on the Sass map in `_utililies.scss`
 @import "~bootstrap/scss/utilities/api";
