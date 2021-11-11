@@ -40,8 +40,11 @@ const calculatorApi = {
   // POST 요청URL HTTP/1.1  {...}
   add: (addItem: AddItemRequest) =>
     axios.post<AddItemRequest>(
-      `http://localhost:8080/send-message`, addItem
+      `http://localhost:8080/saleItemList`, addItem
     ),
+
+  fetchList: () =>
+      axios.get<AddItemRequest>(`http://localhost:8080/saleItemList`),
 };
 
 export default calculatorApi;

@@ -133,13 +133,13 @@ const Calculator = () => {
 
     // 아이디값을 위한 매물목록 불러오기
     // res에 받아온 패티 데이터를 넣는다.
-    // const res = await api.fetchList ()
+    const res = await api.fetchList ()
 
     try{
       const result = await api.add({
         // 매물 ID
         // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-        itemId:  + 1,
+        itemId:  111,
         // 유저 아이디
         hostName: hostName.current?.value,
         // 가지고있는 국가
@@ -160,11 +160,37 @@ const Calculator = () => {
 
       console.log("----- result -----");
       console.log(result);
-      
+
     }catch(e:any){
       console.log("ADDERR");
       console.log(e.response);
     }
+
+    // 상태값 확인용
+    const result = ({
+      // 매물 ID
+      // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
+      itemId: 1,
+      // 유저 아이디
+      hostName: hostName.current?.value,
+      // 가지고있는 국가
+      cntHave: cntHave.current?.value,
+      // 가지고있는 돈
+      crcHave: parseInt(crcHave.current?.value),
+      // 원하는환전 국가
+      cntWant: cntWant.current?.value,
+      // 원하는환전 액
+      crcWant: parseInt(crcWant.current?.value),
+      // 거래일자
+      dDay: yy.current?.value+mm.current?.value+dd.current?.value,
+      // 본문
+      content: content.current?.value,
+      // 거래상태
+      status: true,
+    });
+
+    console.log("----- result -----");
+    console.log(result);
   }
 
 
