@@ -20,7 +20,7 @@ interface AddItemRequest {
   // 원하는환전 액
   crcWant: number;
   // 거래일자
-  dDay: String;
+  dday: String;
   // 본문
   content: String;
   // 거래상태

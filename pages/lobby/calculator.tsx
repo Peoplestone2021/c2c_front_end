@@ -26,7 +26,7 @@ interface AddItemState {
   // 원하는환전 액
   crcWant: number;
   // 거래일자
-  dDay: String;
+  dday: String;
   // 본문
   content: String;
   // 거래상태
@@ -61,7 +61,7 @@ const Calculator = () => {
   const content = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
   // 원하는 국가
-  const wantCountry = cntWant.current?.value;
+  const wantCountry = cntHave.current?.value;
 
   // 계산하는 함수
   const ExChange = () => {
@@ -138,8 +138,7 @@ const Calculator = () => {
     try{
       const result = await api.add({
         // 매물 ID
-        // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-        itemId:  111,
+        itemId:  0,
         // 유저 아이디
         hostName: hostName.current?.value,
         // 가지고있는 국가
@@ -151,7 +150,7 @@ const Calculator = () => {
         // 원하는환전 액
         crcWant: parseInt(crcWant.current?.value),
         // 거래일자
-        dDay: yy.current?.value+mm.current?.value+dd.current?.value,
+        dday: yy.current?.value+mm.current?.value+dd.current?.value,
         // 본문
         content: content.current?.value,
         // 거래상태
@@ -208,7 +207,7 @@ const Calculator = () => {
               <select
                 defaultValue="USD"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntWant}
+                ref={cntHave}
               >
                 <option
                   value="USD"
@@ -240,7 +239,7 @@ const Calculator = () => {
               <select
                 defaultValue="KRW"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntHave}
+                ref={cntWant}
               >
                 <option value="KRW">KRW</option>
                 {/* <option value="USD">USD</option>
