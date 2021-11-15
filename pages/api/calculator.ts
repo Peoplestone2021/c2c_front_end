@@ -66,6 +66,7 @@ const calculatorApi = {
       addItem
     ),
 
+  // 매물 데이터 목록 받아오기
   fetch: () =>
       axios.get<MoneyItemRequest>(`http://localhost:8080/saleItemList`),
 

@@ -1,5 +1,13 @@
 .rate {
   width: 500px;
+  height: 820px;
+  overflow: auto;
+  margin-top: 50px;
+}
+
+.tablebody {
+  overflow: auto;
+
 }
 
 .cal {

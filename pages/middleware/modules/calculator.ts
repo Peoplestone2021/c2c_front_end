@@ -91,6 +91,9 @@ function* addDataNext(action: PayloadAction<moneyItem>){
 
     yield put(addMoneyItem(moneyItem));
 
+    yield console.log("------ add request ------");
+    yield console.log(moneyItem);
+
   } catch (e:any) {
     console.log(e);
   }
