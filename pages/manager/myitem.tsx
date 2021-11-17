@@ -39,30 +39,7 @@ const MyItem = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>John</td>
-              <td>100USD to 120,000KRW</td>
-              <td>Jason</td>
-              <td>거래중</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>John</td>
-              <td>100CNY to 18,000KRW</td>
-              <td>Smith</td>
-              <td>거래완료</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>John</td>
-              <td>110,000KRW to 10,000JPY</td>
-              <td>Jully</td>
-              <td>거래완료</td>
-              <td>2021.11.01</td>
-            </tr>
+
           </tbody>
         </table>
 
