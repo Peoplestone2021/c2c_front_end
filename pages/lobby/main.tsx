@@ -16,9 +16,7 @@ const Main = () => {
           <div className={`${styles.cal} `}>
             <Calculator />
           </div>
-          <div className={`${styles.latest}`}>
-            <LatestTable />
-          </div>
+          <div className={`${styles.latest}`}>{/* {<LatestTable /> */}</div>
         </div>
       </>
     </Provider>

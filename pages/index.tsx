@@ -5,11 +5,8 @@ import React, { Key, ReactChild, ReactFragment, ReactPortal } from "react";
 import { Provider } from "react-redux";
 import { store } from "../provider";
 import styles from "../styles/Home.module.css";
-<<<<<<< HEAD
 import 'bootstrap/dist/css/bootstrap.css';
-=======
 import Appbar from "./bar/appbar";
->>>>>>> 5332934237242fcf9bf67293d4451933c205f696
 
 const Home = () => {
   return (
