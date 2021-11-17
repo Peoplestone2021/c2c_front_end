@@ -1,4 +1,10 @@
+.tablediv {
+  width: 1000px;
+  margin-top: 50px;
+}
+
 .rateTablePage .tablebody {
   overflow: auto;
   height: 100px;
+  /* margin-left: 200px; */
 }
