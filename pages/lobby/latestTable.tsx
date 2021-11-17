@@ -1,7 +1,12 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import api from "../api/latestTable";
 import Sidebar from "./sideBar";
 import styles from "./styles/ratetable.module.css";
+
+interface Latestprop {
+  latest: LatestState[];
+}
 
 interface LatestState {
   itemId: number;
@@ -13,29 +18,7 @@ interface LatestState {
   status: boolean;
 }
 
-const LatestTable = () => {
-  const [moneyItemList, setMoneyItemList] = useState<LatestState[]>([]);
-
-  const fetchData = async () => {
-    const res = await api.fetch();
-
-    const items = (res.data.map((item) => ({
-      itemId: item.itemId,
-      hostName: item.hostName,
-      cntHave: item.cntHave,
-      crcHave: item.crcHave,
-      cntWant: item.cntWant,
-      crcWant: item.crcWant,
-      status: item.status,
-    })) as unknown) as LatestState[];
-
-    setMoneyItemList(items);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+const LatestTable = ({ latest }: Latestprop) => {
   return (
     <>
       <div className={`${styles.maindiv} d-flex justify-content-evenly`}>
@@ -55,7 +38,7 @@ const LatestTable = () => {
               </tr>
             </thead>
             <tbody>
-              {moneyItemList.map((item, index) => (
+              {latest.map((item, index) => (
                 <tr key={index}>
                   <td>{item.itemId}</td>
                   <td>{item.hostName}</td>
@@ -63,7 +46,7 @@ const LatestTable = () => {
                   <td>{item.crcHave}</td>
                   <td>{item.cntWant}</td>
                   <td>{item.crcWant}</td>
-                  <td>거래중</td>
+                  <td>{item.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -73,5 +56,19 @@ const LatestTable = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  const res = await axios.get("http://54.180.135.245:8080/saleItemList/latest");
+  // const rate: RateItem[] = await res.json();
+  const rates = res.data;
+
+  console.log(rates.content);
+
+  const latest = rates.content;
+
+  // 여기에 prop: {속성객체}
+  // 속성객체를 컴포넌트의 속성을 넣어줌
+  return { props: { latest } };
+}
 
 export default LatestTable;
