@@ -1,41 +1,4 @@
-import { InferGetServerSidePropsType } from "next";
-
-export interface marketItemListResponse {
-  id: number;
-  crcHave: String;
-  // crcWant: String; // 한국원 케이스 알고리즘 필요
-  cntHave: number;
-  cntWant: number;
-  dDate: String;
-  // content?: String;
-  status: boolean;
-}
-
-export interface marketItems {
-  id: number;
-  hostName: String;
-  crcHave: String;
-  crcWant: String;
-  cntHave: number;
-  cntWant: number;
-  dDate: String;
-  content?: String;
-  status: boolean;
-}
-
-export interface marketItem {
-  id: number;
-  hostName: String;
-  crcHave: String;
-  crcWant: String;
-  cntHave: number;
-  cntWant: number;
-  dDate: String;
-  content?: String;
-  status: boolean;
-}
-
-const marketItems = [
+export const marketItems = [
   {
     id: 11111111,
     hostName: "Zero",
@@ -312,20 +275,3 @@ const marketItems = [
     status: true,
   },
 ];
-
-export const getServerSideProps = async () => {
-  const res = await fetch("https://.../data");
-  const data: marketItems = await res.json();
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
-
-// const Page({data}: InferGetServerSidePropsType<typeof GetServerSideProps>){
-
-// }
-
-// export default Page;

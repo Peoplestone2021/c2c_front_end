@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/rateTable";
+import styles from './styles/ratetable.module.css'
 
 // 환율 인터페이스
 interface RateItem{
@@ -53,7 +54,7 @@ const RateTable = () => {
             </td>
           </tr>
         </thead>
-        <tbody>
+        <tbody className ={`${styles.tablebody}`}>
           {rateList.map((item, index) => (
             <tr key = {index}>
               <td>

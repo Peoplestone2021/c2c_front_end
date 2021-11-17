@@ -1,43 +1,25 @@
 import styles from './styles/caclulator.module.css'
 import Link from "next/link";
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 // 계산기 백엔드 연동 api
 import api from "../api/calculator"
 import { Alert } from 'react-bootstrap';
 import produce from 'immer';
+import { useSelector, useDispatch, Provider } from "react-redux";
+import { AppDispatch, RootState, store } from '../../provider';
+import router, { useRouter } from 'next/router';
+import { moneyItem } from '../../provider/modules/calculator';
+import { requestAddMoneyItem } from '../middleware/modules/calculator';
 
 //계산에 필요한 state
 interface CalculatorItemState {
   cntUnit: string;
   dealBasR: number;
 }
-// 매물에 대한 state
-interface AddItemState {
-  // 매물 ID
-  itemId: number;
-  // 유저 아이디
-  hostName: String;
-  // 가지고있는 국가
-  cntHave: String;
-  // 가지고있는 돈
-  crcHave: number;
-  // 원하는환전 국가
-  cntWant: String;
-  // 원하는환전 액
-  crcWant: number;
-  // 거래일자
-  dDay: String;
-  // 본문
-  content: String;
-  // 거래상태
-  status: boolean;
-  // 추가모드인지
-  isAdd?: boolean;
-}
 
 const Calculator = () => {
-  // 매물
-  const [item, setItem] = useState<AddItemState[]>();
+  // 매물 데이터 배열 가져오기
+  const moneyItemData = useSelector((state:RootState) => state.calculator.data);
 
   // 불러온 매매율
   const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
@@ -63,12 +45,29 @@ const Calculator = () => {
   const content = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
   // 원하는 국가
-  const wantCountry = cntWant.current?.value;
+  const wantCountry = cntHave.current?.value;
 
+  // dispatch 함수
+  const dispatch = useDispatch<AppDispatch>();
+
+  // 추가 완료 여부
+  const isAddCompleted = useSelector(
+    (state: RootState) => state.calculator.isAddCompleted
+    );
+
+  // // 추가되면 처리됨
+  // useEffect(() => {
+  //   console.log("--isAddCompleted 변경: " + isAddCompleted);
+  //   // true이면 화면이동
+  //   isAddCompleted && router.push("/market/market");
+  // }, [isAddCompleted, router, dispatch]);
+  
   // 계산하는 함수
   const ExChange = () => {
     // 원하는 금액의 값
     const haveMoney = crcHave.current?.value;
+      
+
 
     // 대상 국가의 매매기준율값을 exrate에 넣는다.
     // 대상 국가의 화폐 1단위가 한국돈으로 바뀐 기준
@@ -90,7 +89,7 @@ const Calculator = () => {
   // 국가코드, 매매기준율 받아오기
   const fetchData = async () => {
     // 백엔드에서 해당 국가의 코드와 매매기준율 데이터를 받아옴 
-    const res = await api.fetch(wantCountry);
+    const res = await api.cntFetch(wantCountry);
 
     // axios에서 응답받은 데이터는 data 속성에 들어가있음
     // 서버로부터 받은 데이터를 state 객체로 받아옴
@@ -130,19 +129,42 @@ const Calculator = () => {
     day31.push(i);
   }
 
-  const seleYear = yy.current?.value;
-  const seleMonth = mm.current?.value;
-  const seleDay = dd.current?.value;
-
-  let dDays = seleYear + seleMonth + seleDay;
-
   // 매물 추가시 함수
   const handleAddClick = async () => {
+    try{
+      const result = await api.add({
+        // 유저 아이디
+        itemId: moneyItemData.length ? moneyItemData[0].itemId + 1 : 1,
+        // 유저 아이디
+        hostName: hostName.current?.value,
+        // 가지고있는 국가
+        cntHave: cntHave.current?.value,
+        // 가지고있는 돈
+        crcHave: parseInt(crcHave.current?.value),
+        // 원하는환전 국가
+        cntWant: cntWant.current?.value,
+        // 원하는환전 액
+        crcWant: parseInt(crcWant.current?.value),
+        // 거래일자
+        dday: yy.current?.value + mm.current?.value + dd.current?.value,
+        // 본문
+        content: content.current?.value,
+        // 거래상태
+        status: true,
+      } as moneyItem);
 
-    const addItem: AddItemState = {
+      
+      console.log("----- result -----");
+      console.log(result);
+
+    }catch(e:any){
+      console.log("ADDERR");
+      console.log(e.response);
+    }
+    const item : moneyItem = ({
       // 매물 ID
       // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-      itemId: 1,
+      itemId: moneyItemData.length ? moneyItemData[0].itemId + 1 : 1,
       // 유저 아이디
       hostName: hostName.current?.value,
       // 가지고있는 국가
@@ -154,27 +176,22 @@ const Calculator = () => {
       // 원하는환전 액
       crcWant: parseInt(crcWant.current?.value),
       // 거래일자
-      dDay: dDays,
+      dday: yy.current?.value + mm.current?.value + dd.current?.value,
       // 본문
       content: content.current?.value,
       // 거래상태
       status: true,
-    }
+    });
 
-    setItem(
-      produce((state) => {
-        state?.unshift(addItem);
-      })
-    );
-
-    const res = await api.add();
-  }
+    dispatch(requestAddMoneyItem(item));
+  };
 
 
 
 
   // HTML
   return (
+    <Provider store={store}>
     <>
       <div className={styles.calculator_main}>
         {/* 계산기 */}
@@ -185,7 +202,7 @@ const Calculator = () => {
               <select
                 defaultValue="USD"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntWant}
+                ref={cntHave}
               >
                 <option
                   value="USD"
@@ -217,7 +234,7 @@ const Calculator = () => {
               <select
                 defaultValue="KRW"
                 className={`form-select ${styles.select_cnt}`}
-                ref={cntHave}
+                ref={cntWant}
               >
                 <option value="KRW">KRW</option>
                 {/* <option value="USD">USD</option>
@@ -288,8 +305,7 @@ const Calculator = () => {
             type="submit"
             className={`btn btn-dark ${styles.ebut}`}
             onClick={() => {
-              // handleAddClick();
-              console.log(dDays)
+              handleAddClick();
             }}
           >
             매물등록
@@ -298,6 +314,7 @@ const Calculator = () => {
         </div>
       </div>
     </>
+    </Provider>
   )
 }
 

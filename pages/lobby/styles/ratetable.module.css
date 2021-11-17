@@ -1,0 +1,4 @@
+.rateTablePage .tablebody {
+  overflow: auto;
+  height: 100px;
+}

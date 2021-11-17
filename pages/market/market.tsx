@@ -1,22 +1,10 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Appbar from "../bar/appbar";
+// import Chart from "react-apexcharts";
 import SSRProvider from "react-bootstrap/SSRProvider";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
-// import itemState from "../../provider/modules/market";
-// import axios from "axios";
-// import { NavItem, ToastBody } from "react-bootstrap";
-// import styles from "../../styles/market.module.css";
-// import Link from "next/link";
-// import {profilePic} from '../data/flag_usd.png'
-// import {}
-
-// import { Router } from "next/dist/client/router";
-// import { flagusd } from "../market/data";
-
-// const getTimeStringD = (unixtime: number) => {
-//   return;
-// };
 
 // const MarketItemData = (marketItems) => {};
 
@@ -41,6 +29,158 @@ import { GetServerSideProps } from "next";
 
 // }
 
+const getTimeString = (unixtime: number) => {
+  const dateTime = new Date(unixtime);
+  const day = 24 * 60 * 60 * 1000;
+  return unixtime - new Date().getTime() >= day
+    ? dateTime.toLocaleDateString()
+    : dateTime.toLocaleTimeString();
+  // return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+};
+
+const itemStatus = (d: boolean) => {
+  if (d === true) {
+    return <span className="bi bi-play-fill"></span>;
+  }
+  return <span className="bi bi-stop-fill"></span>;
+};
+
+const options = {
+  series: [
+    {
+      name: "Points",
+      type: "scatter",
+
+      //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
+      data: [
+        {
+          x: 1,
+          y: 2.14,
+        },
+        {
+          x: 1.2,
+          y: 2.19,
+        },
+        {
+          x: 1.8,
+          y: 2.43,
+        },
+        {
+          x: 2.3,
+          y: 3.8,
+        },
+        {
+          x: 2.6,
+          y: 4.14,
+        },
+        {
+          x: 2.9,
+          y: 5.4,
+        },
+        {
+          x: 3.2,
+          y: 5.8,
+        },
+        {
+          x: 3.8,
+          y: 6.04,
+        },
+        {
+          x: 4.55,
+          y: 6.77,
+        },
+        {
+          x: 4.9,
+          y: 8.1,
+        },
+        {
+          x: 5.1,
+          y: 9.4,
+        },
+        {
+          x: 7.1,
+          y: 7.14,
+        },
+        {
+          x: 9.18,
+          y: 8.4,
+        },
+      ],
+    },
+    {
+      name: "Line",
+      type: "line",
+      data: [
+        {
+          x: 1,
+          y: 2,
+        },
+        {
+          x: 2,
+          y: 3,
+        },
+        {
+          x: 3,
+          y: 4,
+        },
+        {
+          x: 4,
+          y: 5,
+        },
+        {
+          x: 5,
+          y: 6,
+        },
+        {
+          x: 6,
+          y: 7,
+        },
+        {
+          x: 7,
+          y: 8,
+        },
+        {
+          x: 8,
+          y: 9,
+        },
+        {
+          x: 9,
+          y: 10,
+        },
+        {
+          x: 10,
+          y: 11,
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: "line",
+  },
+  fill: {
+    type: "solid",
+  },
+  markers: {
+    size: [6, 0],
+  },
+  tooltip: {
+    shared: false,
+    intersect: true,
+  },
+  legend: {
+    show: false,
+  },
+  xaxis: {
+    type: "numeric",
+    min: 0,
+    max: 12,
+    tickAmount: 12,
+  },
+};
+
+// const Chart = () => {};
+
 const Market = () => {
   const router = useRouter();
 
@@ -52,7 +192,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1000,
       cntWant: 1174000,
-      dDate: "1635747679",
+      dDate: 1635747679,
       content: "울릉도 동남쪽",
       status: true,
     },
@@ -63,7 +203,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1100,
       cntWant: 1291000,
-      dDate: "1635745679",
+      dDate: 1635745679,
       content: "뱃길따라 이백리",
       status: true,
     },
@@ -74,9 +214,9 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 890,
       cntWant: 1044000,
-      dDate: "1635749679",
+      dDate: 1635749679,
       content: "외로운 섬하나",
-      status: true,
+      status: false,
     },
     {
       id: 44444444,
@@ -85,7 +225,7 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 880,
       cntWant: 1033000,
-      dDate: "1635748679",
+      dDate: 1635748679,
       content: "새들의 고향",
       status: true,
     },
@@ -96,11 +236,13 @@ const Market = () => {
       crcWant: "KRW",
       cntHave: 1150,
       cntWant: 1350000,
-      dDate: "1635748679",
+      dDate: 1635748679,
       content: "새들의 고향",
       status: true,
     },
   ];
+
+  // Chart.render();
 
   // const listMarketItems = marketItems.map((marketItems) => (
   //   <li>{listMarketItems}</li>
@@ -110,10 +252,19 @@ const Market = () => {
 
   return (
     <section>
+      <Appbar />
       <div id="site-container" style={{ width: "50vw" }} className="mx-auto">
         <h1 className="text-center my-5 fw-bold border-bottom pb-4">
           마켓플레이스
         </h1>
+        {/* <div id="chart">
+          <Chart
+            type="line"
+            height="350"
+            options="chartOptions"
+            series="series"
+          ></Chart>
+        </div> */}
         <div
           id="search-form"
           className="gap-2 button-group  mx-auto d-md-flex"
@@ -123,39 +274,41 @@ const Market = () => {
           <button className="btn btn-secondary">[검색</button>
           <button className="btn btn-secondary">도구]</button>
         </div>{" "}
+        <span></span>
         {/*검색 도구*/}
         <span className="bi bi-list badge bg-light fw-bold"> LIST</span>
-        <table className="striped bordered table-hover w-100">
+        <table className="table text-center striped bordered table-hover max-auto">
           <thead>
             <tr className="text-secondary">
               <th scope="col">국가</th>
-              <th>금액</th>
-              <th>가격</th>
+              <th scope="col">금액</th>
+              <th scope="col">가격</th>
               {/*정렬 기능 버튼처리 필요-후순위*/}
-              <th>상태</th>
-              <th>거래마감</th>
+              <th scope="col">상태</th>
+              <th scope="col">거래마감</th>
             </tr>
           </thead>
           <tbody className="border-bottom border-top">
             {" "}
             {/*map으로 출력하도록*/}
             {marketItems.map((d) => (
-              <tr>
+              <tr key="id">
                 <td>{d.crcHave}</td>
                 <td>{d.cntHave}</td>
                 <td>{d.cntWant}</td>
-                <td>{d.status}</td>
-                <td>{d.dDate}</td>
+                <td>{itemStatus(d.status)}</td>
+                <td>{getTimeString(d.dDate)}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div>
-          {marketItems.map((d) => (
+          {marketItems.map((d, index) => (
             <div
+              key={`market-item-${index}`}
               className="card mx-auto"
               onClick={() => {
-                router.push("/market/marketDetail");
+                router.push(`/market/detail/${d.id}`);
               }}
             >
               <div className="card-body">
@@ -167,8 +320,8 @@ const Market = () => {
                   <div>
                     {d.cntHave}$ to {d.cntWant}w
                   </div>
-                  <div className="bi bi-play-fill"></div>
-                  <div className="text-end">마감: {d.dDate}</div>
+                  {itemStatus(d.status)}
+                  <div className="text-end">마감: {getTimeString(d.dDate)}</div>
                 </p>
               </div>
             </div>
