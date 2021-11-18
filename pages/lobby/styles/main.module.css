@@ -1,7 +1,29 @@
+.maindiv {
+  padding-left: 100px;
+}
+
 .rate {
   width: 500px;
+  height: 820px;
+  overflow: auto;
+  margin-top: 50px;
+  margin-left: 100px;
+
+}
+
+.tablebody {
+  overflow: auto;
+
 }
 
 .cal {
   width: 500px;
+}
+
+.latest {
+  width: 600px;
+  height: 820px;
+  margin-left: 100px;
+  overflow: auto;
+
 }

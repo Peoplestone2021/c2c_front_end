@@ -1,41 +1,27 @@
-import styles from './styles/caclulator.module.css'
+import styles from "./styles/caclulator.module.css";
 import Link from "next/link";
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 // 계산기 백엔드 연동 api
-import api from "../api/calculator"
-import { Alert } from 'react-bootstrap';
-import produce from 'immer';
+import api from "../api/calculator";
+import { Alert } from "react-bootstrap";
+import produce from "immer";
+import { useSelector, useDispatch, Provider } from "react-redux";
+import { AppDispatch, RootState, store } from "../../provider";
+import router, { useRouter } from "next/router";
+import { moneyItem } from "../../provider/modules/calculator";
+import { requestAddMoneyItem } from "../middleware/modules/calculator";
 
 //계산에 필요한 state
 interface CalculatorItemState {
   cntUnit: string;
   dealBasR: number;
 }
-// 매물에 대한 state
-interface AddItemState {
-  // 매물 ID
-  itemId: number;
-  // 유저 아이디
-  hostName: String;
-  // 가지고있는 국가
-  cntHave: String;
-  // 가지고있는 돈
-  crcHave: number;
-  // 원하는환전 국가
-  cntWant: String;
-  // 원하는환전 액
-  crcWant: number;
-  // 거래일자
-  dDay: String;
-  // 본문
-  content: String;
-  // 거래상태
-  status: boolean;
-}
 
 const Calculator = () => {
-  // 매물
-  const [item, setItem] = useState<AddItemState[]>();
+  // 매물 데이터 배열 가져오기
+  const moneyItemData = useSelector(
+    (state: RootState) => state.calculator.data
+  );
 
   // 불러온 매매율
   const [rateValue, setRateValue] = useState<CalculatorItemState[]>();
@@ -61,7 +47,22 @@ const Calculator = () => {
   const content = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
   // 원하는 국가
-  const wantCountry = cntWant.current?.value;
+  const wantCountry = cntHave.current?.value;
+
+  // dispatch 함수
+  const dispatch = useDispatch<AppDispatch>();
+
+  // 추가 완료 여부
+  const isAddCompleted = useSelector(
+    (state: RootState) => state.calculator.isAddCompleted
+  );
+
+  // // 추가되면 처리됨
+  // useEffect(() => {
+  //   console.log("--isAddCompleted 변경: " + isAddCompleted);
+  //   // true이면 화면이동
+  //   isAddCompleted && router.push("/market/market");
+  // }, [isAddCompleted, router, dispatch]);
 
   // 계산하는 함수
   const ExChange = () => {
@@ -79,16 +80,16 @@ const Calculator = () => {
       // 100원기준인 국가코드 일 때
       if (wantCountry === "JPY(100)") {
         // 100을 나누어 1원 기준으로 만든다. (나머지값은 버린다.)
-        return setExValue(Math.round(parseInt(haveMoney) * exrate / 100));
+        return setExValue(Math.round((parseInt(haveMoney) * exrate) / 100));
       }
       // 1원 기준일 시 (나머지 값은 버린다)
       return setExValue(Math.round(parseInt(haveMoney) * exrate));
-    })
-  }
+    });
+  };
   // 국가코드, 매매기준율 받아오기
   const fetchData = async () => {
-    // 백엔드에서 해당 국가의 코드와 매매기준율 데이터를 받아옴 
-    const res = await api.fetch(wantCountry);
+    // 백엔드에서 해당 국가의 코드와 매매기준율 데이터를 받아옴
+    const res = await api.cntFetch(wantCountry);
 
     // axios에서 응답받은 데이터는 data 속성에 들어가있음
     // 서버로부터 받은 데이터를 state 객체로 받아옴
@@ -105,7 +106,7 @@ const Calculator = () => {
     console.log(rateValue);
     // 계산하는 함수 실행
     ExChange();
-  }
+  };
 
   // ---------- 거래일자 구현 ----------
   // 년 배열
@@ -117,29 +118,23 @@ const Calculator = () => {
 
   // 월 배열
   let months = [];
-  // 12월 까지 
+  // 12월 까지
   for (let i = 1; i <= 12; i++) {
     months.push(i);
   }
   // 일 배열
   let day31 = [];
-  // 31일 까지 
+  // 31일 까지
   for (let i = 1; i <= 31; i++) {
     day31.push(i);
   }
 
   // 매물 추가시 함수
   const handleAddClick = async () => {
-
-    // 아이디값을 위한 매물목록 불러오기
-    // res에 받아온 패티 데이터를 넣는다.
-    const res = await api.fetchList ()
-
-    try{
+    try {
       const result = await api.add({
-        // 매물 ID
-        // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-        itemId:  111,
+        // 매물 아이디
+        itemId: moneyItemData.length ? moneyItemData[0].itemId + 1 : 1,
         // 유저 아이디
         hostName: hostName.current?.value,
         // 가지고있는 국가
@@ -151,26 +146,22 @@ const Calculator = () => {
         // 원하는환전 액
         crcWant: parseInt(crcWant.current?.value),
         // 거래일자
-        dDay: yy.current?.value+mm.current?.value+dd.current?.value,
+        dday: yy.current?.value + mm.current?.value + dd.current?.value,
         // 본문
         content: content.current?.value,
         // 거래상태
         status: true,
-      });
+      } as moneyItem);
 
       console.log("----- result -----");
       console.log(result);
-
-    }catch(e:any){
+    } catch (e) {
       console.log("ADDERR");
-      console.log(e.response);
     }
-
-    // 상태값 확인용
-    const result = ({
+    const item: moneyItem = {
       // 매물 ID
       // 매물의 아이디는 매물목록의 배열값 + 1을 해줘야 함
-      itemId: 1,
+      itemId: moneyItemData.length ? moneyItemData[0].itemId + 1 : 1,
       // 유저 아이디
       hostName: hostName.current?.value,
       // 가지고있는 국가
@@ -182,145 +173,159 @@ const Calculator = () => {
       // 원하는환전 액
       crcWant: parseInt(crcWant.current?.value),
       // 거래일자
-      dDay: yy.current?.value+mm.current?.value+dd.current?.value,
+      dday: yy.current?.value + mm.current?.value + dd.current?.value,
       // 본문
       content: content.current?.value,
       // 거래상태
       status: true,
-    });
+    };
 
-    console.log("----- result -----");
-    console.log(result);
-  }
-
-
-
+    dispatch(requestAddMoneyItem(item));
+  };
 
   // HTML
   return (
-    <>
-      <div className={styles.calculator_main}>
-        {/* 계산기 */}
-        <div className={styles.calculator}>
-          <form>
-            <div className="mb-3">
-              <label className="form-label">보유한 화페의 국가</label><br />
-              <select
-                defaultValue="USD"
-                className={`form-select ${styles.select_cnt}`}
-                ref={cntWant}
-              >
-                <option
-                  value="USD"
+    <Provider store={store}>
+      <>
+        <div className={styles.calculator_main}>
+          {/* 계산기 */}
+          <div className={styles.calculator}>
+            <form>
+              <div className="mb-3">
+                <label className="form-label">보유한 화페의 국가</label>
+                <br />
+                <select
+                  defaultValue="USD"
+                  className={`form-select ${styles.select_cnt}`}
+                  ref={cntHave}
                 >
-                  USD
-                </option>
-                <option
-                  value="JPY(100)"
+                  <option value="USD">USD</option>
+                  <option value="JPY(100)">JPY</option>
+                  <option value="CNH">CNH</option>
+                </select>
+                <input
+                  type="number"
+                  className={`form-control ${styles.inputCrc}`}
+                  ref={crcHave}
+                  onChange={fetchData}
+                  placeholder="0"
+                />
+                <div className="form-text">원하는 환전액을 입력하세요.</div>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">환전을 원하는 국가</label>
+                <br />
+                <select
+                  defaultValue="KRW"
+                  className={`form-select ${styles.select_cnt}`}
+                  ref={cntWant}
                 >
-                  JPY
-                </option>
-                <option
-                  value="CNH"
-                >
-                  CNH
-                </option>
-              </select>
-              <input
-                type="number"
-                className={`form-control ${styles.inputCrc}`}
-                ref={crcHave}
-                onChange={fetchData}
-                placeholder="0"
-              />
-              <div className="form-text">원하는 환전액을 입력하세요.</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">환전을 원하는 국가</label><br />
-              <select
-                defaultValue="KRW"
-                className={`form-select ${styles.select_cnt}`}
-                ref={cntHave}
-              >
-                <option value="KRW">KRW</option>
-                {/* <option value="USD">USD</option>
+                  <option value="KRW">KRW</option>
+                  {/* <option value="USD">USD</option>
                 <option value="JPY">JPY</option>
                 <option value="CNY">CNH</option> */}
-              </select>
+                </select>
+                <input
+                  type="number"
+                  className="form-control"
+                  ref={crcWant}
+                  readOnly
+                  disabled
+                  value={exValue}
+                />
+              </div>
+            </form>
+          </div>
+          {/* 구분선 */}
+          <hr className={styles.hr} />
+          {/*  거래등록 */}
+          <div className={styles.addItem}>
+            아이디
+            <div className="input-group flex-nowrap">
+              <span className="input-group-text" id="addon-wrapping">
+                @
+              </span>
               <input
-                type="number"
+                type="text"
                 className="form-control"
-                ref={crcWant}
-                readOnly
-                disabled
-                value={exValue}
+                placeholder="Hostname"
+                aria-label="Username"
+                aria-describedby="addon-wrapping"
+                ref={hostName}
               />
             </div>
-          </form>
-        </div>
-        {/* 구분선 */}
-        <hr className={styles.hr} />
-        {/*  거래등록 */}
-        <div className={styles.addItem}>
-          아이디
-          <div className="input-group flex-nowrap">
-            <span className="input-group-text" id="addon-wrapping">@</span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Hostname"
-              aria-label="Username"
-              aria-describedby="addon-wrapping"
-              ref={hostName}
-            />
+            거래일자
+            <div
+              className={`date d-flex justify-content-between ${styles.datebox}`}
+            >
+              <select
+                name="yy"
+                ref={yy}
+                id=""
+                className={`form-select ${styles.date}`}
+              >
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              년
+              <select
+                name="mm"
+                ref={mm}
+                id=""
+                className={`form-select ${styles.date}`}
+              >
+                {months.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              월
+              <select
+                name="dd"
+                ref={dd}
+                id=""
+                className={`form-select ${styles.date}`}
+              >
+                {day31.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              일
+            </div>
+            내용
+            <div className={`form-floating `}>
+              <textarea
+                className={`form-control ${styles.memo}`}
+                ref={content}
+                placeholder="Leave a comment here"
+                id="floatingTextarea2"
+              />
+              <label htmlFor="floatingTextarea2">Contant</label>
+            </div>
           </div>
-          거래일자
-          <div className={`date d-flex justify-content-between ${styles.datebox}`}>
-            <select name="yy" ref={yy} id="" className={`form-select ${styles.date}`}>
-              {years.map((year, index) => (
-                <option key={index} value={year}>{year}</option>
-              ))}
-            </select>
-            년
-            <select name="mm" ref={mm} id="" className={`form-select ${styles.date}`}>
-              {months.map((item, index) => (
-                <option key={index} value={item}>{item}</option>
-              ))}
-            </select>
-            월
-            <select name="dd" ref={dd} id="" className={`form-select ${styles.date}`}>
-              {day31.map((item, index) => (
-                <option key={index} value={item}>{item}</option>
-              ))}
-            </select>
-            일
-          </div>
-          내용
-          <div className={`form-floating `}>
-            <textarea
-              className={`form-control ${styles.memo}`}
-              ref={content}
-              placeholder="Leave a comment here"
-              id="floatingTextarea2" />
-            <label htmlFor="floatingTextarea2">Contant</label>
+          <div className={`d-flex justify-content-center`}>
+            <Link href="/market/market">
+              <button
+                type="submit"
+                className={`btn btn-dark ${styles.ebut}`}
+                onClick={() => {
+                  handleAddClick();
+                }}
+              >
+                매물등록
+              </button>
+            </Link>
           </div>
         </div>
-        <div className={`d-flex justify-content-center`}>
-          {/* <Link href="/market/market"> */}
-          <button
-            type="submit"
-            className={`btn btn-dark ${styles.ebut}`}
-            onClick={() => {
-              handleAddClick();
-            }}
-          >
-            매물등록
-          </button>
-          {/* </Link> */}
-        </div>
-      </div>
-    </>
-  )
-}
+      </>
+    </Provider>
+  );
+};
 
 export default Calculator;

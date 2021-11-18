@@ -44,30 +44,7 @@ const MyList = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>John</td>
-              <td>100USD to 120,000KRW</td>
-              <td></td>
-              <td>거래가능</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>John</td>
-              <td>100CNY to 18,000KRW</td>
-              <td></td>
-              <td>거래가능</td>
-              <td>2021.11.02</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>John</td>
-              <td>110,000KRW to 10,000JPY</td>
-              <td></td>
-              <td>거래가능</td>
-              <td>2021.11.01</td>
-            </tr>
+
           </tbody>
         </table>
 

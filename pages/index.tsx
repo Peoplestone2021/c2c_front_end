@@ -1,12 +1,17 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Key, ReactChild, ReactFragment, ReactPortal } from "react";
+import React, { Key, ReactChild, ReactFragment, ReactPortal } from "react";
+import { Provider } from "react-redux";
+import { store } from "../provider";
 import styles from "../styles/Home.module.css";
+import 'bootstrap/dist/css/bootstrap.css';
 import Appbar from "./bar/appbar";
 
 const Home = () => {
   return (
+    <Provider store={store}>
+
     <div className={styles.container}>
       <Head>
         <title>ExChangeService</title>
@@ -21,6 +26,7 @@ const Home = () => {
 
       <footer className={styles.footer}></footer>
     </div>
+    </Provider>
   );
 };
 
