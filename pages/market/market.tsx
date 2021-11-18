@@ -1,33 +1,12 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Appbar from "../bar/appbar";
-// import Chart from "react-apexcharts";
-import SSRProvider from "react-bootstrap/SSRProvider";
-import { useState } from "react";
+import MarketApi from "../api/market";
+import { marketItem } from "./marketApi";
 import { GetServerSideProps } from "next";
-
-// const MarketItemData = (marketItems) => {};
-
-// const flag = flagusd;
-
-// const marketItems= map((item)=>({
-//   id.
-// })
-// )
-// export async function getServerSideProps(context){
-//   const res=await fetch(``)
-//   const data = await res.json()
-
-//   return{
-//     props
-//   }
-// }
-
-// type Data={}
-
-// export const getServerSideProps: GetServerSideProps = async(context)=>{
-
-// }
+import { delay } from "@redux-saga/core/effects";
+import ScatterChart from "./chart/ScatterChart";
+import marketApi, { MarketItemResponse } from "../../api/market";
 
 const getTimeString = (unixtime: number) => {
   const dateTime = new Date(unixtime);
@@ -45,210 +24,72 @@ const itemStatus = (d: boolean) => {
   return <span className="bi bi-stop-fill"></span>;
 };
 
-const options = {
-  series: [
-    {
-      name: "Points",
-      type: "scatter",
+interface IndexProp {
+  marketItemList: MarketItemResponse[];
+}
 
-      //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
-      data: [
-        {
-          x: 1,
-          y: 2.14,
-        },
-        {
-          x: 1.2,
-          y: 2.19,
-        },
-        {
-          x: 1.8,
-          y: 2.43,
-        },
-        {
-          x: 2.3,
-          y: 3.8,
-        },
-        {
-          x: 2.6,
-          y: 4.14,
-        },
-        {
-          x: 2.9,
-          y: 5.4,
-        },
-        {
-          x: 3.2,
-          y: 5.8,
-        },
-        {
-          x: 3.8,
-          y: 6.04,
-        },
-        {
-          x: 4.55,
-          y: 6.77,
-        },
-        {
-          x: 4.9,
-          y: 8.1,
-        },
-        {
-          x: 5.1,
-          y: 9.4,
-        },
-        {
-          x: 7.1,
-          y: 7.14,
-        },
-        {
-          x: 9.18,
-          y: 8.4,
-        },
-      ],
-    },
-    {
-      name: "Line",
-      type: "line",
-      data: [
-        {
-          x: 1,
-          y: 2,
-        },
-        {
-          x: 2,
-          y: 3,
-        },
-        {
-          x: 3,
-          y: 4,
-        },
-        {
-          x: 4,
-          y: 5,
-        },
-        {
-          x: 5,
-          y: 6,
-        },
-        {
-          x: 6,
-          y: 7,
-        },
-        {
-          x: 7,
-          y: 8,
-        },
-        {
-          x: 8,
-          y: 9,
-        },
-        {
-          x: 9,
-          y: 10,
-        },
-        {
-          x: 10,
-          y: 11,
-        },
-      ],
-    },
-  ],
-  chart: {
-    height: 350,
-    type: "line",
-  },
-  fill: {
-    type: "solid",
-  },
-  markers: {
-    size: [6, 0],
-  },
-  tooltip: {
-    shared: false,
-    intersect: true,
-  },
-  legend: {
-    show: false,
-  },
-  xaxis: {
-    type: "numeric",
-    min: 0,
-    max: 12,
-    tickAmount: 12,
-  },
-};
-
-// const Chart = () => {};
-
-const Market = () => {
+const Market = ({ marketItemList }: IndexProp) => {
   const router = useRouter();
 
-  const marketItems = [
+  console.log(marketItemList);
+
+  const marketItems: marketItem[] = [
     {
-      id: 11111111,
+      itemId: 11111111,
       hostName: "Zero",
       crcHave: "USD",
       crcWant: "KRW",
       cntHave: 1000,
       cntWant: 1174000,
-      dDate: 1635747679,
+      dday: "20211212",
       content: "울릉도 동남쪽",
       status: true,
     },
     {
-      id: 22222222,
+      itemId: 22222222,
       hostName: "One",
       crcHave: "USD",
       crcWant: "KRW",
       cntHave: 1100,
       cntWant: 1291000,
-      dDate: 1635745679,
+      dday: "20211212",
       content: "뱃길따라 이백리",
       status: true,
     },
     {
-      id: 33333333,
+      itemId: 33333333,
       hostName: "Two",
       crcHave: "USD",
       crcWant: "KRW",
       cntHave: 890,
       cntWant: 1044000,
-      dDate: 1635749679,
+      dday: "20211212",
       content: "외로운 섬하나",
       status: false,
     },
     {
-      id: 44444444,
+      itemId: 44444444,
       hostName: "Three",
       crcHave: "USD",
       crcWant: "KRW",
       cntHave: 880,
       cntWant: 1033000,
-      dDate: 1635748679,
+      dday: "20211212",
       content: "새들의 고향",
       status: true,
     },
     {
-      id: 55555555,
+      itemId: 55555555,
       hostName: "Three",
       crcHave: "USD",
       crcWant: "KRW",
       cntHave: 1150,
       cntWant: 1350000,
-      dDate: 1635748679,
+      dday: "20211212",
       content: "새들의 고향",
       status: true,
     },
   ];
-
-  // Chart.render();
-
-  // const listMarketItems = marketItems.map((marketItems) => (
-  //   <li>{listMarketItems}</li>
-  // ));
-
-  // const [itemList, setItemList] = useState<MarketItems[]>
 
   return (
     <section>
@@ -257,14 +98,9 @@ const Market = () => {
         <h1 className="text-center my-5 fw-bold border-bottom pb-4">
           마켓플레이스
         </h1>
-        {/* <div id="chart">
-          <Chart
-            type="line"
-            height="350"
-            options="chartOptions"
-            series="series"
-          ></Chart>
-        </div> */}
+        <span>
+          <ScatterChart />
+        </span>
         <div
           id="search-form"
           className="gap-2 button-group  mx-auto d-md-flex"
@@ -274,7 +110,6 @@ const Market = () => {
           <button className="btn btn-secondary">[검색</button>
           <button className="btn btn-secondary">도구]</button>
         </div>{" "}
-        <span></span>
         {/*검색 도구*/}
         <span className="bi bi-list badge bg-light fw-bold"> LIST</span>
         <table className="table text-center striped bordered table-hover max-auto">
@@ -291,15 +126,16 @@ const Market = () => {
           <tbody className="border-bottom border-top">
             {" "}
             {/*map으로 출력하도록*/}
-            {marketItems.map((d) => (
-              <tr key="id">
+            {/* {marketItemList.map((d, index) => (
+              <tr key={`market-item-list-${index}`}>
                 <td>{d.crcHave}</td>
                 <td>{d.cntHave}</td>
                 <td>{d.cntWant}</td>
-                <td>{itemStatus(d.status)}</td>
-                <td>{getTimeString(d.dDate)}</td>
+                <td>{itemStatus(d.status)}</td> */}
+            {/* <td>{getTimeString(d.dday)}</td> */}
+            {/* <td>{d.dday}</td>
               </tr>
-            ))}
+            ))} */}
           </tbody>
         </table>
         <div>
@@ -308,7 +144,7 @@ const Market = () => {
               key={`market-item-${index}`}
               className="card mx-auto"
               onClick={() => {
-                router.push(`/market/detail/${d.id}`);
+                router.push(`/market/detail/${d.itemId}`);
               }}
             >
               <div className="card-body">
@@ -321,36 +157,12 @@ const Market = () => {
                     {d.cntHave}$ to {d.cntWant}w
                   </div>
                   {itemStatus(d.status)}
-                  <div className="text-end">마감: {getTimeString(d.dDate)}</div>
+                  {/* <div className="text-end">마감: {getTimeString(d.dDate)}</div> */}
+                  <div className="text-end">마감: {d.dday}</div>
                 </p>
               </div>
             </div>
           ))}
-          {/* <div>
-              <h5 className="card-title">
-                <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
-                USD
-              </h5>
-              <p className="card-text">1,000$ to 1,174,000w</p>
-              <div className="bi bi-play-fill"></div>
-              <div className="text-end">마감: 오늘</div>
-            </div> */}
-        </div>
-        <div
-          className="card mx-auto"
-          onClick={() => {
-            router.push("/market/marketDetail");
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">
-              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
-              USD
-            </h5>
-            <p className="card-text">1,100$ to 1,291,000w</p>
-            <div className="bi bi-play-fill" style={{ width: 50 }}></div>
-            <div className="text-end">마감 없음</div>
-          </div>
         </div>
         <div className="text-center btn text-secondary fs-10 fw-bold mx-auto">
           더 보기
@@ -362,16 +174,8 @@ const Market = () => {
   // 머지 테스트
 };
 
-//{market.data.map((item, index) => (
-//  <tbody key={`market-item-${index}`} id="tr-list">
-//  <tr>
-//    {/* 버튼 필요 */}
-//     <td>{item.crcHave}</td>
-//     <td>{item.cntHave}</td>
-//     <td>{item.cntWant}</td>
-//     <td>{item.status}</td>
-//     <td>{getTimeStringD(item.dDay)}</td> {/*마감시간 계산함수 필요*/}
-//   </tr>
-// </tbody>
-// ))} // 데이터 테이블
+// export async function getServerSideProps(){
+//   const res = await marketApi.fetchPaging(0,4);
+// }
+
 export default Market;

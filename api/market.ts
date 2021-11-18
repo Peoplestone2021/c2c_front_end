@@ -7,7 +7,7 @@ export interface MarketItemResponse {
   crcWant: string;
   cntHave: number;
   cntWant: number;
-  dDate: number;
+  dday: number;
   content: string;
   status: boolean;
 }
@@ -15,7 +15,7 @@ export interface MarketItemResponse {
 const marketApi = {
   get: (id: number) =>
     createAxiosInstance().get<MarketItemResponse>(
-      `${process.env.NEXT_PUBLIC_API_BASE}/market/${id}`
+      `${process.env.NEXT_PUBLIC_API_BASE}/marketItems`
     ),
 };
 
