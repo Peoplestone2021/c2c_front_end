@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAxiosInstance } from "../../api/_request";
 
 // 환율 서버로부터 받아오는 데이터 1건에 대한 타입
- interface ExChangeRateResponse {
+interface ExChangeRateResponse {
   curUnit: string;
   dealBasR: number;
 }
@@ -56,20 +56,18 @@ const calculatorApi = {
   // GET 요청URL HTTP/1.1
   // 원하는 국가에 해당되는 매매기준율을 불러오는 api
   cntFetch: (wantCountry: string) =>
-    axios.get<ExChangeRateResponse[]>(`http://54.180.135.245:8080/lobby/rate/${wantCountry}`),
+    axios.get<ExChangeRateResponse[]>(
+      `http://54.180.135.245:8080/lobby/rate/${wantCountry}`
+    ),
 
   // axios.post<응답타입>(요청URL, 요청객체(JSON바디));
   // POST 요청URL HTTP/1.1  {...}
   add: (addItem: MoneyItemRequest) =>
-    axios.post<MoneyItemRequest>(
-      `http://localhost:8080/saleItemList`, 
-      addItem
-    ),
+    axios.post<MoneyItemRequest>(`http://localhost:8080/saleItemList`, addItem),
 
   // 매물 데이터 목록 받아오기
   fetch: () =>
-      axios.get<MoneyItemRequest>(`http://localhost:8080/saleItemList`),
-
+    axios.get<MoneyItemRequest>(`http://54.180.135.245:8080/saleItemList`),
 };
 
 export default calculatorApi;

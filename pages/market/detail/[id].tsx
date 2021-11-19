@@ -7,6 +7,7 @@ import ContentDetail from "../components/ContentDetail";
 import marketApi from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../provider";
+import Appbar from "../../bar/appbar";
 
 // import { RootState } from ".";
 
@@ -21,6 +22,14 @@ interface marketItem {
   content: string;
   status: boolean;
 }
+
+type commentsItem = {
+  id: number;
+  userName: string;
+  cmtContent: string;
+  cmtCreatedTime: number;
+};
+
 const marketItems = [
   {
     id: 11111111,
@@ -83,12 +92,14 @@ const marketItems = [
 const commentsItem = [
   {
     id: 1111,
+    itemId: 11111111,
     userName: "John Doe",
     cmtContent: "Exercitationem velit labore animi nihil corporis nostrum!",
     cmtCreatedTime: 1636325783,
   },
   {
     id: 2222,
+    itemId: 22222222,
     userName: "Smith",
     cmtContent:
       "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
@@ -114,6 +125,10 @@ const MarketDetail = () => {
   console.log(marketContent);
   console.log(typeof marketItems.find);
 
+  const commentsContent = commentsItem.find(
+    (data) => data.itemId === Number(id)
+  );
+
   type Props = {
     id?: marketItem;
   };
@@ -122,12 +137,13 @@ const MarketDetail = () => {
 
   return (
     <section>
+      <Appbar />
       <div
         id="item-detail-container"
         style={{ width: "50vw" }}
         className="mx-auto"
       >
-        <h2 className="text-center">매물 상세</h2>
+        <h2 className="text-center mt-4">매물 상세</h2>
         <span className="card mx-auto">
           <span className="card-body">
             <Container>
@@ -165,31 +181,31 @@ const MarketDetail = () => {
             </button>
           </div>
         </div>
-        {commentsItem.map((d) => (
-          <Collapse key={id} in={open} className="mt-2">
-            <div key="id" className="mx-auto" id="comment-collapse-thread">
-              {/* <div className="card card-body"> */}
-              <div className={`${style.imessage}`}>
-                <p className={`${style.fromThem}`}>{d.cmtContent}</p>
-                <div className="fs-6">
-                  <div className="text-bold">{d.userName}</div>
-                  {/* created&nbsp; */}
-                  {getTimeString(d.cmtCreatedTime)}
-                </div>
-                {/* </div> */}
-                <Form>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="commentForm.ControlTextarea1"
-                  >
-                    <Form.Control as="textarea" rows={2} />
-                  </Form.Group>
-                </Form>
-                <Button>댓글</Button>
+        <Collapse key={id} in={open} className="mt-2">
+          <div key="id" className="mx-auto" id="comment-collapse-thread">
+            {/* <div className="card card-body"> */}
+            <div className={`${style.imessage}`}>
+              <p className={`${style.fromThem}`}>
+                {commentsContent?.cmtContent}
+              </p>
+              <div className="fs-6">
+                <div className="text-bold">{commentsContent?.userName}</div>
+                {/* created&nbsp; */}
+                {/* {getTimeString(commentsContent?.cmtCreatedTime)} */}
               </div>
+              {/* </div> */}
+              <Form>
+                <Form.Group
+                  className="mb-3"
+                  controlId="commentForm.ControlTextarea1"
+                >
+                  <Form.Control as="textarea" rows={2} />
+                </Form.Group>
+              </Form>
+              <Button>댓글</Button>
             </div>
-          </Collapse>
-        ))}
+          </div>
+        </Collapse>
       </div>
     </section>
   );

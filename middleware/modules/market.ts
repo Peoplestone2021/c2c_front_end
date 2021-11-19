@@ -13,16 +13,20 @@ import { AxiosResponse } from "axios";
 import { endProgress, startProgress } from "../../provider/modules/progress";
 import { RootState } from "../../provider";
 
-export const requestFetchMarketItem = createAction<number>(
+export const requestFetchMarketItems = createAction<number>(
   `${marketReducer.name}/requestFetchMarketItem`
 );
 
 function* fetchDataItem(action: PayloadAction<number>) {
+  yield console.log("--fetchData--");
+
+  yield put(startProgress());
+
   const id = action.payload;
 
   const result: AxiosResponse<MarketItemResponse> = yield call(api.get, id);
 }
 
 export default function* marketSaga() {
-  yield takeEvery(requestFetchMarketItem, fetchDataItem);
+  yield takeEvery(requestFetchMarketItems, fetchDataItem);
 }

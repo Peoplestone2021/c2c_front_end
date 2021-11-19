@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+
+.sideall {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Do Hyeon', sans-serif;
+  position: relative;
+  min-height: 100vh;
+  width: 0%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 240px;
+  background-color: #11101d;
+  padding: 6px 14px;
+  color: whitesmoke;
+}
+
+.sidebar .logo_content .logo {
+  display: flex;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  font-size: 25px;
+
+}
+
+.sidebar .logo_content .logo i {
+  font-size: 28px;
+  margin-right: 5px;
+}
+
+.sidebar .logo_content .logo .logo_name {
+  font-weight: 400;
+}
+
+.sidebar #btn {
+  position: absolute;
+  left: 90%;
+  top: 6px;
+  font-size: 20px;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  line-height: 50px;
+  transform: translate(-50%);
+}
+
+.sidebar ul {
+  margin-top: 20px;
+}
+
+.sidebar ul li {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  margin-top: 50px;
+  list-style: none;
+}
+
+.sidebar ul li:hover {
+  color: black;
+  background-color: whitesmoke;
+  border-radius: 12px;
+}
+
+.sidebar ul li Link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transform: all 0.4s ease;
+}
+
+.sidebar .icons {
+  margin-right: 20px;
+}
+
+.sidebar ul li Link i {
+  height: 50px;
+  min-width: 50px;
+  border-radius: 12px;
+  line-height: 50px;
+}

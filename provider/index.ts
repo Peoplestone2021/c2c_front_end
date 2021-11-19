@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import marketReducer from "./modules/market";
+import userNameReducer from "./modules/user";
 import rootSaga from "../middleware";
 import createSagaMiddleware from "@redux-saga/core";
-import calculatorReducer from "./modules/calculator"
+import calculatorReducer from "./modules/calculator";
 
 const sagaMiddleware = createSagaMiddleware();
 
