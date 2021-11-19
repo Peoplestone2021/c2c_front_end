@@ -1,7 +1,10 @@
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-import Modal from "./scheduleModal";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+// import { AppDispatch, RootState } from "../../store";
+// import { requestFetchContacts } from "./contactSaga";
 
 import React, {
   MutableRefObject,
@@ -17,12 +20,16 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Calendar } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
+import { Modal, Form, Row, Col, Button } from "react-bootstrap";
 
 import axios from "axios";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { useRouter } from "next/router";
+import produce from "immer";
+import { TextCenter } from "react-bootstrap-icons";
 
 interface EventItemState {
-  id?: number;
+  id?: string | undefined;
   title: string | undefined;
   start?: string | undefined;
   end?: string | undefined;
@@ -35,11 +42,45 @@ interface EventItemState {
 //   onSave: (editItem: EventItemState) => void;
 // }
 
-// const Schedule = () => {
-const Schedule = (): ReactElement => {
+const getTimeString = (unixtime: number) => {
+  // 1초: 1000
+  // 1분: 60 * 1000
+  // 1시간: 60 * 60 * 1000
+  // 1일: 24 * 60 * 60 * 1000
+  const day = 24 * 60 * 60 * 1000;
+
+  // Locale: timezone, currency 등
+  // js에서는 브라우저의 정보를 이용함
+  const dateTime = new Date(unixtime);
+
+  // 현재시간보다 24시간 이전이면 날짜를 보여주고
+  // 현재시간보다 24시간 미만이면 시간을 보여줌
+  return unixtime - new Date().getTime() >= day
+    ? dateTime.toLocaleDateString()
+    : dateTime.toLocaleTimeString();
+};
+
+const Schedule = () => {
+  // const Schedule = (): ReactElement => {
+
+  const handleDateClick = (arg) => {
+    alert(arg.dateStr);
+  };
+
+  const [event, setEvent] = useState({
+    id: "1",
+    groupId: "999",
+    title: "initial event",
+    start: new Date(),
+  });
   const [showReq, setShowReq] = useState<boolean>(false);
   const [events, setEvents] = useState([
-    { groupId: "999", title: "initial event", start: new Date() },
+    {
+      id: "1",
+      groupId: "999",
+      title: "initial event",
+      start: new Date(),
+    },
   ]);
 
   function openReq() {
@@ -63,36 +104,10 @@ const Schedule = (): ReactElement => {
   // document.addEventListener('DOMContentLoaded', function () {
 
   // })
-  let calendarEl = document.getElementById("calendar");
-  let title;
-  if (calendarEl) {
-    let calendar = new Calendar(calendarEl, {
-      plugins: [interactionPlugin],
-      select: function(arg) {
-        // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
-        var title = prompt("Event Title:");
-        if (title) {
-          calendar.addEvent({
-            title: title,
-            start: arg.start,
-            end: arg.end,
-            allDay: arg.allDay,
-          });
-        }
-        calendar.unselect();
-      },
-      eventClick: function(e) {
-        alert(e.event.title);
-      },
-      dateClick: function(info) {
-        alert("Clicked on: " + info.dateStr);
-        alert("Coordinates: " + info.jsEvent.pageX + "," + info.jsEvent.pageY);
-        alert("Current view: " + info.view.type);
-        // change the day's background color just for fun
-        info.dayEl.style.backgroundColor = "red";
-      },
-    });
-  }
+  // let title;
+  const inputTitle = useRef() as MutableRefObject<HTMLInputElement>;
+
+  const eventHandler = () => {};
 
   return (
     <div>
@@ -135,8 +150,8 @@ const Schedule = (): ReactElement => {
 
           drop={function(info) {}}
           events={events}
-          dateClick={function(e) {
-            console.log(e.dateStr);
+          dateClick={(e) => {
+            setEvent({ ...event, start: new Date(e.dateStr) });
           }}
           eventClick={function(e) {
             alert(e.event.title);
@@ -148,6 +163,8 @@ const Schedule = (): ReactElement => {
           droppable={true}
           selectable={true}
           dayMaxEvents={true}
+          // weekNumbers={false}
+
           eventAdd={function(obj) {
             console.log(obj);
           }}
@@ -158,17 +175,19 @@ const Schedule = (): ReactElement => {
             console.log(obj);
           }}
           select={function(arg) {
-            title = prompt("이벤트 이름을 작성하세요:");
-            if (title) {
-              setEvents([
-                {
-                  groupId: `${title}-${arg.startStr}-${arg.endStr}`,
-                  title: title ? title : "",
-                  start: arg.start,
-                },
-                ...events,
-              ]);
-            }
+            setShowReq(true);
+
+            // title = prompt("이벤트 이름을 작성하세요:");
+            // if (title) {
+            //   setEvents([
+            //     {
+            //       groupId: `${title}-${arg.startStr}-${arg.endStr}`,
+            //       title: title ? title : "",
+            //       start: arg.start,
+            //     },
+            //     ...events,
+            //   ]);
+            // }
             // if (title) {
             //   // <Modal open={showReq} close={closeReq} />
 
@@ -176,10 +195,88 @@ const Schedule = (): ReactElement => {
           }}
         />
       </div>
-      <button className="request_btn" onClick={openReq}>
-        모달창 보기
-      </button>
-      <Modal open={showReq} close={closeReq} />
+      <Modal
+        size="lg"
+        centered
+        show={showReq}
+        onHide={() => {
+          closeReq();
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>이벤트 추가</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+              <Form.Label as={Col} md={2} className="text-left">
+                이벤트명
+              </Form.Label>
+              <Col md={10} className="text-center">
+                <Form.Control type="text" placeholder="event" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+              <Form.Label as={Col} md={2} className="text-left">
+                시작시간
+              </Form.Label>
+              <Col md={5} className="text-center">
+                <Form.Control type="date" placeholder="event" />
+              </Col>
+              <Col md={5} className="text-center">
+                <Form.Control type="time" placeholder="event" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+              <Form.Label as={Col} md={2} className="text-left">
+                종료시간
+              </Form.Label>
+              <Col md={5} className="text-center">
+                <Form.Control type="date" placeholder="event" />
+              </Col>
+              <Col md={5} className="text-center">
+                <Form.Control type="time" placeholder="event" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+              <Form.Label as={Col} md={2} className="text-left">
+                내용
+              </Form.Label>
+              <Col md={10} className="text-center">
+                <Form.Control as="textarea" rows={5} placeholder="context" />
+              </Col>
+            </Form.Group>
+
+            <Row className="text-center">
+              <Col md={4} />
+              <Col md={2}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    setEvents([event, ...events]);
+                    closeReq();
+                  }}
+                >
+                  저장
+                </Button>
+              </Col>
+              <Col md={2}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    closeReq();
+                  }}
+                >
+                  취소
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
