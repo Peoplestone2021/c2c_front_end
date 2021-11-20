@@ -1,5 +1,6 @@
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
+import api from "./scheduleApi";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -29,11 +30,12 @@ import produce from "immer";
 import { TextCenter } from "react-bootstrap-icons";
 
 interface EventItemState {
-  id?: string | undefined;
+  id?: number | undefined;
+  groupId: string | undefined;
   title: string | undefined;
+  memo?: string | undefined;
   start?: string | undefined;
   end?: string | undefined;
-  memo?: string | undefined;
 }
 
 // interface ModalProp {
@@ -63,23 +65,23 @@ const getTimeString = (unixtime: number) => {
 const Schedule = () => {
   // const Schedule = (): ReactElement => {
 
-  const handleDateClick = (arg) => {
-    alert(arg.dateStr);
-  };
-
   const [event, setEvent] = useState({
-    id: "1",
+    id: 1,
     groupId: "999",
     title: "initial event",
+    memo: "memo",
     start: new Date(),
+    end: new Date(),
   });
   const [showReq, setShowReq] = useState<boolean>(false);
   const [events, setEvents] = useState([
     {
-      id: "1",
+      id: 1,
       groupId: "999",
       title: "initial event",
+      memo: "memo",
       start: new Date(),
+      end: new Date(),
     },
   ]);
 
@@ -108,6 +110,25 @@ const Schedule = () => {
   const inputTitle = useRef() as MutableRefObject<HTMLInputElement>;
 
   const eventHandler = () => {};
+
+  const fetchData = async () => {
+    // 백엔드에서 데이터 받아옴
+    const res = await api.fetch();
+    const events2 = res.data.map((item) => ({
+      id: item.id,
+      groupId: item.groupId,
+      title: item.title,
+      memo: item.memo,
+      start: item.start,
+      end: item.end,
+    })) as EventItemState[];
+    console.log(res);
+    // setLoading(false); // 로딩중 여부 state 업데이트
+    setEvents(events2); // event state 업데이트
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div>
