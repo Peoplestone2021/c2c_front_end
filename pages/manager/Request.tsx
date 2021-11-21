@@ -4,7 +4,6 @@ import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 const Request = () => {
-
   const Create = useRef<HTMLButtonElement>(null);
   const Cancel = useRef<HTMLButtonElement>(null);
   return (
@@ -20,13 +19,15 @@ const Request = () => {
           <button ref={Cancel}>취소 요청</button>
         </Link>
         <div className="form-check form-check-inline">
-          <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="inlineCheckbox1"
+            value="option1"
+          />
           <label className="form-check-label">거래요청</label>
         </div>
-
       </div>
-
-
     </div>
   );
 };
