@@ -1,6 +1,6 @@
 import axios from "axios";
-
-interface MarketItemResponse {
+//====    사용안함. "../../api"사용할 것    ====
+export interface MarketItemResponse {
   item: number;
   hostName: string;
   crcHave: string;
@@ -12,11 +12,12 @@ interface MarketItemResponse {
   dday: string;
 }
 
-interface MarketPagingResponse {
+export interface MarketPagingResponse {
   content: MarketItemResponse[];
   last: boolean;
 }
 
+//====    사용안함. "../../api"사용할 것    ====
 const marketApi = {
   fetch: () =>
     axios.get<MarketItemResponse[]>(

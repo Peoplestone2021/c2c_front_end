@@ -310,7 +310,7 @@ const Calculator = () => {
             </div>
           </div>
           <div className={`d-flex justify-content-center`}>
-            <Link href="/market/market">
+            <Link href="/market">
               <button
                 type="submit"
                 className={`btn btn-dark ${styles.ebut}`}
