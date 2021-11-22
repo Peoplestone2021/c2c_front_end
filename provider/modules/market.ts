@@ -27,6 +27,14 @@ export interface MarketItem {
   createdTime: number;
 }
 
+export interface CommentItem {
+  commentId: number;
+  marketId: number;
+  userName: string;
+  commentContent: string;
+  createdTime: number;
+}
+
 export interface MarketPage {
   data: MarketItem[];
   totalElements: number;
@@ -36,8 +44,19 @@ export interface MarketPage {
   isLast: boolean;
 }
 
+export interface CommentPage {
+  data: CommentItem[];
+  totalElements: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+  isLast: boolean;
+}
+
+// //////////////// commentInitial 충돌 가능성 있음
 interface MarketState {
   data: MarketItem[];
+  commentData: CommentItem[];
   isFetched: boolean;
   isAddCompleted?: boolean;
   isRemoveCompleted?: boolean;
@@ -47,6 +66,15 @@ interface MarketState {
   page: number;
   pageSize: number;
   isLast?: boolean;
+  isCommentFetched: boolean;
+  isCommentAddCompleted?: boolean;
+  isCommentRemoveCompleted?: boolean;
+  isCommentModifyCompleted?: boolean;
+  totalCommentElements?: number;
+  totalCommentPages: number;
+  commentPage: number;
+  commentPageSize: number;
+  isCommentLast?: boolean;
 }
 
 const initialState: MarketState = {
@@ -55,6 +83,11 @@ const initialState: MarketState = {
   page: 0,
   pageSize: 8,
   totalPages: 0,
+  commentData: [],
+  isCommentFetched: false,
+  commentPage: 0,
+  totalCommentPages: 0,
+  commentPageSize: 30,
 };
 
 const marketSlice = createSlice({
@@ -128,6 +161,47 @@ const marketSlice = createSlice({
       state.isLast = action.payload.isLast;
       state.isFetched = true;
     },
+    addCommentItem: (state, action: PayloadAction<CommentItem>) => {
+      const comment = action.payload;
+      state.commentData.unshift(comment);
+      state.isCommentAddCompleted = true;
+    },
+    initialNextMarketComment: (state, action: PayloadAction<CommentPage>) => {
+      state.commentData = state.commentData.concat(action.payload.data);
+      state.totalCommentElements = action.payload.totalElements;
+      state.totalCommentPages = action.payload.totalPages;
+      state.commentPage = action.payload.page;
+      state.commentPageSize = action.payload.pageSize;
+      state.isCommentLast = action.payload.isLast;
+      state.isCommentFetched = true;
+    },
+    initialComment: (state, action: PayloadAction<CommentItem[]>) => {
+      const commentItems = action.payload;
+      state.commentData = commentItems;
+      state.isCommentFetched = true;
+    },
+    initialCommentItem: (state, action: PayloadAction<CommentItem>) => {
+      const commentItem = action.payload;
+      state.commentData = [{ ...commentItem }];
+    },
+    removeCommentItem: (state, action: PayloadAction<number>) => {
+      const id = action.payload;
+      state.commentData.splice(
+        state.commentData.findIndex((item) => item.commentId === id),
+        1
+      );
+      state.isCommentRemoveCompleted = true; // 삭제 되었음을 표시
+    },
+    modifyCommentItem: (state, action: PayloadAction<CommentItem>) => {
+      const modifyItem = action.payload;
+      const commentItem = state.commentData.find(
+        (item) => item.commentId === modifyItem.commentId
+      );
+      if (commentItem) {
+        commentItem.commentContent = modifyItem.commentContent;
+      }
+      state.isCommentModifyCompleted = true;
+    },
   },
 });
 
@@ -141,6 +215,12 @@ export const {
   addTotalpages,
   initialPagedMarket,
   initialNextMarket,
+  addCommentItem,
+  initialNextMarketComment,
+  initialComment,
+  initialCommentItem,
+  removeCommentItem,
+  modifyCommentItem,
 } = marketSlice.actions;
 
 export default marketSlice.reducer;

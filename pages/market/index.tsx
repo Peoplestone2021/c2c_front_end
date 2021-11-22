@@ -23,8 +23,13 @@ interface PublicItem {
   status: boolean;
 }
 
+interface PublicItemPage {
+  content: PublicItem[];
+}
+
 interface IndexProp {
   marketItems: PublicItem[];
+  marketItemsPage: PublicItemPage[];
 }
 
 const getTimeString = (unixtime: number) => {
@@ -43,32 +48,18 @@ const itemStatus = (d: boolean) => {
   return <span className="bi bi-stop-fill"></span>;
 };
 
-const Index = ({ marketItems }: IndexProp) =>
+const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
   // { marketItemList }: IndexProp
   {
     const market = useSelector((state: RootState) => state.market);
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log("[log] marketState");
-    console.log(market);
+    // console.log("[log] marketState");
+    // console.log(market);
 
-    // useEffect(() => {
-    //   if (!market.isFetched) {
-    //     const marketPageSize = localStorage.getItem("market_page_size");
-    //     dispatch(
-    //       requestFetchPagingMarketItems({
-    //         page: 0,
-    //         size: marketPageSize ? +marketPageSize : market.pageSize,
-    //       })
-    //     );
-
-    //     // dispatch(requestFetchMarketItems());
-    //   }
-    // }, [dispatch, market.isFetched, market.pageSize]);
-
-    console.log("[log] market.data: ");
-    console.log(market.data);
+    // console.log("[log] market.data: ");
+    // console.log(market.data);
 
     const handlePageSizeChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
       console.log(e.currentTarget.value);
@@ -80,66 +71,8 @@ const Index = ({ marketItems }: IndexProp) =>
       );
     };
 
-    // const marketItems: marketItem[] = [
-    //   {
-    //     itemId: 1,
-    //     hostName: "Zero",
-    //     crcHave: "USD",
-    //     crcWant: "KRW",
-    //     cntHave: 1000,
-    //     cntWant: 1174000,
-    //     dday: "20211212",
-    //     content: "울릉도 동남쪽",
-    //     status: true,
-    //   },
-    //   {
-    //     itemId: 2,
-    //     hostName: "One",
-    //     crcHave: "USD",
-    //     crcWant: "KRW",
-    //     cntHave: 1100,
-    //     cntWant: 1291000,
-    //     dday: "20211212",
-    //     content: "뱃길따라 이백리",
-    //     status: true,
-    //   },
-    //   {
-    //     itemId: 3,
-    //     hostName: "Two",
-    //     crcHave: "USD",
-    //     crcWant: "KRW",
-    //     cntHave: 890,
-    //     cntWant: 1044000,
-    //     dday: "20211212",
-    //     content: "외로운 섬하나",
-    //     status: false,
-    //   },
-    //   {
-    //     itemId: 4,
-    //     hostName: "Three",
-    //     crcHave: "USD",
-    //     crcWant: "KRW",
-    //     cntHave: 880,
-    //     cntWant: 1033000,
-    //     dday: "20211212",
-    //     content: "새들의 고향",
-    //     status: true,
-    //   },
-    //   {
-    //     itemId: 5,
-    //     hostName: "Three",
-    //     crcHave: "USD",
-    //     crcWant: "KRW",
-    //     cntHave: 1150,
-    //     cntWant: 1350000,
-    //     dday: "20211212",
-    //     content: "새들의 고향",
-    //     status: true,
-    //   },
-    // ];
-
-    console.log("[log] marketItems: ");
-    console.log(marketItems);
+    // console.log("[log] marketItems: ");
+    // console.log(marketItems);
 
     return (
       <section>
@@ -176,7 +109,7 @@ const Index = ({ marketItems }: IndexProp) =>
             <tbody className="border-bottom border-top">
               {" "}
               {/*map으로 출력하도록*/}
-              {marketItems.map((d, index) => (
+              {marketItemsPage.content.map((d, index) => (
                 <tr key={`market-item-list-${index}`}>
                   <td>{d.crcHave}</td>
                   <td>{d.cntHave}</td>
@@ -232,9 +165,13 @@ export async function getServerSideProps() {
   const res = await axios.get<PublicItem[]>(
     `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
   );
+  const resPage = await axios.get<PublicItem[]>(
+    `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
+  );
   const marketItems = res.data;
+  const marketItemsPage = resPage.data;
 
-  return { props: { marketItems } };
+  return { props: { marketItems, marketItemsPage } };
 }
 
 export default Index;

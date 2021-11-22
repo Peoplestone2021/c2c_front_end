@@ -2,7 +2,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import style from "../styles/market.module.scss";
-import { Container, Collapse, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Collapse,
+  Form,
+  Button,
+  Row,
+  Col,
+  FloatingLabel,
+} from "react-bootstrap";
 // import ContentDetail from "../components/ContentDetail";
 import marketApi from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,12 +36,23 @@ import {
 //   status: boolean;
 // }
 
-type commentsItem = {
-  id: number;
+type commentsItems = {
+  commentId: number;
+  marketId: number;
   userName: string;
-  cmtContent: string;
-  cmtCreatedTime: number;
+  commentContent: string;
+  createdTime: number;
 };
+
+interface commentContentsPage {
+  data: commentsItems[];
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  isEmpty: boolean;
+}
 
 const marketItems = [
   {
@@ -94,21 +113,39 @@ const marketItems = [
   },
 ];
 
-const commentsItem = [
+const commentsItems = [
   {
-    id: 1111,
-    itemId: 11111111,
+    commentId: 1,
+    marketId: 1,
     userName: "John Doe",
-    cmtContent: "Exercitationem velit labore animi nihil corporis nostrum!",
-    cmtCreatedTime: 1636325783,
+    commentContent: "Exercitationem velit labore animi nihil corporis nostrum!",
+    createdTime: 1636325783,
   },
   {
-    id: 2222,
-    itemId: 22222222,
+    commentId: 2,
+    marketId: 1,
+    itemId: 2,
     userName: "Smith",
-    cmtContent:
+    commentContent:
       "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
-    cmtCreatedTime: 1636325783,
+    createdTime: 1636325783,
+  },
+  {
+    commentId: 3,
+    marketId: 18,
+    itemId: 2,
+    userName: "Smith",
+    commentContent:
+      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
+    createdTime: 1636325783,
+  },
+  {
+    commentId: 4,
+    marketId: 18,
+    itemId: 2,
+    userName: "jone",
+    commentContent: "Exercitationem velit labore animi nihil corporis nostrum!",
+    createdTime: 1636325783,
   },
 ];
 
@@ -141,10 +178,17 @@ const MarketDetail = () => {
   console.log("marketItem: ");
   console.log(marketItem);
 
-  const marketContent = marketItems.find((data) => data.id === Number(id));
+  const commentContentsPage = {
+    data: commentsItems,
+    last: false,
+    totalElements: 2,
+    size: 2,
+    number: 2,
+    isEmpty: false,
+  };
 
-  const commentsContent = commentsItem.find(
-    (data) => data.itemId === Number(id)
+  const commentsContents = commentContentsPage.data.find(
+    (data) => data.marketId === Number(id)
   );
 
   const [open, setOpen] = useState(false);
@@ -167,7 +211,12 @@ const MarketDetail = () => {
                 {marketItem?.cntHave} &#62; {marketItem?.crcWant}
                 {marketItem?.cntWant}
               </h5>
-              {marketItem?.content}
+              <Row>
+                <span>{marketItem?.hostName}</span>
+              </Row>
+              <Row>
+                <span>{marketItem?.content}</span>
+              </Row>
             </Container>
             {/* <span className="card-text"></span> */}
             {/* css 그리드처리 해야함 */}
@@ -199,22 +248,36 @@ const MarketDetail = () => {
           <div key="id" className="mx-auto" id="comment-collapse-thread">
             {/* <div className="card card-body"> */}
             <div className={`${style.imessage}`}>
-              <p className={`${style.fromThem}`}>
-                {commentsContent?.cmtContent}
-              </p>
-              <div className="fs-6">
-                <div className="text-bold">{commentsContent?.userName}</div>
-                {/* created&nbsp; */}
-                {/* {getTimeString(commentsContent?.cmtCreatedTime)} */}
-              </div>
+              {commentContentsPage.data.map((d) => (
+                <span key="marketId">
+                  <div className="text-bold mt-0">
+                    {d?.userName}
+                    {getTimeString(d?.createdTime)}
+                  </div>
+                  <p className={`${style.fromThem}`}>{d?.commentContent}</p>
+                </span>
+              ))}
+              <div className="fs-6 mt-0">{/* created&nbsp; */}</div>
               {/* </div> */}
-              <Form>
-                <Form.Group
-                  className="mb-3"
-                  controlId="commentForm.ControlTextarea1"
-                >
-                  <Form.Control as="textarea" rows={2} />
-                </Form.Group>
+              <Form className="mt-4">
+                <Row>
+                  <Col xs={2}>
+                    <FloatingLabel controlId="floatingInputGrid" label="이름">
+                      <Form.Control
+                        type="email"
+                        placeholder="name@example.com"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                  <Col>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="commentForm.ControlTextarea1"
+                    >
+                      <Form.Control as="textarea" rows={2} />
+                    </Form.Group>
+                  </Col>
+                </Row>
               </Form>
               <Button>댓글</Button>
             </div>

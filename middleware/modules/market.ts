@@ -9,6 +9,14 @@ import marketReducer, {
   initialPagedMarket,
   initialNextMarket,
   MarketPage,
+  CommentItem,
+  addCommentItem,
+  CommentPage,
+  initialNextMarketComment,
+  initialComment,
+  initialCommentItem,
+  removeCommentItem,
+  modifyCommentItem,
 } from "../../provider/modules/market";
 import { createAction, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { MarketItem } from "../../provider/modules/market";
@@ -23,6 +31,9 @@ import api, {
   MarketItemPagingResponse,
   MarketItemRequest,
   MarketItemResponse,
+  CommentItemPagingResponse,
+  CommentItemRequest,
+  CommentItemResponse,
 } from "../../api/market";
 import { AxiosResponse } from "axios";
 import { endProgress, startProgress } from "../../provider/modules/progress";
@@ -34,7 +45,7 @@ export interface PageRequest {
 }
 
 // ====   saga action   ====
-// items
+// item 추가
 export const requestAddMarketItem = createAction<MarketItem>(
   `${marketReducer.name}/requestAddMarketItem`
 );
@@ -73,6 +84,24 @@ export const requestRemoveMarketItemNext = createAction<number>(
 );
 export const requestModifyMarketItem = createAction<MarketItem>(
   `${marketReducer.name}/requestModifyMarketItem`
+);
+export const requestAddCommentItem = createAction<CommentItem>(
+  `${marketReducer.name}/requestAddCommentItem`
+);
+export const requestFetchCommentItem = createAction<number>(
+  `${marketReducer.name}/requestFetchCommentItem`
+);
+export const requestFetchCommentItems = createAction<number>(
+  `${marketReducer.name}/requestFetchCommentItems`
+);
+export const requestFetchNextCommentItems = createAction<PageRequest>(
+  `${marketReducer.name}/requestFetchNextCommentItems`
+);
+export const requestRemoveCommentItem = createAction<number>(
+  `${marketReducer.name}/requestRemoveCommentItem`
+);
+export const requestModifyCommentItem = createAction<CommentItem>(
+  `${marketReducer.name}/requestModifyCommentItem`
 );
 
 // 더보기 페이징
@@ -423,6 +452,165 @@ function* modifyData(action: PayloadAction<MarketItem>) {
   yield put(initialCompleted());
 }
 
+function* addCommentNext(action: PayloadAction<CommentItem>) {
+  try {
+    const commentItemPayload = action.payload;
+
+    yield put(startProgress());
+
+    const commentItemRequest: CommentItemRequest = {
+      marketId: commentItemPayload.marketId,
+      userName: commentItemPayload.userName,
+      commentContent: commentItemPayload.commentContent,
+      createdTime: commentItemPayload.createdTime,
+    };
+
+    const result: AxiosResponse<CommentItemResponse> = yield call(
+      api.postComment,
+      commentItemRequest
+    );
+    yield put(endProgress());
+    /////////////////////// commentId ? 백엔드 연동시에 수정해야할듯
+    const commentItem: CommentItem = {
+      commentId: result.data.commentId,
+      marketId: result.data.marketId,
+      userName: result.data.userName,
+      commentContent: result.data.commentContent,
+      createdTime: result.data.createdTime,
+    };
+
+    yield put(addCommentItem(commentItem));
+
+    yield put(initialCompleted());
+  } catch (e) {
+    yield put(endProgress());
+  }
+}
+
+function* fetchNextCommentData(action: PayloadAction<PageRequest>) {
+  const page = action.payload.page;
+  const size = action.payload.size;
+
+  yield put(startProgress());
+
+  try {
+    const result: AxiosResponse<CommentItemPagingResponse> = yield call(
+      api.fetchPagingComment,
+      page,
+      size
+    );
+
+    yield put(endProgress());
+
+    const commentPage: CommentPage = {
+      data: result.data.content.map(
+        (item) =>
+          ({
+            commentId: item.commentId,
+            marketId: item.marketId,
+            userName: item.userName,
+            commentContent: item.commentContent,
+            createdTime: item.createdTime,
+          } as CommentItem)
+      ),
+      totalElements: result.data.totalElements,
+      totalPages: result.data.totalPages,
+      page: result.data.number,
+      pageSize: result.data.size,
+      isLast: result.data.last,
+    };
+    yield put(initialNextMarketComment(commentPage));
+  } catch (e) {
+    yield put(endProgress());
+  }
+}
+
+function* fetchCommentData(action: PayloadAction<number>) {
+  const id = action.payload;
+
+  yield put(startProgress());
+  const result: AxiosResponse<CommentItemResponse[]> = yield call(
+    api.fetchComment,
+    id
+  );
+
+  yield put(endProgress());
+
+  const commentItems = result.data.map(
+    (item) =>
+      ({
+        commentId: item.commentId,
+        marketId: item.marketId,
+        userName: item.userName,
+        commentContent: item.commentContent,
+        createdTime: item.createdTime,
+      } as CommentItem)
+  );
+  yield put(initialComment(commentItems));
+}
+
+function* fetchCommentDataItem(action: PayloadAction<number>) {
+  const id = action.payload;
+
+  const result: AxiosResponse<CommentItemResponse> = yield call(
+    api.getComment,
+    id
+  );
+
+  const commentItem = result.data;
+  if (commentItem) {
+    yield put(initialCommentItem(commentItem));
+  }
+}
+
+function* removeComment(action: PayloadAction<number>) {
+  const id = action.payload;
+
+  yield put(startProgress());
+
+  const result: AxiosResponse<boolean> = yield call(api.removeComment, id);
+
+  yield put(endProgress());
+  if (result.data) {
+    yield put(removeCommentItem(id));
+  } else {
+    // alert박스?
+  }
+}
+function* modifyComment(action: PayloadAction<CommentItem>) {
+  const commentItemPayload = action.payload;
+
+  yield put(startProgress());
+
+  const commentItemRequest: CommentItemRequest = {
+    marketId: commentItemPayload.marketId,
+    userName: commentItemPayload.userName,
+    commentContent: commentItemPayload.commentContent,
+    createdTime: commentItemPayload.createdTime,
+  };
+
+  const result: AxiosResponse<CommentItemResponse> = yield call(
+    api.modifyComment,
+    commentItemPayload.commentId,
+    commentItemRequest
+  );
+
+  yield put(endProgress());
+
+  const commentItem: CommentItem = {
+    /////////////////////// commentId ? 백엔드 연동시에 수정해야할듯
+    commentId: result.data.commentId,
+    marketId: result.data.marketId,
+    userName: result.data.userName,
+    commentContent: result.data.commentContent,
+    createdTime: result.data.createdTime,
+  };
+
+  yield put(modifyCommentItem(commentItem));
+
+  yield put(initialCompleted());
+}
+
 //====    saga action 감지    ====
 
 export default function* marketSaga() {
@@ -440,4 +628,11 @@ export default function* marketSaga() {
   yield takeEvery(requestRemoveMarketItemNext, removeDataNext);
 
   yield takeEvery(requestModifyMarketItem, modifyData);
+
+  yield takeEvery(requestAddCommentItem, addCommentNext);
+  yield takeLatest(requestFetchNextCommentItems, fetchNextCommentData);
+  yield takeLatest(requestFetchCommentItems, fetchCommentData);
+  yield takeLatest(requestFetchCommentItem, fetchCommentDataItem);
+  yield takeEvery(requestRemoveCommentItem, removeComment);
+  yield takeEvery(requestModifyCommentItem, modifyComment);
 }

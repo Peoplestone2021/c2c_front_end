@@ -6,13 +6,13 @@ export interface moneyItem {
   // 유저 아이디
   hostName: String;
   // 가지고있는 국가
-  cntHave: String;
+  crcHave: String;
   // 가지고있는 돈
-  crcHave: number;
+  cntHave: number;
   // 원하는환전 국가
-  cntWant: String;
+  crcWant: String;
   // 원하는환전 액
-  crcWant: number;
+  cntWant: number;
   // 거래일자
   dday: String;
   // 본문
@@ -24,7 +24,7 @@ export interface moneyItem {
 // 백엔드 연동을 고려
 interface MoneyItemState {
   // 추가된 매물의 데이터 배열
-  data: moneyItem[],
+  data: moneyItem[];
   // 서버에서 데이터를 받아왔는지에 대한 여부
   isFetched: boolean;
   // 데이터 추가의 완료 여부
@@ -41,7 +41,7 @@ const calculatorSlice = createSlice({
   name: "calculator",
   initialState,
   reducers: {
-    addMoneyItem : (state, action: PayloadAction<moneyItem>) => {
+    addMoneyItem: (state, action: PayloadAction<moneyItem>) => {
       const calculator = action.payload;
       console.log("-- in reducer function --");
       console.log(calculator);
@@ -59,7 +59,7 @@ const calculatorSlice = createSlice({
       const moneyItems = action.payload;
       state.data = moneyItems;
       state.isFetched = true;
-    }
+    },
   },
 });
 

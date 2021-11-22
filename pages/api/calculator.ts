@@ -14,13 +14,13 @@ export interface MoenyItemResponse {
   // 유저 아이디
   hostName: String;
   // 가지고있는 국가
-  cntHave: String;
+  crcHave: String;
   // 가지고있는 돈
-  crcHave: number;
+  cntHave: number;
   // 원하는환전 국가
-  cntWant: String;
+  crcWant: String;
   // 원하는환전 액
-  crcWant: number;
+  cntWant: number;
   // 거래일자
   dday: String;
   // 본문
@@ -34,13 +34,13 @@ export interface MoneyItemRequest {
   // 유저 아이디
   hostName: String;
   // 가지고있는 국가
-  cntHave: String;
+  crcHave: String;
   // 가지고있는 돈
-  crcHave: number;
+  cntHave: number;
   // 원하는환전 국가
-  cntWant: String;
+  crcWant: String;
   // 원하는환전 액
-  crcWant: number;
+  cntWant: number;
   // 거래일자
   dday: String;
   // 본문

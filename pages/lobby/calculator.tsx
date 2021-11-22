@@ -138,13 +138,13 @@ const Calculator = () => {
         // 유저 아이디
         hostName: hostName.current?.value,
         // 가지고있는 국가
-        cntHave: cntHave.current?.value,
+        crcHave: cntHave.current?.value,
         // 가지고있는 돈
-        crcHave: parseInt(crcHave.current?.value),
+        cntHave: parseInt(crcHave.current?.value),
         // 원하는환전 국가
-        cntWant: cntWant.current?.value,
+        crcWant: cntWant.current?.value,
         // 원하는환전 액
-        crcWant: parseInt(crcWant.current?.value),
+        cntWant: parseInt(crcWant.current?.value),
         // 거래일자
         dday: yy.current?.value + mm.current?.value + dd.current?.value,
         // 본문
@@ -165,13 +165,13 @@ const Calculator = () => {
       // 유저 아이디
       hostName: hostName.current?.value,
       // 가지고있는 국가
-      cntHave: cntHave.current?.value,
+      crcHave: cntHave.current?.value,
       // 가지고있는 돈
-      crcHave: parseInt(crcHave.current?.value),
+      cntHave: parseInt(crcHave.current?.value),
       // 원하는환전 국가
-      cntWant: cntWant.current?.value,
+      crcWant: cntWant.current?.value,
       // 원하는환전 액
-      crcWant: parseInt(crcWant.current?.value),
+      cntWant: parseInt(crcWant.current?.value),
       // 거래일자
       dday: yy.current?.value + mm.current?.value + dd.current?.value,
       // 본문

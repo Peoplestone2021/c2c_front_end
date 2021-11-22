@@ -46,19 +46,28 @@ export interface MarketItemPagingResponse {
   number: number;
 }
 
-export interface CommentItemRequest {
-  itemId: number;
-  userName: string;
-  commentContent: string;
+export interface CommentItemPagingResponse {
+  content: CommentItemResponse[];
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  isEmpty: boolean;
 }
 
 export interface CommentItemResponse {
   commentId: number;
-  itemId: number;
+  marketId: number;
   userName: string;
   commentContent: string;
   createdTime: number;
-  isEmpty: boolean;
+}
+export interface CommentItemRequest {
+  marketId: number;
+  userName: string;
+  commentContent: string;
+  createdTime: number;
 }
 
 const marketApi = {
@@ -81,6 +90,7 @@ const marketApi = {
       // `${process.env.NEXT_PUBLIC_API_BASE}/marketItems/paging?=${page}&size=${size}`
       `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/paging?page=${page}&size=${size}`
     ),
+
   add: (marketItem: MarketItemRequest) => {
     createAxiosInstance().post<MarketItemResponse>(
       // `${process.env.NEXT_PUBLIC_API_BASE}/marketItems/`,
@@ -101,12 +111,38 @@ const marketApi = {
       marketItem
     );
   },
-
-  // postComment: (commentItem: CommentItemRequest, commentId: number) =>
-  //   createAxiosInstance().post<CommentItemResponse>(
-  //     `${process.env.NEXT_PUBLIC_FILE_MARKET_BASE}/comments/${commentId}`,
-  //     commentItem
-  //   ),
+  getComment: (id: number) => {
+    createAxiosInstance().get<number>(
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comment/${id}`
+    );
+  },
+  fetchComment: (id: number) => {
+    createAxiosInstance().get<CommentItemResponse[]>(
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comments/${id}`
+    );
+  },
+  fetchPagingComment: (page: number, size: number) =>
+    createAxiosInstance().get<CommentItemPagingResponse>(
+      // `${process.env.NEXT_PUBLIC_API_BASE}/marketItems/paging?=${page}&size=${size}`
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comments/paging?page=${page}&size=${size}`
+    ),
+  postComment: (commentItem: CommentItemRequest) => {
+    createAxiosInstance().post<CommentItemResponse>(
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comments/`,
+      commentItem
+    );
+  },
+  removeComment: (id: number) => {
+    createAxiosInstance().delete<boolean>(
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comments/${id}`
+    );
+  },
+  modifyComment: (id: number, item: CommentItemRequest) => {
+    createAxiosInstance().post<CommentItemResponse>(
+      `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/comments/${id}`,
+      item
+    );
+  },
 };
 
 export default marketApi;
