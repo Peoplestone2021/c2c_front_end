@@ -15,7 +15,7 @@ import React, {
   useCallback,
 } from "react";
 
-import common from "@fullcalendar/common";
+import common, { identity } from "@fullcalendar/common";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -108,6 +108,7 @@ const Schedule = () => {
   // })
   // let title;
   const inputTitle = useRef() as MutableRefObject<HTMLInputElement>;
+  const inputMemo = useRef() as MutableRefObject<HTMLInputElement>;
 
   const eventHandler = () => {};
 
@@ -132,11 +133,20 @@ const Schedule = () => {
     fetchData();
   }, []);
 
+  const add = async (e: React.PointerEvent<HTMLInputElement> | null) => {
+
+    try {
+      const result = await api.add({
+        title: inputTitle
+      })
+    }
+  }
   const del = (id: string, index: number) => {
     setEvents(
       produce((state) => {
         state.splice(index, 1);
         console.log(events[0].id);
+        
       })
     );
   };
@@ -188,7 +198,8 @@ const Schedule = () => {
           eventClick={function(e) {
             // alert(e.event.title);
             console.log(e.event.id);
-            del(e.event.id, 1);
+            del(e.event.id);
+            setEvent;
           }}
           nowIndicator={true}
           navLinks={true}
