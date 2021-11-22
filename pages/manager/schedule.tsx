@@ -30,12 +30,12 @@ import produce from "immer";
 import { TextCenter } from "react-bootstrap-icons";
 
 interface EventItemState {
-  id?: number | undefined;
-  groupId: string | undefined;
+  id?: number;
+  groupId: number;
   title: string | undefined;
   memo?: string | undefined;
   start?: string | undefined;
-  end?: string | undefined;
+  // end?: string | undefined;
 }
 
 // interface ModalProp {
@@ -67,21 +67,21 @@ const Schedule = () => {
 
   const [event, setEvent] = useState({
     id: 1,
-    groupId: "999",
-    title: "initial event",
-    memo: "memo",
+    groupId: 999,
+    title: "",
+    memo: "",
     start: new Date(),
-    end: new Date(),
+    // end: new Date(),
   });
   const [showReq, setShowReq] = useState<boolean>(false);
   const [events, setEvents] = useState([
     {
       id: 1,
-      groupId: "999",
-      title: "initial event",
-      memo: "memo",
+      groupId: 999,
+      title: "",
+      memo: "",
       start: new Date(),
-      end: new Date(),
+      // end: new Date(),
     },
   ]);
 
@@ -120,15 +120,26 @@ const Schedule = () => {
       title: item.title,
       memo: item.memo,
       start: item.start,
-      end: item.end,
+      // end: item.end,
     })) as EventItemState[];
     console.log(res);
     // setLoading(false); // 로딩중 여부 state 업데이트
-    setEvents(events2); // event state 업데이트
+    console.log(res.data);
+    console.log(events2);
+    setEvents(res.data); // event state 업데이트
   };
   useEffect(() => {
     fetchData();
   }, []);
+
+  const del = (id: string, index: number) => {
+    setEvents(
+      produce((state) => {
+        state.splice(index, 1);
+        console.log(events[0].id);
+      })
+    );
+  };
 
   return (
     <div>
@@ -175,7 +186,9 @@ const Schedule = () => {
             setEvent({ ...event, start: new Date(e.dateStr) });
           }}
           eventClick={function(e) {
-            alert(e.event.title);
+            // alert(e.event.title);
+            console.log(e.event.id);
+            del(e.event.id, 1);
           }}
           nowIndicator={true}
           navLinks={true}
