@@ -3,25 +3,30 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import style from "../styles/market.module.scss";
 import { Container, Collapse, Form, Button } from "react-bootstrap";
-import ContentDetail from "../components/ContentDetail";
+// import ContentDetail from "../components/ContentDetail";
 import marketApi from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../provider";
 import Appbar from "../../bar/appbar";
+// import { initialMarketItem } from "../../../provider/modules/market";
+import {
+  requestFetchMarketItems,
+  requestFetchMarketItem,
+} from "../../../middleware/modules/market";
 
 // import { RootState } from ".";
 
-interface marketItem {
-  id: number;
-  hostName: string;
-  crcHave: string;
-  crcWant: string;
-  cntHave: number;
-  cntWant: number;
-  dDate: number;
-  content: string;
-  status: boolean;
-}
+// interface marketItem {
+//   id: number;
+//   hostName: string;
+//   crcHave: string;
+//   crcWant: string;
+//   cntHave: number;
+//   cntWant: number;
+//   dDate: number;
+//   content: string;
+//   status: boolean;
+// }
 
 type commentsItem = {
   id: number;
@@ -117,21 +122,30 @@ const getTimeString = (unixtime: number) => {
 };
 
 const MarketDetail = () => {
-  const Router = useRouter();
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const id = router.query.id as string;
+  console.log("[log]id: ");
+  console.log(id);
 
-  const id = Router.query.id as string;
+  const marketItem = useSelector((state: RootState) =>
+    state.market.data.find((item) => item.marketId === +id)
+  );
+
+  if (id) {
+    if (!marketItem) {
+      dispatch(requestFetchMarketItem(+id));
+    }
+  }
+
+  console.log("marketItem: ");
+  console.log(marketItem);
+
   const marketContent = marketItems.find((data) => data.id === Number(id));
-
-  console.log(marketContent);
-  console.log(typeof marketItems.find);
 
   const commentsContent = commentsItem.find(
     (data) => data.itemId === Number(id)
   );
-
-  type Props = {
-    id?: marketItem;
-  };
 
   const [open, setOpen] = useState(false);
 
@@ -149,11 +163,11 @@ const MarketDetail = () => {
             <Container>
               <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
               <h5 className="card-title">
-                {marketContent?.crcHave}
-                {marketContent?.cntHave} &#62; {marketContent?.crcWant}
-                {marketContent?.cntWant}
+                {marketItem?.crcHave}
+                {marketItem?.cntHave} &#62; {marketItem?.crcWant}
+                {marketItem?.cntWant}
               </h5>
-              {marketContent?.content}
+              {marketItem?.content}
             </Container>
             {/* <span className="card-text"></span> */}
             {/* css 그리드처리 해야함 */}
@@ -164,7 +178,7 @@ const MarketDetail = () => {
             <button
               className="btn btn-secondary me-1 float-left"
               onClick={() => {
-                Router.push("/makeOfferModal");
+                router.push("/makeOfferModal");
               }}
             >
               거래 신청하기

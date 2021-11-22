@@ -8,8 +8,10 @@ import { store } from "../provider";
 import styles from "../styles/Home.module.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import Appbar from "./bar/appbar";
+import { useRouter } from "next/router";
 
-const Home = () => {
+const Index = () => {
+  const router = useRouter();
   return (
     <Provider store={store}>
 <div>
@@ -42,7 +44,7 @@ const Home = () => {
             </a>
           </Link>
 
-          <Link href="/manager/manager">
+          <Link href="/manager/itemlist">
             <a className="menu-link">
               <div className="menu3">
                 <p>프라이빗거래매니저</p>
@@ -52,10 +54,10 @@ const Home = () => {
         </div>
       </div>
     </div>
-    </Provider>
+     </Provider>
   );
 };
 
 
-export default Home;
+export default Index;
 
