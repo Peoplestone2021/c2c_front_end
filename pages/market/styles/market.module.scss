@@ -177,8 +177,21 @@ p[class^="from-"].emoji::before {
     margin: 0.5rem 0;
   }
 }
+//====    CRUD    ====
+.zoom {
+  padding: 50px;
+  background-color: green;
+  transition: transform 0.2s; /* Animation */
+  // margin: 0 auto;
+}
 
-// ==== grid container
+.zoom:hover {
+  transform: scale(
+    1.1
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+// ====   grid container    ====
 .detailContainer {
   display: grid;
 }
@@ -199,3 +212,8 @@ p[class^="from-"].emoji::before {
   max-width: 650px;
   margin: 35px auto;
 }
+
+//====
+// $btn-border-radius: 2;
+// $btn-border-radius-sm: 3;
+// $btn-border-radius-lg: 3;

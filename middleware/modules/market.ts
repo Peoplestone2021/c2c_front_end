@@ -85,7 +85,7 @@ export const requestRemoveMarketItemNext = createAction<number>(
 export const requestModifyMarketItem = createAction<MarketItem>(
   `${marketReducer.name}/requestModifyMarketItem`
 );
-export const requestAddCommentItem = createAction<CommentItem>(
+export const requestAddCommentItem = createAction<CommentItemRequest>(
   `${marketReducer.name}/requestAddCommentItem`
 );
 export const requestFetchCommentItem = createAction<number>(
@@ -100,7 +100,7 @@ export const requestFetchNextCommentItems = createAction<PageRequest>(
 export const requestRemoveCommentItem = createAction<number>(
   `${marketReducer.name}/requestRemoveCommentItem`
 );
-export const requestModifyCommentItem = createAction<CommentItem>(
+export const requestModifyCommentItem = createAction<CommentItemRequest>(
   `${marketReducer.name}/requestModifyCommentItem`
 );
 
@@ -452,9 +452,10 @@ function* modifyData(action: PayloadAction<MarketItem>) {
   yield put(initialCompleted());
 }
 
-function* addCommentNext(action: PayloadAction<CommentItem>) {
+function* addCommentNext(action: PayloadAction<CommentItemRequest>) {
   try {
     const commentItemPayload = action.payload;
+    // const commentIclude = id.payload;
 
     yield put(startProgress());
 
@@ -471,8 +472,8 @@ function* addCommentNext(action: PayloadAction<CommentItem>) {
     );
     yield put(endProgress());
     /////////////////////// commentId ? 백엔드 연동시에 수정해야할듯
-    const commentItem: CommentItem = {
-      commentId: result.data.commentId,
+    const commentItem: CommentItemRequest = {
+      // commentId: result.data.commentId,
       marketId: result.data.marketId,
       userName: result.data.userName,
       commentContent: result.data.commentContent,
@@ -529,24 +530,29 @@ function* fetchCommentData(action: PayloadAction<number>) {
   const id = action.payload;
 
   yield put(startProgress());
-  const result: AxiosResponse<CommentItemResponse[]> = yield call(
-    api.fetchComment,
-    id
-  );
 
-  yield put(endProgress());
+  try {
+    const result: AxiosResponse<CommentItemResponse[]> = yield call(
+      api.fetchComment,
+      id
+    );
 
-  const commentItems = result.data.map(
-    (item) =>
-      ({
-        commentId: item.commentId,
-        marketId: item.marketId,
-        userName: item.userName,
-        commentContent: item.commentContent,
-        createdTime: item.createdTime,
-      } as CommentItem)
-  );
-  yield put(initialComment(commentItems));
+    const commentItems: CommentItem[] = result.data.map(
+      (item) =>
+        ({
+          commentId: item.commentId,
+          marketId: item.marketId,
+          userName: item.userName,
+          commentContent: item.commentContent,
+          createdTime: item.createdTime,
+          isEmpty: item.isEmpty,
+        } as CommentItem)
+    );
+
+    yield put(initialComment(commentItems));
+  } catch (e) {
+    yield put(endProgress());
+  }
 }
 
 function* fetchCommentDataItem(action: PayloadAction<number>) {
@@ -582,11 +588,13 @@ function* modifyComment(action: PayloadAction<CommentItem>) {
 
   yield put(startProgress());
 
-  const commentItemRequest: CommentItemRequest = {
+  const commentItemRequest: CommentItem = {
+    commentId: commentItemPayload.commentId,
     marketId: commentItemPayload.marketId,
     userName: commentItemPayload.userName,
     commentContent: commentItemPayload.commentContent,
     createdTime: commentItemPayload.createdTime,
+    isEmpty: commentItemPayload.isEmpty,
   };
 
   const result: AxiosResponse<CommentItemResponse> = yield call(
@@ -604,6 +612,7 @@ function* modifyComment(action: PayloadAction<CommentItem>) {
     userName: result.data.userName,
     commentContent: result.data.commentContent,
     createdTime: result.data.createdTime,
+    isEmpty: result.data.isEmpty,
   };
 
   yield put(modifyCommentItem(commentItem));

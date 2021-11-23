@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CommentItemModRequest, CommentItemRequest } from "../../api/market";
 
 // export interface marketItem {
 //   itemId: number;
@@ -28,11 +29,12 @@ export interface MarketItem {
 }
 
 export interface CommentItem {
-  commentId: number;
+  commentId?: number;
   marketId: number;
   userName: string;
   commentContent: string;
   createdTime: number;
+  isEmpty?: boolean;
 }
 
 export interface MarketPage {
@@ -77,6 +79,15 @@ interface MarketState {
   isCommentLast?: boolean;
 }
 
+// interface commentItemState {
+//   commentId: number;
+//   marketId: number;
+//   userName: number;
+//   commentContent: string | undefined;
+//   createdTime: number;
+//   isModified?: boolean;
+// }
+
 const initialState: MarketState = {
   data: [],
   isFetched: false,
@@ -86,8 +97,8 @@ const initialState: MarketState = {
   commentData: [],
   isCommentFetched: false,
   commentPage: 0,
-  totalCommentPages: 0,
   commentPageSize: 30,
+  totalCommentPages: 0,
 };
 
 const marketSlice = createSlice({
@@ -161,7 +172,7 @@ const marketSlice = createSlice({
       state.isLast = action.payload.isLast;
       state.isFetched = true;
     },
-    addCommentItem: (state, action: PayloadAction<CommentItem>) => {
+    addCommentItem: (state, action: PayloadAction<CommentItemRequest>) => {
       const comment = action.payload;
       state.commentData.unshift(comment);
       state.isCommentAddCompleted = true;
@@ -192,7 +203,10 @@ const marketSlice = createSlice({
       );
       state.isCommentRemoveCompleted = true; // 삭제 되었음을 표시
     },
-    modifyCommentItem: (state, action: PayloadAction<CommentItem>) => {
+    modifyCommentItem: (
+      state,
+      action: PayloadAction<CommentItemModRequest>
+    ) => {
       const modifyItem = action.payload;
       const commentItem = state.commentData.find(
         (item) => item.commentId === modifyItem.commentId

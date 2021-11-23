@@ -10,144 +10,24 @@ import {
   Row,
   Col,
   FloatingLabel,
+  Tooltip,
+  OverlayTrigger,
+  Modal,
 } from "react-bootstrap";
-// import ContentDetail from "../components/ContentDetail";
-import marketApi from "../../../api/market";
+import marketApi, { CommentItemRequest } from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../provider";
 import Appbar from "../../bar/appbar";
-// import { initialMarketItem } from "../../../provider/modules/market";
 import {
   requestFetchMarketItems,
   requestFetchMarketItem,
+  requestFetchCommentItems,
+  requestAddCommentItem,
+  requestModifyCommentItem,
+  requestRemoveCommentItem,
 } from "../../../middleware/modules/market";
-
-// import { RootState } from ".";
-
-// interface marketItem {
-//   id: number;
-//   hostName: string;
-//   crcHave: string;
-//   crcWant: string;
-//   cntHave: number;
-//   cntWant: number;
-//   dDate: number;
-//   content: string;
-//   status: boolean;
-// }
-
-type commentsItems = {
-  commentId: number;
-  marketId: number;
-  userName: string;
-  commentContent: string;
-  createdTime: number;
-};
-
-interface commentContentsPage {
-  data: commentsItems[];
-  last: boolean;
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  isEmpty: boolean;
-}
-
-const marketItems = [
-  {
-    id: 11111111,
-    hostName: "Zero",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 1000,
-    cntWant: 1174000,
-    dDate: 1635747679,
-    content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
-    status: true,
-  },
-  {
-    id: 22222222,
-    hostName: "One",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 1100,
-    cntWant: 1291000,
-    dDate: 1635745679,
-    content: "Exercitationem velit labore animi nihil corporis nostrum!",
-    status: true,
-  },
-  {
-    id: 33333333,
-    hostName: "Two",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 890,
-    cntWant: 1044000,
-    dDate: 1635749679,
-    content: "Dolorum molestias distinctio velit maiores, ",
-    status: false,
-  },
-  {
-    id: 44444444,
-    hostName: "Three",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 880,
-    cntWant: 1033000,
-    dDate: 1635748679,
-    content:
-      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
-    status: true,
-  },
-  {
-    id: 55555555,
-    hostName: "Three",
-    crcHave: "USD",
-    crcWant: "KRW",
-    cntHave: 1150,
-    cntWant: 1350000,
-    dDate: 1635748679,
-    content: "Exercitationem velit labore animi nihil corporis nostrum!",
-    status: true,
-  },
-];
-
-const commentsItems = [
-  {
-    commentId: 1,
-    marketId: 1,
-    userName: "John Doe",
-    commentContent: "Exercitationem velit labore animi nihil corporis nostrum!",
-    createdTime: 1636325783,
-  },
-  {
-    commentId: 2,
-    marketId: 1,
-    itemId: 2,
-    userName: "Smith",
-    commentContent:
-      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
-    createdTime: 1636325783,
-  },
-  {
-    commentId: 3,
-    marketId: 18,
-    itemId: 2,
-    userName: "Smith",
-    commentContent:
-      "fugit mollitia similique doloribus sed, facere asperiores assumenda cumque delectus.,",
-    createdTime: 1636325783,
-  },
-  {
-    commentId: 4,
-    marketId: 18,
-    itemId: 2,
-    userName: "jone",
-    commentContent: "Exercitationem velit labore animi nihil corporis nostrum!",
-    createdTime: 1636325783,
-  },
-];
+import { CommentItem, MarketItem } from "../../../provider/modules/market";
+import { useEffect } from "hoist-non-react-statics/node_modules/@types/react";
 
 const getTimeString = (unixtime: number) => {
   const dateTime = new Date(unixtime);
@@ -162,36 +42,114 @@ const MarketDetail = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const id = router.query.id as string;
-  console.log("[log]id: ");
-  console.log(id);
+
+  const userInput = useRef<HTMLInputElement>(null);
+  const commentInput = useRef<HTMLTextAreaElement>(null);
+  const modRef = useRef<HTMLInputElement>(null);
 
   const marketItem = useSelector((state: RootState) =>
     state.market.data.find((item) => item.marketId === +id)
   );
 
+  const commentItems = useSelector(
+    (state: RootState) => state.market.commentData
+  );
+
   if (id) {
     if (!marketItem) {
       dispatch(requestFetchMarketItem(+id));
+      dispatch(requestFetchCommentItems(+id));
     }
   }
 
-  console.log("marketItem: ");
-  console.log(marketItem);
+  // ==== POST COMMENT
+  const handlePostClick = () => {
+    if (userInput.current?.value?.length) {
+      console.log("[log] commentItems: ");
+      console.log(commentItems);
+    }
+    if (userInput.current?.value?.length) {
+      const comment: CommentItemRequest = {
+        marketId: +id,
+        userName: userInput.current.value,
+        commentContent: commentInput.current ? commentInput.current.value : "",
+        createdTime: new Date().getTime(),
+      };
+      // console.log("[log] comment: ");
+      // console.log(comment);
+      console.log("[log] type_comment_content: ");
+      console.log();
 
-  const commentContentsPage = {
-    data: commentsItems,
-    last: false,
-    totalElements: 2,
-    size: 2,
-    number: 2,
-    isEmpty: false,
+      dispatch(requestAddCommentItem(comment));
+      dispatch(requestFetchCommentItems(+id));
+    }
   };
 
-  const commentsContents = commentContentsPage.data.find(
-    (data) => data.marketId === Number(id)
-  );
+  // ====   수정    ====
 
-  const [open, setOpen] = useState(false);
+  const modCommentItem = (d: CommentItem) => {
+    // const id = d.commentId;
+
+    if (modRef.current?.value?.length) {
+      const commentItem: CommentItem = {
+        commentId: d.commentId,
+        marketId: d.marketId,
+        userName: d.userName,
+        commentContent: modRef.current?.value,
+        createdTime: d.createdTime,
+        isEmpty: d.isEmpty,
+      };
+
+      console.log("[log] commentItem_mod: ");
+      console.log(commentItem);
+
+      dispatch(requestModifyCommentItem(commentItem));
+      handleCloseMod();
+    }
+  };
+  // ====   삭제    ====
+  // ====   실제 삭제   ====
+  const removeCommentItem = (d: CommentItem) => {
+    const targetId = d.commentId;
+    if (targetId) {
+      dispatch(requestRemoveCommentItem(targetId));
+      handleCloseDel();
+    }
+  };
+
+  // ====   숨기기    ====
+
+  const [isModify, setIsModify] = useState(false);
+  const [showDel, setShowDel] = useState(false);
+  const [showApply, setShowApply] = useState(false);
+  const [showMod, setShowMod] = useState(false);
+
+  const handleCloseDel = () => setShowDel(false);
+  const handleShowDel = () => setShowDel(true);
+
+  const handleCloseApply = () => setShowApply(false);
+  const handleShowApply = () => setShowApply(true);
+
+  const handleCloseMod = () => setShowMod(false);
+  const handleShowMod = () => {
+    setShowMod(true);
+  };
+
+  // ====    item CRUD   ====
+  // if (id) {
+  //   if (!commentItems) {
+  //     dispatch(requestFetchCommentItems(+id));
+  //   }
+  // }
+
+  // const isRemoveCompleted = useSelector(
+  //   (state: RootState) => state.market.isRemoveCompleted
+  // );
+  // useEffect(() => {
+  //   isRemoveCompleted && router.push("/market");
+  // }, [isRemoveCompleted, router]);
+
+  const [open, setOpen] = useState(true);
 
   return (
     <section>
@@ -222,39 +180,136 @@ const MarketDetail = () => {
             {/* css 그리드처리 해야함 */}
           </span>
         </span>
-        <div className="d-flex mt-2">
-          <div style={{ width: "50%" }}>
-            <button
-              className="btn btn-secondary me-1 float-left"
-              onClick={() => {
-                router.push("/makeOfferModal");
-              }}
-            >
-              거래 신청하기
-            </button>
-          </div>
-          <div style={{ width: "50%" }} className="d-flex justify-content-end">
-            <button
-              className="btn btn-secondary me-1 float-left"
-              onClick={() => setOpen(!open)}
-              aria-controls="comment-collapse-thread"
-              aria-expanded={open}
-            >
-              댓글 보기
-            </button>
-          </div>
-        </div>
+        <Row className="mt-2">
+          <Col md={{ span: 3, offset: 0 }}>
+            <Button variant="secondary" onClick={handleShowApply}>
+              거래 신청
+            </Button>
+          </Col>
+          <Col></Col>
+          <Col
+            md={{ span: 3, offset: 5 }}
+            className="d-flex justify-content-end"
+          >
+            <Button className="justify-content-end" variant="secondary">
+              댓글 닫기
+            </Button>
+          </Col>
+        </Row>
+        <Modal show={showApply} onHide={handleCloseApply}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <strong>거래 신청</strong>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>거래를 신청합니다.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseApply}>
+              취소
+            </Button>
+            <Button variant="primary" onClick={handleCloseApply}>
+              확인
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <Collapse key={id} in={open} className="mt-2">
           <div key="id" className="mx-auto" id="comment-collapse-thread">
             {/* <div className="card card-body"> */}
             <div className={`${style.imessage}`}>
-              {commentContentsPage.data.map((d) => (
-                <span key="marketId">
+              {commentItems?.map((d) => (
+                <span key={d.commentId}>
                   <div className="text-bold mt-0">
-                    {d?.userName}
-                    {getTimeString(d?.createdTime)}
+                    <Row>
+                      <Col xs={3}>{d?.userName}</Col>
+                      <Col className="fs-6">
+                        {getTimeString(d?.createdTime)}
+                      </Col>
+                    </Row>
                   </div>
-                  <p className={`${style.fromThem}`}>{d?.commentContent}</p>
+                  <Row>
+                    <Col md={{ span: 8, offset: 0 }}>
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 100 }}
+                        overlay={
+                          <Tooltip>
+                            <strong>수정하기</strong>
+                          </Tooltip>
+                        }
+                      >
+                        <p
+                          className={`${style.fromThem} ${style.zoom} ${style.hover} button`}
+                          onClick={handleShowMod}
+                        >
+                          {d?.commentContent}
+                        </p>
+                      </OverlayTrigger>
+                      <Modal show={showMod} onHide={handleCloseMod}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>댓글 수정</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <Form.Control
+                            size="lg"
+                            type="text"
+                            placeholder="내용"
+                            ref={modRef}
+                          />
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button variant="secondary" onClick={handleCloseMod}>
+                            Close
+                          </Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => modCommentItem(d)}
+                          >
+                            Save Changes
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    </Col>
+                    <Col></Col>
+                    <Col
+                      md={{ span: 1, offset: 2 }}
+                      className="justify-content-end"
+                    >
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 100 }}
+                        overlay={
+                          <Tooltip>
+                            <strong>삭제하기</strong>
+                          </Tooltip>
+                        }
+                      >
+                        <Button
+                          className="btn bi bi-trash"
+                          variant="secondary"
+                          onClick={handleShowDel}
+                        />
+                      </OverlayTrigger>
+                    </Col>
+                  </Row>
+                  <Modal show={showDel} onHide={handleCloseDel}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>
+                        <strong>삭제하기</strong>
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>댓글을 삭제하시겠습니까?</Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleCloseDel}>
+                        취소
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => removeCommentItem(d)}
+                      >
+                        확인
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </span>
               ))}
               <div className="fs-6 mt-0">{/* created&nbsp; */}</div>
@@ -264,22 +319,34 @@ const MarketDetail = () => {
                   <Col xs={2}>
                     <FloatingLabel controlId="floatingInputGrid" label="이름">
                       <Form.Control
-                        type="email"
+                        type="text"
                         placeholder="name@example.com"
+                        ref={userInput}
                       />
                     </FloatingLabel>
                   </Col>
                   <Col>
                     <Form.Group
                       className="mb-3"
-                      controlId="commentForm.ControlTextarea1"
+                      controlId="commentForm.Controltextarea1"
                     >
-                      <Form.Control as="textarea" rows={2} />
+                      <Form.Control
+                        type="text"
+                        as="textarea"
+                        rows={2}
+                        ref={commentInput}
+                      />
                     </Form.Group>
+                  </Col>
+                  <Col xs={1}>
+                    <Button
+                      variant="danger"
+                      className="bi bi-arrow-up-square-fill fs-2 ml-1"
+                      onClick={() => handlePostClick()}
+                    />
                   </Col>
                 </Row>
               </Form>
-              <Button>댓글</Button>
             </div>
           </div>
         </Collapse>
