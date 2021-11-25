@@ -31,7 +31,7 @@ const Index = () => {
           <Link href="/lobby/main">
             <a className="menu-link">
               <div className="menu1">
-                <p>환전로비</p>
+                <p><strong>환전로비</strong></p>
               </div>
             </a>
           </Link>
@@ -39,7 +39,7 @@ const Index = () => {
           <Link href="/market">
             <a className="menu-link">
               <div className="menu2">
-                <p>마켓플레이스</p>
+                <p><strong>마켓플레이스</strong></p>
               </div>
             </a>
           </Link>
@@ -47,7 +47,7 @@ const Index = () => {
           <Link href="/manager/itemlist">
             <a className="menu-link">
               <div className="menu3">
-                <p>프라이빗거래매니저</p>
+                <p><strong>프라이빗거래매니저</strong></p>
               </div>
             </a>
           </Link>

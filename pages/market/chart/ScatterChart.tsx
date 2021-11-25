@@ -1,11 +1,10 @@
 import { ApexOptions } from "apexcharts";
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-// import ReactApexChart from "react-apexcharts";
 import dynamic from "next/dynamic";
+
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const ScatterChart = () => {
+
   const series = [
     {
       name: "Points",

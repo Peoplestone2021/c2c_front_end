@@ -159,15 +159,30 @@ const MarketDetail = () => {
         style={{ width: "50vw" }}
         className="mx-auto"
       >
-        <h2 className="text-center mt-4">매물 상세</h2>
+        <h2 className="text-center my-5 fw-bold border-bottom pb-4">
+          매물 상세
+        </h2>
         <span className="card mx-auto">
           <span className="card-body">
             <Container>
-              <Image src="/flag_usd.png" alt="USD" width="40" height="40" />
               <h5 className="card-title">
-                {marketItem?.crcHave}
-                {marketItem?.cntHave} &#62; {marketItem?.crcWant}
-                {marketItem?.cntWant}
+                <Row>
+                  <Col md={{ span: 1, offset: 0 }}>
+                    <Image
+                      src="/flag_usd.png"
+                      alt="USD"
+                      width={48}
+                      height={48}
+                    />
+                  </Col>
+                  <Col md={{ span: 3, offset: 0 }}>
+                    <strong>{marketItem?.crcHave}</strong>
+                    {marketItem?.cntHave}{" "}
+                    <strong>&#62;{marketItem?.crcWant}</strong>
+                    &#32;{marketItem?.cntWant}
+                  </Col>
+                  <Col md={{ span: 6, offset: 0 }}></Col>
+                </Row>
               </h5>
               <Row>
                 <span>{marketItem?.hostName}</span>

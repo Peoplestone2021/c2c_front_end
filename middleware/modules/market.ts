@@ -34,6 +34,7 @@ import api, {
   CommentItemPagingResponse,
   CommentItemRequest,
   CommentItemResponse,
+  CommentItemModRequest,
 } from "../../api/market";
 import { AxiosResponse } from "axios";
 import { endProgress, startProgress } from "../../provider/modules/progress";
@@ -100,7 +101,7 @@ export const requestFetchNextCommentItems = createAction<PageRequest>(
 export const requestRemoveCommentItem = createAction<number>(
   `${marketReducer.name}/requestRemoveCommentItem`
 );
-export const requestModifyCommentItem = createAction<CommentItemRequest>(
+export const requestModifyCommentItem = createAction<CommentItemModRequest>(
   `${marketReducer.name}/requestModifyCommentItem`
 );
 
@@ -588,7 +589,7 @@ function* modifyComment(action: PayloadAction<CommentItem>) {
 
   yield put(startProgress());
 
-  const commentItemRequest: CommentItem = {
+  const commentItemRequest: CommentItemModRequest = {
     commentId: commentItemPayload.commentId,
     marketId: commentItemPayload.marketId,
     userName: commentItemPayload.userName,

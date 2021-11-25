@@ -11,6 +11,9 @@ const Main = () => {
   return (
     <Provider store={store}>
       <>
+        <div>
+          <Appbar />
+        </div>
         <div className={`${styles.maindiv} d-flex justify-content-evenly`}>
           <Sidebar />
           <div className={`${styles.cal} `}>
