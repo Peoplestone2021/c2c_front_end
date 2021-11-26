@@ -11,8 +11,10 @@ import {
   requestFetchPagingMarketItems,
 } from "../../middleware/modules/market";
 import axios from "axios";
+import { ApexOptions } from "apexcharts";
+import dynamic from "next/dynamic";
 
-interface PublicItem {
+export interface PublicItem {
   marketId: number;
   itemId: number;
   crcHave: string;
@@ -23,11 +25,11 @@ interface PublicItem {
   status: boolean;
 }
 
-interface PublicItemPage {
+export interface PublicItemPage {
   content: PublicItem[];
 }
 
-interface IndexProp {
+export interface IndexProp {
   marketItems: PublicItem[];
   marketItemsPage: PublicItemPage[];
 }
@@ -40,6 +42,8 @@ const getTimeString = (unixtime: number) => {
     : dateTime.toLocaleTimeString();
   // return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
 };
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const itemStatus = (d: boolean) => {
   if (d === true) {
@@ -71,6 +75,109 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
       );
     };
 
+    const series: [
+      {
+        name: string;
+        type: string;
+        data: number[];
+      },
+      {
+        name: string;
+        type: string;
+        data: {
+          x: number;
+          y: number;
+        }[];
+      }
+    ] = [
+      {
+        name: "Points",
+        type: "scatter",
+        //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
+        data: marketItems.map((d) => (10000 * d.cntHave) / d.cntWant),
+      },
+      {
+        name: "Line",
+        type: "line",
+        data: [
+          {
+            x: 1,
+            y: 8.41,
+          },
+          {
+            x: 2,
+            y: 8.41,
+          },
+          {
+            x: 3,
+            y: 8.41,
+          },
+          {
+            x: 4,
+            y: 8.41,
+          },
+          {
+            x: 5,
+            y: 8.41,
+          },
+          {
+            x: 6,
+            y: 8.41,
+          },
+          {
+            x: 7,
+            y: 8.41,
+          },
+          {
+            x: 8,
+            y: 8.41,
+          },
+          {
+            x: 9,
+            y: 8.41,
+          },
+          {
+            x: 10,
+            y: 8.41,
+          },
+        ],
+      },
+    ];
+
+    const options: ApexOptions = {
+      title: {
+        text: `USD 거래 추세 현황`,
+      },
+      chart: {
+        height: 350,
+        type: `line`,
+      },
+      fill: {
+        type: `solid`,
+      },
+      markers: {
+        size: [6, 0],
+      },
+      tooltip: {
+        shared: false,
+        intersect: true,
+      },
+      legend: {
+        show: false,
+      },
+      xaxis: {
+        // type: `numeric`,
+        // min: 17,
+        // max: 44,
+        // tickAmount: 12,
+      },
+    };
+
+    const chartData = {
+      series: series,
+      options: options,
+    };
+
     // console.log("[log] marketItems: ");
     // console.log(marketItems);
 
@@ -82,7 +189,17 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
             마켓플레이스
           </h1>
           <span>
-            <ScatterChart />
+            <div className="mixed-chart">
+              {chartData && (
+                <Chart
+                  options={chartData?.options}
+                  series={chartData?.series}
+                  type="line"
+                  height={350}
+                  // className="mixed-chart"
+                ></Chart>
+              )}
+            </div>
           </span>
           <div
             id="search-form"
@@ -109,8 +226,13 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
             <tbody className="border-bottom border-top">
               {" "}
               {/*map으로 출력하도록*/}
-              {marketItemsPage.content.map((d, index) => (
-                <tr key={`market-item-list-${index}`}>
+              {marketItemsPage.content.map((d: PublicItem, index: number) => (
+                <tr
+                  key={`market-item-list-${index}`}
+                  onClick={() => {
+                    router.push(`/market/detail/${d.marketId}`);
+                  }}
+                >
                   <td>{d.crcHave}</td>
                   <td>{d.cntHave}</td>
                   <td>{d.cntWant}</td>
@@ -173,5 +295,12 @@ export async function getServerSideProps() {
 
   return { props: { marketItems, marketItemsPage } };
 }
+
+const getChartData = async () => {
+  // const result = await axios.get<typeof data>(
+  //   "http://localhost:5050/sales-orders/stats?sd=1997-01-01&ed=1997-01-31"
+  // );
+  // setData(result.data);
+};
 
 export default Index;

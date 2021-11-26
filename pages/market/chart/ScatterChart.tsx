@@ -1,11 +1,67 @@
 import { ApexOptions } from "apexcharts";
+import axios from "axios";
 import dynamic from "next/dynamic";
+import regression from "regression";
+import { PublicItem } from "../index";
+import { IndexProp } from "..";
+import { useState } from "preact/hooks";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const ScatterChart = () => {
+const ScatterChart = ({ marketItems }: IndexProp) => {
+  // const clean_data = datoa
+  // .filter(({ x, y }) => {
+  //   return (
+  //     typeof x === typeof y &&  // filter out one string & one number
+  //     !isNaN(x) &&              // filter out `NaN`
+  //     !isNaN(y) &&
+  //     Math.abs(x) !== Infinity &&
+  //     Math.abs(y) !== Infinity
+  //   );
+  // })
+  // .map(({ x, y }) => {
+  //   return [x, y];             // we need a list of [[x1, y1], [x2, y2], ...]
+  // });
 
-  const series = [
+  // const my_regression = regression.linear(
+  //   clean_data
+  // );
+
+  // const [setData, setData]=useState<{
+
+  // }>();
+
+  // const getChartData = async ({marketItems}:IndexProp)=> {
+  //   const res = await axios.get<PublicItem[]>(
+  //     `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
+  //   );
+  //   const resPage = await axios.get<PublicItem[]>(
+  //     `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
+  //   );
+  //   const marketItems = res.data;
+  //   const marketItemsPage = resPage.data;
+
+  //   return  marketItems;
+  // }
+
+  const series: [
+    {
+      name: string;
+      type: string;
+      data: {
+        x: number[];
+        y: number[];
+      }[];
+    },
+    {
+      name: string;
+      type: string;
+      data: {
+        x: number;
+        y: number;
+      }[];
+    }
+  ] = [
     {
       name: "Points",
       type: "scatter",
@@ -13,56 +69,8 @@ const ScatterChart = () => {
       //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
       data: [
         {
-          x: 1,
-          y: 2.14,
-        },
-        {
-          x: 1.2,
-          y: 2.19,
-        },
-        {
-          x: 1.8,
-          y: 2.43,
-        },
-        {
-          x: 2.3,
-          y: 3.8,
-        },
-        {
-          x: 2.6,
-          y: 4.14,
-        },
-        {
-          x: 2.9,
-          y: 5.4,
-        },
-        {
-          x: 3.2,
-          y: 5.8,
-        },
-        {
-          x: 3.8,
-          y: 6.04,
-        },
-        {
-          x: 4.55,
-          y: 6.77,
-        },
-        {
-          x: 4.9,
-          y: 8.1,
-        },
-        {
-          x: 5.1,
-          y: 9.4,
-        },
-        {
-          x: 7.1,
-          y: 7.14,
-        },
-        {
-          x: 9.18,
-          y: 8.4,
+          x: marketItems.map((d) => (10000 * d.cntHave) / d.cntWant),
+          y: marketItems.map((d) => d.marketId),
         },
       ],
     },
@@ -72,43 +80,43 @@ const ScatterChart = () => {
       data: [
         {
           x: 1,
-          y: 2,
+          y: 8.41,
         },
         {
           x: 2,
-          y: 3,
+          y: 8.41,
         },
         {
           x: 3,
-          y: 4,
+          y: 8.41,
         },
         {
           x: 4,
-          y: 5,
+          y: 8.41,
         },
         {
           x: 5,
-          y: 6,
+          y: 8.41,
         },
         {
           x: 6,
-          y: 7,
+          y: 8.41,
         },
         {
           x: 7,
-          y: 8,
+          y: 8.41,
         },
         {
           x: 8,
-          y: 9,
+          y: 8.41,
         },
         {
           x: 9,
-          y: 10,
+          y: 8.41,
         },
         {
           x: 10,
-          y: 11,
+          y: 8.41,
         },
       ],
     },
@@ -163,4 +171,18 @@ const ScatterChart = () => {
   );
 };
 
+export async function getServerSideProps() {
+  const res = await axios.get<PublicItem[]>(
+    // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
+    `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
+  );
+  const resPage = await axios.get<PublicItem[]>(
+    // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
+    `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
+  );
+  const marketItems = res.data;
+  const marketItemsPage = resPage.data;
+
+  return { props: { marketItems, marketItemsPage } };
+}
 export default ScatterChart;

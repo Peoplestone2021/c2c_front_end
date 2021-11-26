@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import style from "../styles/market.module.scss";
+
 import {
   Container,
   Collapse,
@@ -13,6 +14,7 @@ import {
   Tooltip,
   OverlayTrigger,
   Modal,
+  Placeholder,
 } from "react-bootstrap";
 import marketApi, { CommentItemRequest } from "../../../api/market";
 import { useDispatch, useSelector } from "react-redux";
@@ -165,30 +167,41 @@ const MarketDetail = () => {
         <span className="card mx-auto">
           <span className="card-body">
             <Container>
-              <h5 className="card-title">
-                <Row>
-                  <Col md={{ span: 1, offset: 0 }}>
-                    <Image
-                      src="/flag_usd.png"
-                      alt="USD"
-                      width={48}
-                      height={48}
-                    />
-                  </Col>
-                  <Col md={{ span: 3, offset: 0 }}>
-                    <strong>{marketItem?.crcHave}</strong>
-                    {marketItem?.cntHave}{" "}
-                    <strong>&#62;{marketItem?.crcWant}</strong>
-                    &#32;{marketItem?.cntWant}
-                  </Col>
-                  <Col md={{ span: 6, offset: 0 }}></Col>
-                </Row>
-              </h5>
               <Row>
-                <span>{marketItem?.hostName}</span>
-              </Row>
-              <Row>
-                <span>{marketItem?.content}</span>
+                <Col md={{ span: 1, offset: 0 }}>
+                  <Image
+                    src="/flag_usd.png"
+                    alt="USD"
+                    width={48}
+                    height={48}
+                  ></Image>
+                </Col>
+                <Col>
+                  <Row>
+                    <Col md={{ span: 1, offset: 0 }}>
+                      <h1>
+                        <i className="bi bi-person-circle" />
+                      </h1>
+                    </Col>
+                    <Col md={{ span: 3, offset: 0 }}>
+                      <h5 className="card-title">
+                        <strong>{marketItem?.crcHave}</strong>
+                        {marketItem?.cntHave}{" "}
+                        <strong>&#62;{marketItem?.crcWant}</strong>
+                        &#32;{marketItem?.cntWant}
+                      </h5>
+                    </Col>
+                    <Col md={{ span: 6, offset: 0 }}></Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <strong>{marketItem?.hostName}</strong>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>{marketItem?.content}</Col>
+                  </Row>
+                </Col>
               </Row>
             </Container>
             {/* <span className="card-text"></span> */}
@@ -206,11 +219,18 @@ const MarketDetail = () => {
             md={{ span: 3, offset: 5 }}
             className="d-flex justify-content-end"
           >
-            <Button className="justify-content-end" variant="secondary">
-              댓글 닫기
+            <Button
+              className="justify-content-end"
+              variant="secondary"
+              onClick={() => {
+                router.push(`/market`);
+              }}
+            >
+              목록으로
             </Button>
           </Col>
         </Row>
+        <Placeholder xs={`12`} />
         <Modal show={showApply} onHide={handleCloseApply}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -235,9 +255,11 @@ const MarketDetail = () => {
                 <span key={d.commentId}>
                   <div className="text-bold mt-0">
                     <Row>
-                      <Col xs={3}>{d?.userName}</Col>
+                      <Col xs={3}>
+                        <strong>{d?.userName}</strong>
+                      </Col>
                       <Col className="fs-6">
-                        {getTimeString(d?.createdTime)}
+                        <small>{getTimeString(d?.createdTime)}</small>
                       </Col>
                     </Row>
                   </div>
