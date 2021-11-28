@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Appbar from "../bar/appbar";
-import { marketItem } from "./marketApi";
-import ScatterChart from "./chart/ScatterChart";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../provider";
 import { useEffect } from "preact/hooks";
@@ -31,7 +29,7 @@ export interface PublicItemPage {
 
 export interface IndexProp {
   marketItems: PublicItem[];
-  marketItemsPage: PublicItemPage[];
+  marketItemsPage: PublicItemPage;
 }
 
 const getTimeString = (unixtime: number) => {
@@ -178,9 +176,6 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
       options: options,
     };
 
-    // console.log("[log] marketItems: ");
-    // console.log(marketItems);
-
     return (
       <section>
         <Appbar />
@@ -266,7 +261,6 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
                       {d.cntHave}$ to {d.cntWant}w
                     </div>
                     {itemStatus(d.status)}
-                    {/* <div className="text-end">마감: {getTimeString(d.dDate)}</div> */}
                     <div className="text-end">마감: {d.dday}</div>
                   </p>
                 </div>
@@ -285,10 +279,12 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
 
 export async function getServerSideProps() {
   const res = await axios.get<PublicItem[]>(
-    `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
+    `http://13.125.158.16:8081/marketItems?page=0&size=8`
+    // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems?page=0&size=8`
   );
   const resPage = await axios.get<PublicItem[]>(
-    `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
+    `http://13.125.158.16:8081/marketItems/latest?page=0&size=8`
+    // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/latest?page=0&size=8`
   );
   const marketItems = res.data;
   const marketItemsPage = resPage.data;

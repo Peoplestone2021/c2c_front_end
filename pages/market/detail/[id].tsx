@@ -72,10 +72,12 @@ const MarketDetail = () => {
     }
     if (userInput.current?.value?.length) {
       const comment: CommentItemRequest = {
+        commentId: 0,
         marketId: +id,
         userName: userInput.current.value,
         commentContent: commentInput.current ? commentInput.current.value : "",
         createdTime: new Date().getTime(),
+        isEmpty: true,
       };
       // console.log("[log] comment: ");
       // console.log(comment);
@@ -121,6 +123,7 @@ const MarketDetail = () => {
 
   // ====   숨기기    ====
 
+  // ====   ====
   const [isModify, setIsModify] = useState(false);
   const [showDel, setShowDel] = useState(false);
   const [showApply, setShowApply] = useState(false);

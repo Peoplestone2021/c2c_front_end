@@ -4,9 +4,6 @@ import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
 import produce from "immer";
-import api from "./commentApi";
-
-
 
 interface CommentItemState {
   id: number;
@@ -21,7 +18,6 @@ const getTimeString = (unixtime: number) => {
 };
 
 const Comment = () => {
-
   // comment 여러건에 대한 state
   const [commentList, setCommentList] = useState<CommentItemState[]>([
     // { id: 2, memo: "메모입니다", name: "Jhon", },
@@ -37,32 +33,30 @@ const Comment = () => {
 
   const ulRef = useRef<HTMLUListElement>(null);
 
-  const fetchData = async () => {
-    // 백엔드에서 데이터 받아옴
-    const res = await api.fetch();
+  // const fetchData = async () => {
+  //   // 백엔드에서 데이터 받아옴
+  //   const res = await api.fetch();
 
-    // axios에서 응답받은 데이터는 data속성에 들어가 있음
-    // 서버로부터 받은 데이터를 state 객체로 변환함
-    const comments = res.data.map((item) => ({
-      id: item.id,
-      memo: item.memo,
-      name: item.name,
-      createdTime: item.createdTime,
-    })) as CommentItemState[];
-    setLoading(false); // 로딩중 여부 state 업데이트
-    setCommentList(comments); // comment state 업데이트
-    // console.log(comments);
-    // console.log("--2. await axios.get completed--");
+  //   // axios에서 응답받은 데이터는 data속성에 들어가 있음
+  //   // 서버로부터 받은 데이터를 state 객체로 변환함
+  //   const comments = res.data.map((item) => ({
+  //     id: item.id,
+  //     memo: item.memo,
+  //     name: item.name,
+  //     createdTime: item.createdTime,
+  //   })) as CommentItemState[];
+  //   setLoading(false); // 로딩중 여부 state 업데이트
+  //   setCommentList(comments); // comment state 업데이트
+  //   // console.log(comments);
+  //   // console.log("--2. await axios.get completed--");
 
-  };
-  useEffect(() => {
-    console.log("--1. mounted--");
-    //   // 백엔드에서 데이터를 받아올 것임
-    //   // ES8 style로 async-await 기법을 이용해서 데이터를 조회해옴
-    fetchData();
-  }, []);
-
-
+  // };
+  // useEffect(() => {
+  //   console.log("--1. mounted--");
+  //   //   // 백엔드에서 데이터를 받아올 것임
+  //   //   // ES8 style로 async-await 기법을 이용해서 데이터를 조회해옴
+  //   fetchData();
+  // }, []);
 
   // const add = async () => {
   //   try {
@@ -78,7 +72,6 @@ const Comment = () => {
   //       createdTime: result.data.createdTime,
   //     };
 
-
   //     setIsError(false);
   //   } catch (e: any) {
   //     console.log(e.response);
@@ -88,11 +81,6 @@ const Comment = () => {
   //     setErrMessage(message);
   //   }
   // }
-
-
-
-
-
 
   return (
     <div>
@@ -134,16 +122,16 @@ const Comment = () => {
           </tbody>
         </table> */}
         <div className="card-body">
-
-
-          <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam distinctio non sunt quasi atque ipsam libero a porro nihil ratione, alias harum dolorum! Impedit iusto sed dignissimos harum mollitia necessitatibus!</p>
+          <p className="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam
+            distinctio non sunt quasi atque ipsam libero a porro nihil ratione,
+            alias harum dolorum! Impedit iusto sed dignissimos harum mollitia
+            necessitatibus!
+          </p>
         </div>
 
         <div className="card-body d-flex justify-content-end">
-          <div className="me-3">
-            createdTime
-          </div>
-
+          <div className="me-3">createdTime</div>
         </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination">
@@ -152,9 +140,21 @@ const Comment = () => {
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li className="page-item"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link" href="#">2</a></li>
-            <li className="page-item"><a className="page-link" href="#">3</a></li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                3
+              </a>
+            </li>
             <li className="page-item">
               <a className="page-link" href="#" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -162,8 +162,6 @@ const Comment = () => {
             </li>
           </ul>
         </nav>
-
-
       </div>
     </div>
   );

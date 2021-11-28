@@ -1,6 +1,5 @@
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
-import api from "./scheduleApi";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -112,44 +111,44 @@ const Schedule = () => {
 
   const eventHandler = () => {};
 
-  const fetchData = async () => {
-    // 백엔드에서 데이터 받아옴
-    const res = await api.fetch();
-    const events2 = res.data.map((item) => ({
-      id: item.id,
-      groupId: item.groupId,
-      title: item.title,
-      memo: item.memo,
-      start: item.start,
-      // end: item.end,
-    })) as EventItemState[];
-    console.log(res);
-    // setLoading(false); // 로딩중 여부 state 업데이트
-    console.log(res.data);
-    console.log(events2);
-    setEvents(res.data); // event state 업데이트
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const fetchData = async () => {
+  //   // 백엔드에서 데이터 받아옴
+  //   const res = await api.fetch();
+  //   const events2 = res.data.map((item) => ({
+  //     id: item.id,
+  //     groupId: item.groupId,
+  //     title: item.title,
+  //     memo: item.memo,
+  //     start: item.start,
+  //     // end: item.end,
+  //   })) as EventItemState[];
+  //   console.log(res);
+  //   // setLoading(false); // 로딩중 여부 state 업데이트
+  //   console.log(res.data);
+  //   console.log(events2);
+  //   setEvents(res.data); // event state 업데이트
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const add = async (e: React.PointerEvent<HTMLInputElement> | null) => {
+  // const add = async (e: React.PointerEvent<HTMLInputElement> | null) => {
 
-    try {
-      const result = await api.add({
-        title: inputTitle
-      })
-    }
-  }
-  const del = (id: string, index: number) => {
-    setEvents(
-      produce((state) => {
-        state.splice(index, 1);
-        console.log(events[0].id);
-        
-      })
-    );
-  };
+  //   try {
+  //     const result = await api.add({
+  //       title: inputTitle
+  //     })
+  //   }
+  // }
+  // const del = (id: string, index: number) => {
+  //   setEvents(
+  //     produce((state) => {
+  //       state.splice(index, 1);
+  //       console.log(events[0].id);
+
+  //     })
+  //   );
+  // };
 
   return (
     <div>
@@ -159,7 +158,7 @@ const Schedule = () => {
         style={{ marginLeft: "20vw", marginRight: "10vw" }}
         className="card text-center"
       >
-        <FullCalendar
+        {/* <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           customButtons={{
@@ -238,7 +237,7 @@ const Schedule = () => {
 
             // }
           }}
-        />
+        /> */}
       </div>
       <Modal
         size="lg"

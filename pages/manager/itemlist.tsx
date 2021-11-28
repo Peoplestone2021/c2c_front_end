@@ -3,8 +3,6 @@ import Link from "next/link";
 import Sidebar from "./about/sidebar";
 import Appbar from "../bar/appbar";
 
-import api from "./itemlistApi";
-
 interface ItemListItemState {
   id: number;
   hostName: string;
@@ -23,7 +21,6 @@ const getTimeString = (unixtime: number) => {
 };
 
 const ItemList = () => {
-
   const [itemlistList, setItemListList] = useState<ItemListItemState[]>([]);
 
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -34,27 +31,27 @@ const ItemList = () => {
 
   const ulRef = useRef<HTMLUListElement>(null);
 
-  const fetchData = async () => {
-    // 백엔드에서 데이터 받아옴
-    const res = await api.fetch();
-    const itemlists = res.data.map((item) => ({
-      id: item.id,
-      hostName: item.hostName,
-      crcHave: item.crcHave,
-      cntHave: item.cntHave,
-      memo: item.memo,
-      crcWant: item.crcWant,
-      cntWant: item.cntWant,
-      bidderName: item.bidderName,
-      // status?:
-      createdTime: item.createdTime,
-    })) as ItemListItemState[];
-    setLoading(false); // 로딩중 여부 state 업데이트
-    setItemListList(itemlists); // comment state 업데이트
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const fetchData = async () => {
+  //   // 백엔드에서 데이터 받아옴
+  //   const res = await api.fetch();
+  //   const itemlists = res.data.map((item) => ({
+  //     id: item.id,
+  //     hostName: item.hostName,
+  //     crcHave: item.crcHave,
+  //     cntHave: item.cntHave,
+  //     memo: item.memo,
+  //     crcWant: item.crcWant,
+  //     cntWant: item.cntWant,
+  //     bidderName: item.bidderName,
+  //     // status?:
+  //     createdTime: item.createdTime,
+  //   })) as ItemListItemState[];
+  //   setLoading(false); // 로딩중 여부 state 업데이트
+  //   setItemListList(itemlists); // comment state 업데이트
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <div>
@@ -74,7 +71,6 @@ const ItemList = () => {
             <Link href="/manager/mylist">
               <button>신청중매물</button>
             </Link>
-
           </caption>
 
           <thead>
@@ -90,21 +86,14 @@ const ItemList = () => {
           <tbody>
             {itemlistList.map((item, index) => (
               <tr className="tbody-tr" key={item.id}>
-                <td className="me-1" >
-                  {item.id}
+                <td className="me-1">{item.id}</td>
+                <td className="me-1">{item.hostName}</td>
+                <td className="me-1">
+                  {item.crcHave} {item.cntHave} {item.memo} {item.crcWant}{" "}
+                  {item.cntWant}
                 </td>
-                <td className="me-1" >
-                  {item.hostName}
-                </td>
-                <td className="me-1" >
-                  {item.crcHave} {item.cntHave} {item.memo} {item.crcWant} {item.cntWant}
-                </td>
-                <td className="me-1" >
-                  {item.bidderName}
-                </td>
-                <td className="me-1" >
-                  {getTimeString(item.createdTime)}
-                </td>
+                <td className="me-1">{item.bidderName}</td>
+                <td className="me-1">{getTimeString(item.createdTime)}</td>
               </tr>
             ))}
           </tbody>
@@ -117,9 +106,21 @@ const ItemList = () => {
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li className="page-item"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link" href="#">2</a></li>
-            <li className="page-item"><a className="page-link" href="#">3</a></li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                3
+              </a>
+            </li>
             <li className="page-item">
               <a className="page-link" href="#" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -127,7 +128,6 @@ const ItemList = () => {
             </li>
           </ul>
         </nav>
-
       </div>
     </div>
   );

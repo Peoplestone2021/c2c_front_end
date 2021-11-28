@@ -9,7 +9,7 @@ import { useSelector, useDispatch, Provider } from "react-redux";
 import { AppDispatch, RootState, store } from "../../provider";
 import router, { useRouter } from "next/router";
 import { moneyItem } from "../../provider/modules/calculator";
-import { requestAddMoneyItem } from "../middleware/modules/calculator";
+import { requestAddMoneyItem } from "../../middleware/modules/calculator";
 
 //계산에 필요한 state
 interface CalculatorItemState {

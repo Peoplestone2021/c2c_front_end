@@ -101,7 +101,7 @@ export const requestFetchNextCommentItems = createAction<PageRequest>(
 export const requestRemoveCommentItem = createAction<number>(
   `${marketReducer.name}/requestRemoveCommentItem`
 );
-export const requestModifyCommentItem = createAction<CommentItemModRequest>(
+export const requestModifyCommentItem = createAction<CommentItem>(
   `${marketReducer.name}/requestModifyCommentItem`
 );
 
@@ -461,10 +461,12 @@ function* addCommentNext(action: PayloadAction<CommentItemRequest>) {
     yield put(startProgress());
 
     const commentItemRequest: CommentItemRequest = {
+      commentId: commentItemPayload.commentId,
       marketId: commentItemPayload.marketId,
       userName: commentItemPayload.userName,
       commentContent: commentItemPayload.commentContent,
       createdTime: commentItemPayload.createdTime,
+      isEmpty: commentItemPayload.isEmpty,
     };
 
     const result: AxiosResponse<CommentItemResponse> = yield call(
@@ -473,12 +475,13 @@ function* addCommentNext(action: PayloadAction<CommentItemRequest>) {
     );
     yield put(endProgress());
     /////////////////////// commentId ? 백엔드 연동시에 수정해야할듯
-    const commentItem: CommentItemRequest = {
-      // commentId: result.data.commentId,
+    const commentItem: CommentItem = {
+      commentId: result.data.commentId,
       marketId: result.data.marketId,
       userName: result.data.userName,
       commentContent: result.data.commentContent,
       createdTime: result.data.createdTime,
+      isEmpty: result.data.isEmpty,
     };
 
     yield put(addCommentItem(commentItem));
@@ -584,12 +587,13 @@ function* removeComment(action: PayloadAction<number>) {
     // alert박스?
   }
 }
+
 function* modifyComment(action: PayloadAction<CommentItem>) {
   const commentItemPayload = action.payload;
 
   yield put(startProgress());
 
-  const commentItemRequest: CommentItemModRequest = {
+  const commentItemMod: CommentItem = {
     commentId: commentItemPayload.commentId,
     marketId: commentItemPayload.marketId,
     userName: commentItemPayload.userName,
@@ -598,10 +602,10 @@ function* modifyComment(action: PayloadAction<CommentItem>) {
     isEmpty: commentItemPayload.isEmpty,
   };
 
-  const result: AxiosResponse<CommentItemResponse> = yield call(
+  const result: AxiosResponse<CommentItem> = yield call(
     api.modifyComment,
     commentItemPayload.commentId,
-    commentItemRequest
+    commentItemMod
   );
 
   yield put(endProgress());

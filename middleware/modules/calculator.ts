@@ -1,20 +1,17 @@
 import calculatorReducer, {
-  addMoneyItem, 
-  initialMoneyItem, 
+  addMoneyItem,
+  initialMoneyItem,
   moneyItem,
-} from "../../../provider/modules/calculator"
-import { createAction, PayloadAction } from "@reduxjs/toolkit"
+} from "../../provider/modules/calculator";
+import { createAction, PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeEvery } from "@redux-saga/core/effects";
 import { AxiosResponse } from "axios";
-import api, {
-  MoneyItemRequest,
-  MoenyItemResponse,
-} from "../../api/calculator"
-import { RootState } from "../../../provider";
+import api, { MoneyItemRequest, MoenyItemResponse } from "../../api/calculator";
+import { RootState } from "../../provider";
 
 export const requestFetchMoneyItems = createAction(
   `${calculatorReducer.name}/requestFetchMoneyItems`
-)
+);
 
 export const requestAddMoneyItem = createAction<moneyItem>(
   `${calculatorReducer.name}/requestAddItem`
@@ -52,7 +49,7 @@ function* fetchData() {
   yield put(initialMoneyItem(moneyItem));
 }
 
-function* addDataNext(action: PayloadAction<moneyItem>){
+function* addDataNext(action: PayloadAction<moneyItem>) {
   yield console.log("--addDataNext--");
   yield console.log(action);
 
@@ -74,10 +71,10 @@ function* addDataNext(action: PayloadAction<moneyItem>){
 
     const result: AxiosResponse<MoenyItemResponse> = yield call(
       api.add,
-      moneyItemrequest,
-      );
-      
-      const moneyItem: moneyItem = {
+      moneyItemrequest
+    );
+
+    const moneyItem: moneyItem = {
       itemId: result.data.itemId,
       hostName: result.data.hostName,
       cntHave: result.data.cntHave,
@@ -93,13 +90,10 @@ function* addDataNext(action: PayloadAction<moneyItem>){
 
     yield console.log("------ add request ------");
     yield console.log(moneyItem);
-
-  } catch (e:any) {
+  } catch (e) {
     console.log(e);
   }
 }
-
-
 
 export default function* calculatorSaga() {
   yield takeEvery(requestFetchMoneyItems, fetchData);

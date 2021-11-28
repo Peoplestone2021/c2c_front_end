@@ -29,12 +29,12 @@ export interface MarketItem {
 }
 
 export interface CommentItem {
-  commentId?: number;
+  commentId: number;
   marketId: number;
   userName: string;
   commentContent: string;
   createdTime: number;
-  isEmpty?: boolean;
+  isEmpty: boolean;
 }
 
 export interface MarketPage {
@@ -59,6 +59,7 @@ export interface CommentPage {
 interface MarketState {
   data: MarketItem[];
   commentData: CommentItem[];
+  commentMod: CommentItem[];
   isFetched: boolean;
   isAddCompleted?: boolean;
   isRemoveCompleted?: boolean;
@@ -95,6 +96,7 @@ const initialState: MarketState = {
   pageSize: 8,
   totalPages: 0,
   commentData: [],
+  commentMod: [],
   isCommentFetched: false,
   commentPage: 0,
   commentPageSize: 30,
