@@ -78,69 +78,70 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
         name: string;
         type: string;
         data: number[];
-      },
-      {
-        name: string;
-        type: string;
-        data: {
-          x: number;
-          y: number;
-        }[];
       }
-    ] = [
-      {
-        name: "Points",
-        type: "scatter",
-        //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
-        data: marketItems.map((d) => (10000 * d.cntHave) / d.cntWant),
-      },
-      {
-        name: "Line",
-        type: "line",
-        data: [
-          {
-            x: 1,
-            y: 8.41,
-          },
-          {
-            x: 2,
-            y: 8.41,
-          },
-          {
-            x: 3,
-            y: 8.41,
-          },
-          {
-            x: 4,
-            y: 8.41,
-          },
-          {
-            x: 5,
-            y: 8.41,
-          },
-          {
-            x: 6,
-            y: 8.41,
-          },
-          {
-            x: 7,
-            y: 8.41,
-          },
-          {
-            x: 8,
-            y: 8.41,
-          },
-          {
-            x: 9,
-            y: 8.41,
-          },
-          {
-            x: 10,
-            y: 8.41,
-          },
-        ],
-      },
-    ];
+    ] =
+      // {
+      //   name: string;
+      //   type: string;
+      //   data: {
+      //     x: number;
+      //     y: number;
+      //   }[];
+
+      [
+        {
+          name: "Points",
+          type: "scatter",
+          //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
+          data: marketItems.map((d) => (10000 * d.cntHave) / d.cntWant),
+        },
+      ];
+    // {
+    //   name: "Line",
+    //   type: "line",
+    //   data: [
+    //     {
+    //       x: 20,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 21,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 22,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 23,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 24,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 25,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 26,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 27,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 28,
+    //       y: 8.41,
+    //     },
+    //     {
+    //       x: 29,
+    //       y: 8.41,
+    //     },
+    //   ],
+    // },
 
     const options: ApexOptions = {
       title: {
@@ -164,10 +165,11 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
         show: false,
       },
       xaxis: {
-        // type: `numeric`,
+        type: `numeric`,
+        categories: marketItems.map((d) => d.marketId),
         // min: 17,
-        // max: 44,
-        // tickAmount: 12,
+        // max: 36,
+        tickAmount: 12,
       },
     };
 
