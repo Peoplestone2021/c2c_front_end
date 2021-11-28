@@ -35,21 +35,27 @@ const Appbar = () => {
         <Provider store={store}>
           <Container>
             <Row className="align-items-center">
-              <Col xs={3}>
-                <div className="fs-1 fw-bold text-center mt-4">
-                  환<span className="fs-6">전</span>장
-                  <span className="fs-6">터</span>
-                </div>
+              <Col md={{ span: 2, offset: 0 }}>
+                <Link href="/">
+                  <a>
+                    <div className="fs-1 fw-bold text-center mt-4 bi bi-currency-exchange">
+                      {/* bi bi-currency-exchange */}환
+                      <span className="fs-6">전</span>장
+                      <span className="fs-6">터</span>
+                    </div>
+                  </a>
+                </Link>
               </Col>
-              <Col xs={5}></Col>
-              <Col>
+              <Col md={{ span: 6, offset: 1 }}></Col>
+              <Col md={{ span: 2, offset: 0 }}>
                 <FloatingLabel
                   controlId="floatingInput"
                   label="Input Name"
-                  className="mt-4 ml-2 d-flex"
+                  className="mt-4 ml-2"
                 >
                   <Form.Control
                     type="text"
+                    className=" justify-content-end"
                     placeholder="name@example.com"
                     // ref={userNameRef}
                   />

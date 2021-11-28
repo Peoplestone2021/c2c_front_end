@@ -4,7 +4,7 @@ import api from "../api/rateTable";
 import styles from "./styles/ratetable.module.css";
 import Sidebar from "./sideBar";
 
-interface HomeProp {
+interface IndexProp {
   rates: RateItem[];
 }
 
@@ -17,12 +17,11 @@ interface RateItem {
   curNm: string;
 }
 
-const RateTable = ({ rates }: HomeProp) => {
+const RateTable = ({ rates }: IndexProp) => {
   return (
     <>
-      <div className={`${styles.maindiv} d-flex justify-content-evenly`}>
-        <Sidebar />
-        <div className={`${styles.tablediv}`}>
+      <div className={` d-flex justify-content-evenly`}>
+        <div className={``}>
           <table className="table table-hover top-10 my-5">
             <thead>
               <tr>

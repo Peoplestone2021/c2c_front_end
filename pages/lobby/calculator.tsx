@@ -229,9 +229,11 @@ const Calculator = () => {
                   type="number"
                   className="form-control"
                   ref={crcWant}
-                  readOnly
-                  disabled
-                  value={exValue}
+                  // readOnly
+                  // disabled
+                  placeholder={`${exValue}`}
+                  // value={exValue}
+                  defaultValue={`${exValue}`}
                 />
               </div>
             </form>
