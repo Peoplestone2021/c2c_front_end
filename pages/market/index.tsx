@@ -93,7 +93,9 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
           name: "Points",
           type: "scatter",
           //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
-          data: marketItems.map((d) => (10000 * d.cntHave) / d.cntWant),
+          data: marketItems.map(
+            (d) => +((10000 * d.cntHave) / d.cntWant).toFixed(2)
+          ),
         },
       ];
     // {
@@ -145,7 +147,7 @@ const Index = ({ marketItems, marketItemsPage }: IndexProp) =>
 
     const options: ApexOptions = {
       title: {
-        text: `USD 거래 추세 현황`,
+        text: `USD 거래 추세(일만원)`,
       },
       chart: {
         height: 350,
