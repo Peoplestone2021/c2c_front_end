@@ -2,7 +2,7 @@ import styles from "./styles/caclulator.module.css";
 import Link from "next/link";
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 // 계산기 백엔드 연동 api
-import api from "../api/calculator";
+import api from "../../api/calculator";
 import { Alert } from "react-bootstrap";
 import produce from "immer";
 import { useSelector, useDispatch, Provider } from "react-redux";

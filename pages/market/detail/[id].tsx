@@ -44,6 +44,7 @@ const MarketDetail = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const id = router.query.id as string;
+  const [commentList, setCommentList] = useState<CommentItem[]>([]);
 
   const userInput = useRef<HTMLInputElement>(null);
   const commentInput = useRef<HTMLTextAreaElement>(null);
