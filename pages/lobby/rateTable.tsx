@@ -47,7 +47,9 @@ const RateTable = ({ rates }: IndexProp) => {
 };
 
 export async function getServerSideProps() {
-  const res = await axios.get("http://54.180.135.245:8080/lobby/rate");
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_LOBBY_BASE}/lobby/rate`
+  );
   // const rate: RateItem[] = await res.json();
   const rates = res.data;
 

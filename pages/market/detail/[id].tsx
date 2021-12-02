@@ -86,7 +86,8 @@ const MarketDetail = () => {
       console.log();
 
       dispatch(requestAddCommentItem(comment));
-      dispatch(requestFetchCommentItems(+id));
+      setCommentList(commentItems);
+      // dispatch(requestFetchCommentItems(+id));
     }
   };
 

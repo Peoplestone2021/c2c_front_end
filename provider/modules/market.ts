@@ -55,7 +55,7 @@ export interface CommentPage {
   isLast: boolean;
 }
 
-// //////////////// commentInitial 충돌 가능성 있음
+// commentInitial 충돌 가능성 있음 _ fixed
 interface MarketState {
   data: MarketItem[];
   commentData: CommentItem[];

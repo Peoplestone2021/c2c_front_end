@@ -58,7 +58,7 @@ const calculatorApi = {
   cntFetch: (wantCountry: string) =>
     axios.get<ExChangeRateResponse[]>(
       // `http://localhost:8080/lobby/rate/${wantCountry}`
-      `http://52.78.5.170:8080/lobby/rate/${wantCountry}`
+      `${process.env.NEXT_PUBLIC_API_LOBBY_BASE}/lobby/rate/${wantCountry}`
     ),
 
   // axios.post<응답타입>(요청URL, 요청객체(JSON바디));
@@ -66,14 +66,16 @@ const calculatorApi = {
   add: (addItem: MoneyItemRequest) =>
     // axios.post<MoneyItemRequest>(`http://localhost:8080/saleItemList`, addItem),
     axios.post<MoneyItemRequest>(
-      `http://52.78.5.170:8080/saleItemList`,
+      `${process.env.NEXT_PUBLIC_API_LOBBY_BASE}/saleItemList`,
       addItem
     ),
 
   // 매물 데이터 목록 받아오기
   fetch: () =>
     // axios.get<MoneyItemRequest>(`http://localhost:8080/saleItemList`),
-    axios.get<MoneyItemRequest>(`http://52.78.5.170:8080/saleItemList`),
+    axios.get<MoneyItemRequest>(
+      `${process.env.NEXT_PUBLIC_API_LOBBY_BASE}/saleItemList`
+    ),
 };
 
 export default calculatorApi;
