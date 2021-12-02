@@ -24,7 +24,6 @@ const lobby = () => {
               </div>
             </a>
           </Link>
-
           <Link href="/market/market">
             <a className="menu-link">
               <div className="menu2">

@@ -1,19 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CommentItemModRequest, CommentItemRequest } from "../../api/market";
 
-// export interface marketItem {
-//   itemId: number;
-//   marketId: number;
-//   hostName: String;
-//   crcHave: String;
-//   crcWant: String;
-//   cntHave: number;
-//   cntWant: number;
-//   dday: String;
-//   content?: String;
-//   status: boolean;
-//   createdTime: number;
-// }
 export interface MarketItem {
   itemId: number;
   marketId: number;

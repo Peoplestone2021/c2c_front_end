@@ -86,12 +86,10 @@ const marketApi = {
   get: (id: number) =>
     createAxiosInstance().get<MarketItemResponse>(
       `${process.env.NEXT_PUBLIC_API_MARKET_BASE}/marketItems/${id}`
-      // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/${id}`
     ),
   fetch: () =>
     createAxiosInstance().get<MarketItemResponse[]>(
       `${process.env.NEXT_PUBLIC_API_MARKET_BASE}/marketItems`
-      // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems`
     ),
   // fetchCrc: (crc: string) =>
   //   createAxiosInstance().get<MarketItemResponse>(
@@ -100,7 +98,6 @@ const marketApi = {
   fetchPaging: (page: number, size: number) =>
     createAxiosInstance().get<MarketItemPagingResponse>(
       `${process.env.NEXT_PUBLIC_API_MARKET_BASE}/marketItems/paging?=${page}&size=${size}`
-      // `${process.env.NEXT_PUBLIC_API_TABLE_LOCAL}/marketItems/paging?page=${page}&size=${size}`
     ),
 
   add: (marketItem: MarketItemRequest) =>
